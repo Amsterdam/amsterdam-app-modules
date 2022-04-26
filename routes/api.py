@@ -1,10 +1,11 @@
+import json
 from . import routes
 from APIDocs.APIDocs import APIDocs
 from Decorators.IsReachable import is_reachable
 from Decorators.AppVersion import app_version_header
 from flasgger import swag_from
 from flask import request, abort, Response
-import json
+from GenericFunctions.ProxyRequest import ProxyRequest
 
 
 def validation_error_inform_error(err, data, schema):
@@ -25,7 +26,9 @@ def validation_error_inform_error(err, data, schema):
 @is_reachable
 def module_post():
     data = request.json
-    return {'status': True, 'result': 'A valid request body was accepted'}
+    with ProxyRequest('/api/v1/module', 'POST', data=data) as proxy_request:
+        result = proxy_request.set_result()
+    return result
 
 
 @routes.route('/module', methods=['PATCH'])
@@ -33,7 +36,9 @@ def module_post():
 @is_reachable
 def module_patch():
     data = request.json
-    return {'status': True, 'result': 'A valid request body was accepted'}
+    with ProxyRequest('/api/v1/module', 'PATCH', data=data) as proxy_request:
+        result = proxy_request.set_result()
+    return result
 
 
 @routes.route('/modules/order', methods=['POST', 'PATCH'])
@@ -41,7 +46,9 @@ def module_patch():
 @is_reachable
 def modules_order():
     data = request.json
-    return {'status': True, 'result': 'A valid request body was accepted'}
+    with ProxyRequest('/api/v1/modules/order', request.method, data=data) as proxy_request:
+        result = proxy_request.set_result()
+    return result
 
 
 @routes.route('/modules', methods=['GET'])
@@ -49,4 +56,7 @@ def modules_order():
 @app_version_header
 @is_reachable
 def modules():
-    return {'status': True, 'result': 'A valid header was accepted'}
+    data = {'app_version': request.headers.get('App-Version')}
+    with ProxyRequest('/api/v1/modules/order', request.method, data=data) as proxy_request:
+        result = proxy_request.set_result()
+    return result
