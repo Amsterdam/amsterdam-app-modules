@@ -59,7 +59,14 @@ class APIServer:
 
         Swagger(self.app, template=template, config={"specs_route": "/api/v1/apidocs/"}, merge=True)
 
+        # threading.Thread(target=self.run).start()
+
+    def __enter__(self):
         threading.Thread(target=self.run).start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
 
     def run(self):
         print('Server is listing on port: {port}'.format(port=self.port), flush=True)

@@ -11,19 +11,20 @@ class ProxyRequest:
         self.data = data
         self.request = None
         self.url = None
-        self.token = AESCipher('6aa41cae-c5e3-4006-9df3-faa6bc8f0a9e', os.getenv('AES_SECRET')).encrypt()
-        self.headers = {'Accept': 'application/json', 'UserAuthorization': self.token}
+        self.token = AESCipher(str(uuid4()), os.getenv('AES_SECRET')).encrypt()
+        self.headers = {'Accept': 'application/json', 'IngestAuthorization': self.token}
 
     def set_result(self):
         if self.request.status_code == 403:
             return {'status': False, 'result': self.request.reason}
         else:
+            self.request.headers['Content-Type'] = 'application/json; charset=utf-8'
             return self.request.json()
 
     def set_url(self):
         host = os.getenv('TARGET', 'api-server')
         port = int(os.getenv('TARGET_PORT', 8000))
-        self.url = 'http://{host}:{port}/{path}'.format(host=host, port=port, path=self.path)
+        self.url = 'http://{host}:{port}{path}'.format(host=host, port=port, path=self.path)
         if port == 443:
             self.url = 'https://{host}{path}'.format(host=host, path=self.path)
 
@@ -36,6 +37,8 @@ class ProxyRequest:
             self.request = requests.post(self.url, headers=self.headers, json=self.data)
         elif self.method == 'PATCH':
             self.request = requests.patch(self.url, headers=self.headers, json=self.data)
+        elif self.method == 'DELETE':
+            self.request = requests.delete(self.url, headers=self.headers, json=self.data)
 
         return self
 

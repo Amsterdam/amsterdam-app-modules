@@ -134,10 +134,28 @@ class APIDocs:
         }
     }
 
+    modules_properties_delete = {
+        "slug": {
+            "type": "string",
+            "description": "Unique human readable identifier"
+        },
+        "app_version": {
+            "type": "string",
+            "description": "Mobile App version number (eg. 1.0.0)"
+        }
+    }
+
     module_post = {
         "tags": ["Modules"],
         "summary": "Create a module definition for given Slug and App version",
         "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
             {
                 "name": "body",
                 "in": "body",
@@ -160,6 +178,13 @@ class APIDocs:
         "summary": "Patch a module definition for given Slug and App version",
         "parameters": [
             {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
                 "name": "body",
                 "in": "body",
                 "schema": {
@@ -176,10 +201,45 @@ class APIDocs:
         }
     }
 
+    module_delete = {
+        "tags": ["Modules"],
+        "summary": "delete a module definition witch given Slug and App version",
+        "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "id": "module_delete",
+                    "required": ["slug", "app_version"],
+                    "properties": modules_properties_delete
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "400": response_400,
+            "504": response_504
+        }
+    }
+
     module_order = {
         "tags": ["Modules"],
         "summary": "Create or patch the Slug order for given app-version",
         "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
             {
                 "name": "body",
                 "in": "body",
@@ -198,6 +258,40 @@ class APIDocs:
                                 "type": "string",
                                 "description": "Slugs"
                             }
+                        }
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "400": response_400,
+            "504": response_504
+        }
+    }
+
+    module_order_delete = {
+        "tags": ["Modules"],
+        "summary": "Delete the Slug order for given app-version",
+        "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
+                "name": "body",
+                "in": "body",
+                "required": True,
+                "schema": {
+                    "id": "module_order_delete",
+                    "required": ["app_version"],
+                    "properties": {
+                        "app_version": {
+                            "type": "string",
+                            "description": "Mobile App version number (eg. 1.0.0)"
                         }
                     }
                 }

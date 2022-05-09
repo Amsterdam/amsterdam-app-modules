@@ -10,7 +10,8 @@ def is_reachable(f):
     @wraps(f)
     def decoration(*args, **kwargs):
         timeout = 3
-        host = (Configuration.global_parameters['backend_host'], Configuration.global_parameters['backend_port'])
+        host = (socket.gethostbyname(Configuration.global_parameters['backend_host']),
+                Configuration.global_parameters['backend_port'])
 
         for i in range(timeout):
             try:

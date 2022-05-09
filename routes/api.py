@@ -3,6 +3,7 @@ from . import routes
 from APIDocs.APIDocs import APIDocs
 from Decorators.IsReachable import is_reachable
 from Decorators.AppVersion import app_version_header
+from Decorators.IsAuthorized import IsAuthorized
 from flasgger import swag_from
 from flask import request, abort, Response
 from GenericFunctions.ProxyRequest import ProxyRequest
@@ -23,6 +24,7 @@ def validation_error_inform_error(err, data, schema):
 
 @routes.route('/module', methods=['POST'])
 @swag_from(APIDocs.module_post, validation=True, validation_error_handler=validation_error_inform_error)
+@IsAuthorized
 @is_reachable
 def module_post():
     data = request.json
@@ -33,6 +35,7 @@ def module_post():
 
 @routes.route('/module', methods=['PATCH'])
 @swag_from(APIDocs.module_patch, validation=True, validation_error_handler=validation_error_inform_error)
+@IsAuthorized
 @is_reachable
 def module_patch():
     data = request.json
@@ -41,10 +44,33 @@ def module_patch():
     return result
 
 
+@routes.route('/module', methods=['DELETE'])
+@swag_from(APIDocs.module_delete, validation=True, validation_error_handler=validation_error_inform_error)
+@IsAuthorized
+@is_reachable
+def module_delete():
+    data = request.json
+    with ProxyRequest('/api/v1/module', 'DELETE', data=data) as proxy_request:
+        result = proxy_request.set_result()
+    return result
+
+
 @routes.route('/modules/order', methods=['POST', 'PATCH'])
 @swag_from(APIDocs.module_order, validation=True, validation_error_handler=validation_error_inform_error)
+@IsAuthorized
 @is_reachable
 def modules_order():
+    data = request.json
+    with ProxyRequest('/api/v1/modules/order', request.method, data=data) as proxy_request:
+        result = proxy_request.set_result()
+    return result
+
+
+@routes.route('/modules/order', methods=['DELETE'])
+@swag_from(APIDocs.module_order_delete, validation=True, validation_error_handler=validation_error_inform_error)
+@IsAuthorized
+@is_reachable
+def modules_order_delete():
     data = request.json
     with ProxyRequest('/api/v1/modules/order', request.method, data=data) as proxy_request:
         result = proxy_request.set_result()
@@ -56,7 +82,7 @@ def modules_order():
 @app_version_header
 @is_reachable
 def modules():
-    data = {'app_version': request.headers.get('App-Version')}
-    with ProxyRequest('/api/v1/modules/order', request.method, data=data) as proxy_request:
+    url = '/api/v1/modules?app_version={app_version}'.format(app_version=request.headers.get('App-Version'))
+    with ProxyRequest(url, request.method) as proxy_request:
         result = proxy_request.set_result()
-    return result
+    return Response(json.dumps(result), headers={'Content-Type': 'application/json; charset=utf-8'}, status=200)
