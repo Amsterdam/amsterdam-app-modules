@@ -20,12 +20,12 @@ class MockBackendServer:
             result = {
                 "result": [
                     {
-                        "slug": "waste-guide",
-                        "version": "0.16.5.8439",
-                        "title": "Afval module",
-                        "description": "Regel al je afvalzaken",
-                        "icon": "trash-bin",
-                        "status": 1
+                        "slug": "string",
+                        "version": "0.0.0.0",
+                        "title": "string",
+                        "description": "string",
+                        "icon": "string",
+                        "status": 0
                     }
                 ],
                 "status": True

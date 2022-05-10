@@ -85,4 +85,4 @@ def modules():
     url = '/api/v1/modules?app_version={app_version}'.format(app_version=request.headers.get('App-Version'))
     with ProxyRequest(url, request.method) as proxy_request:
         result = proxy_request.set_result()
-    return Response(json.dumps(result), headers={'Content-Type': 'application/json; charset=utf-8'}, status=200)
+    return result
