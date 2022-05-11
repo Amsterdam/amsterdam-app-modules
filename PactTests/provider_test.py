@@ -1,12 +1,9 @@
-import logging
-from pact import Verifier
-import WSGIServer
+import os
 import socket
 import time
-import MockBackendServer
-log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
-import os
+from pact import Verifier
+from MockBackendServer.MockBackendServer import MockBackendServer
+from WSGIServer.app import APIServer
 
 
 class PactTests:
@@ -30,23 +27,15 @@ class PactTests:
                 time.sleep(0.2)
         return False
 
-    def setup(self):
-        self.mock_backend = MockBackendServer.MockBackendServer()
-
-    def tear_down(self):
-        self.mock_backend.stop()
-
     def run_test(self):
-        self.setup()
-        with WSGIServer.APIServer(debug=True):
-            # Wait until provider is alive
-            if self.wait_for_provider_is_alive():
-                verifier = Verifier(provider='amsterdam-app-modules',
-                                    provider_base_url=self.provider_url)
-                output, logs = verifier.verify_pacts('./pact.json')
-            else:
-                assert False is True
-        self.tear_down()
+        with MockBackendServer(pact=True):
+            with APIServer(debug=True):
+                if self.wait_for_provider_is_alive():
+                    verifier = Verifier(provider='amsterdam-app-modules',
+                                        provider_base_url=self.provider_url)
+                    output, logs = verifier.verify_pacts('./pact.json')
+                else:
+                    assert False is True
         assert output == 0
 
 

@@ -26,4 +26,3 @@ def is_reachable(f):
                         status=504,
                         mimetype='application/json')
     return decoration
-

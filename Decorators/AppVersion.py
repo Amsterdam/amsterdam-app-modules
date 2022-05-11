@@ -6,7 +6,7 @@ from functools import wraps
 def app_version_header(f):
     @wraps(f)
     def decoration(*args, **kwargs):
-        if request.headers.get('App-Version', None) is not None:
+        if request.headers.get('appVersion', None) is not None:
             return f(*args, **kwargs)
 
         return Response(json.dumps({'status': False, 'result': 'App-Version header missing'}),

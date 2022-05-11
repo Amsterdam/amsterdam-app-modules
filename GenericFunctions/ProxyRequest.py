@@ -24,9 +24,8 @@ class ProxyRequest:
     def set_url(self):
         host = os.getenv('TARGET', 'api-server')
         port = int(os.getenv('TARGET_PORT', 8000))
-        self.url = 'http://{host}:{port}{path}'.format(host=host, port=port, path=self.path)
-        if port == 443:
-            self.url = 'https://{host}{path}'.format(host=host, path=self.path)
+        protocol = 'https' if port == 443 else 'http'
+        self.url = '{protocol}://{host}:{port}{path}'.format(protocol=protocol, host=host, port=port, path=self.path)
 
     def __enter__(self):
         self.set_url()
@@ -44,9 +43,3 @@ class ProxyRequest:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.request = None
-
-
-if __name__ == '__main__':
-    with ProxyRequest('/api/v1/project/warning/image', 'POST', {'test': True}) as pr:
-        result = pr.set_result()
-    pass

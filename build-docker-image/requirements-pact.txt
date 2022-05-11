@@ -6,3 +6,4 @@ requests
 wsgiserver
 pact-python
 pytest
+mock

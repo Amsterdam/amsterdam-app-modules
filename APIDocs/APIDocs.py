@@ -55,6 +55,23 @@ class APIDocs:
         }
     }
 
+    response_401 = {
+        "description": "Access forbidden",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "description": "Response status"
+                },
+                "result": {
+                    "type": "string",
+                    "description": "Access forbidden"
+                }
+            }
+        }
+    }
+
     response_504 = {
         "description": "The up-stream server for storing modules could not be reached",
         "schema": {
@@ -66,88 +83,118 @@ class APIDocs:
                 },
                 "result": {
                     "type": "string",
-                    "description": "Human readable status result"
+                    "description": "504 Gateway timeout"
                 }
             }
         }
     }
 
-    enum_status = 'The current state of this module version\n\n'
+    enum_status = 'The current state of this module\n\n'
     enum_status += '0: inactive\n'
     enum_status += '1: active'
 
-    module_properties = {
-        "slug": {
-            "type": "string",
-            "description": "Unique human readable identifier"
-        },
-        "version": {
-            "type": "string",
-            "description": "Module version number (eg. 1.0.0)"
-        },
-        "app_version": {
-            "type": "string",
-            "description": "Mobile App version number (eg. 1.0.0)"
-        },
-        "title": {
-            "type": "string",
-            "description": "Name for this module"
-        },
-        "description": {
-            "type": "string",
-            "description": "A module description"
-        },
-        "icon": {
-            "type": "string",
-            "description": "Icon name used for this module"
-        },
-        "status": {
-            "type": "integer",
-            "description": enum_status
-        }
+    version = {
+        "type": "string",
+        "description": "Version number"
     }
 
-    modules_properties = {
-        "slug": {
-            "type": "string",
-            "description": "Unique human readable identifier"
-        },
-        "version": {
-            "type": "string",
-            "description": "Module version number (eg. 1.0.0)"
-        },
-        "title": {
-            "type": "string",
-            "description": "Name for this module"
-        },
-        "description": {
-            "type": "string",
-            "description": "A module description"
-        },
-        "icon": {
-            "type": "string",
-            "description": "Icon name used for this module"
-        },
-        "status": {
-            "type": "integer",
-            "description": enum_status
-        }
+    slug = {
+        "type": "string",
+        "description": "Unique human readable identifier (Slug)"
     }
 
-    modules_properties_delete = {
-        "slug": {
-            "type": "string",
-            "description": "Unique human readable identifier"
-        },
-        "app_version": {
-            "type": "string",
-            "description": "Mobile App version number (eg. 1.0.0)"
-        }
+    status = {
+        "type": "integer",
+        "description": enum_status
     }
 
-    module_post = {
+    title = {
+        "type": "string",
+        "description": "Descriptive title"
+    }
+
+    icon = {
+        "type": "string",
+        "description": "Icon name"
+    }
+
+    description = {
+        "type": "string",
+        "description": "Description"
+    }
+
+    modules_by_app = {
+        "appVersion": version,
+        "moduleSlug": slug,
+        "moduleVersion": version,
+        "status": status
+    }
+
+    modules = {
+        "slug": slug,
+        "title": title,
+        "icon": icon,
+        "version": version,
+        "description": description
+    }
+
+    modules_get = {
         "tags": ["Modules"],
-        "summary": "Create a module definition for given Slug and App version",
+        "summary": "Get modules",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+            {
+                "name": "slug",
+                "in": "query",
+                "required": True,
+                "type": "string",
+                "description": "slug for requesting modules"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Status and list of modules",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": modules
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "string",
+                            "description": "error message"
+                        }
+                    }
+                }
+            },
+            "504": response_504
+        }
+    }
+
+    modules_post = {
+        "tags": ["Modules"],
+        "summary": "Create a module",
         "parameters": [
             {
                 "name": "Authorization",
@@ -161,19 +208,20 @@ class APIDocs:
                 "in": "body",
                 "schema": {
                     "id": "module_post",
-                    "required": ["slug", "version", "app_version", "title", "description", "icon", "status"],
-                    "properties": module_properties
+                    "required": ["slug", "title", "icon", "version", "description"],
+                    "properties": modules
                 }
             }
         ],
         "responses": {
             "200": response_200,
             "400": response_400,
+            "401": response_401,
             "504": response_504
         }
     }
 
-    module_patch = {
+    modules_patch = {
         "tags": ["Modules"],
         "summary": "Patch a module definition for given Slug and App version",
         "parameters": [
@@ -189,19 +237,20 @@ class APIDocs:
                 "in": "body",
                 "schema": {
                     "id": "module_patch",
-                    "required": ["slug", "app_version"],
-                    "properties": module_properties
+                    "required": ["slug", "version"],
+                    "properties": modules
                 }
             }
         ],
         "responses": {
             "200": response_200,
             "400": response_400,
+            "401": response_401,
             "504": response_504
         }
     }
 
-    module_delete = {
+    modules_delete = {
         "tags": ["Modules"],
         "summary": "delete a module definition witch given Slug and App version",
         "parameters": [
@@ -217,48 +266,10 @@ class APIDocs:
                 "in": "body",
                 "schema": {
                     "id": "module_delete",
-                    "required": ["slug", "app_version"],
-                    "properties": modules_properties_delete
-                }
-            }
-        ],
-        "responses": {
-            "200": response_200,
-            "400": response_400,
-            "504": response_504
-        }
-    }
-
-    module_order = {
-        "tags": ["Modules"],
-        "summary": "Create or patch the Slug order for given app-version",
-        "parameters": [
-            {
-                "name": "Authorization",
-                "in": "header",
-                "required": True,
-                "type": "string",
-                "description": "Authorization header based on uuid and AES_SECRET"
-            },
-            {
-                "name": "body",
-                "in": "body",
-                "required": True,
-                "schema": {
-                    "id": "module_order",
-                    "required": ["app_version", "order"],
+                    "required": ["slug", "version"],
                     "properties": {
-                        "app_version": {
-                            "type": "string",
-                            "description": "Mobile App version number (eg. 1.0.0)"
-                        },
-                        "order": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "description": "Slugs"
-                            }
-                        }
+                        "slug": slug,
+                        "version": version
                     }
                 }
             }
@@ -266,56 +277,23 @@ class APIDocs:
         "responses": {
             "200": response_200,
             "400": response_400,
+            "401": response_401,
             "504": response_504
         }
     }
 
-    module_order_delete = {
-        "tags": ["Modules"],
-        "summary": "Delete the Slug order for given app-version",
-        "parameters": [
-            {
-                "name": "Authorization",
-                "in": "header",
-                "required": True,
-                "type": "string",
-                "description": "Authorization header based on uuid and AES_SECRET"
-            },
-            {
-                "name": "body",
-                "in": "body",
-                "required": True,
-                "schema": {
-                    "id": "module_order_delete",
-                    "required": ["app_version"],
-                    "properties": {
-                        "app_version": {
-                            "type": "string",
-                            "description": "Mobile App version number (eg. 1.0.0)"
-                        }
-                    }
-                }
-            }
-        ],
-        "responses": {
-            "200": response_200,
-            "400": response_400,
-            "504": response_504
-        }
-    }
-
-    modules = {
-        "tags": ["Modules"],
-        "summary": "Get list of active modules for given Mobile-App version",
+    modules_by_app_get = {
+        "tags": ["Modules by App"],
+        "summary": "Get list of active modules for appVersion",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
             {
-                "name": "App-Version",
-                "in": "header",
+                "name": "appVersion",
+                "in": "query",
                 "required": True,
                 "type": "string",
-                "description": "Mobile-App version for requesting modules"
+                "description": "appVersion for requesting modules"
             }
         ],
         "responses": {
@@ -333,7 +311,312 @@ class APIDocs:
                             "items": {
                                 "type": "object",
                                 "description": "Modules",
-                                "properties": modules_properties
+                                "properties": modules_by_app
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "string",
+                            "description": "error message"
+                        }
+                    }
+                }
+            },
+            "504": response_504
+        }
+    }
+
+    modules_by_app_post = {
+        "tags": ["Modules by App"],
+        "summary": "Create a module",
+        "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "id": "module_by_app_post",
+                    "required": ["appVersion", "moduleSlug", "moduleVersion", "status"],
+                    "properties": modules_by_app
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "400": response_400,
+            "401": response_401,
+            "504": response_504
+        }
+    }
+
+    modules_by_app_patch = {
+        "tags": ["Modules by App"],
+        "summary": "Patch a module-by-app",
+        "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "id": "module_by_app_patch",
+                    "required": ["appVersion", "moduleSlug"],
+                    "properties": modules_by_app
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "400": response_400,
+            "401": response_401,
+            "504": response_504
+        }
+    }
+
+    modules_by_app_delete = {
+        "tags": ["Modules by App"],
+        "summary": "Delete a module-by-app",
+        "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "id": "modules_by_app_delete",
+                    "required": ["appVersion", "moduleSlug"],
+                    "properties": {
+                        "appVersion": version,
+                        "moduleSlug": slug
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "400": response_400,
+            "401": response_401,
+            "504": response_504
+        }
+    }
+
+    module_order_get = {
+        "tags": ["Module Order"],
+        "summary": "Slug order for appVersion",
+        "produces": ["application/json"],
+        "parameters": [
+            {
+                "name": "appVersion",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "appVersion for requesting module order"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Status and list of modules",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "array",
+                            "items": slug
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "string",
+                            "description": "error message"
+                        }
+                    }
+                }
+            },
+            "504": response_504
+        }
+    }
+
+    module_order_post = {
+        "tags": ["Module Order"],
+        "summary": "Slug order for appVersion",
+        "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
+                "name": "body",
+                "in": "body",
+                "required": True,
+                "schema": {
+                    "id": "module_order_post",
+                    "required": ["appVersion", "order"],
+                    "properties": {
+                        "appVersion": version,
+                        "order": {
+                            "type": "array",
+                            "items": slug
+                        }
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "400": response_400,
+            "401": response_401,
+            "504": response_504
+        }
+    }
+
+    module_order_patch = {
+        "tags": ["Module Order"],
+        "summary": "Slug order for appVersion",
+        "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
+                "name": "body",
+                "in": "body",
+                "required": True,
+                "schema": {
+                    "id": "module_order_patch",
+                    "required": ["appVersion", "order"],
+                    "properties": {
+                        "appVersion": version,
+                        "order": {
+                            "type": "array",
+                            "items": slug
+                        }
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "400": response_400,
+            "401": response_401,
+            "504": response_504
+        }
+    }
+
+    module_order_delete = {
+        "tags": ["Module Order"],
+        "summary": "Slug order for appVersion",
+        "parameters": [
+            {
+                "name": "Authorization",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "Authorization header based on uuid and AES_SECRET"
+            },
+            {
+                "name": "body",
+                "in": "body",
+                "required": True,
+                "schema": {
+                    "id": "module_order_delete",
+                    "required": ["appVersion"],
+                    "properties": {
+                        "appVersion": version
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "400": response_400,
+            "401": response_401,
+            "504": response_504
+        }
+    }
+
+    modules_for_app_get = {
+        "tags": ["Modules for App"],
+        "summary": "Get list of modules for appVersion",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+            {
+                "name": "appVersion",
+                "in": "header",
+                "required": True,
+                "type": "string",
+                "description": "appVersion for requesting modules"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Status and list of modules",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "description": "Modules",
+                                "properties": {
+                                    "description": description,
+                                    "slug": slug,
+                                    "title": title,
+                                    "icon": icon,
+                                    "status": status
+                                }
                             }
                         }
                     }
