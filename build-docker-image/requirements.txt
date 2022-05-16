@@ -4,3 +4,4 @@ pycryptodome
 PyYAML
 requests
 wsgiserver
+pybase64

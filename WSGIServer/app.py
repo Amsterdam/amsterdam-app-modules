@@ -20,13 +20,7 @@ template = {
         },
         "version": "1.0.0"
     },
-    "host": "{HOST}:{PORT}".format(HOST=Configuration.environment['flask']['HOST'],
-                                   PORT=Configuration.environment['flask']['PORT']),
     "basePath": "/api/v1",
-    "schemes": [
-        "http",
-        "https"
-    ],
     "securityDefinitions": {
         "APIKeyAuth": {
             "type": "apiKey",
@@ -49,13 +43,13 @@ template = {
 class APIServer:
     def __init__(self, debug=False):
         self.debug = debug
-        self.ip = Configuration.environment['flask']['HOST']
-        self.port = Configuration.environment['flask']['PORT']
+        self.ip = os.getenv('HOST', '0.0.0.0')
+        self.port = int(os.getenv('PORT', 9000))
         self.http_server = None
         Configuration.global_parameters = self.__dict__
         Configuration.global_parameters['backend_host'] = os.getenv('TARGET', 'api-server')
         Configuration.global_parameters['backend_port'] = int(os.getenv('TARGET_PORT', 8000))
-        self.app = Flask('WSGI-Flask Server on port: {port}'.format(port=self.port))
+        self.app = Flask('Amsterdam-App-Module Server on port: {port}'.format(port=self.port))
 
         Swagger(self.app, template=template, config={"specs_route": "/api/v1/apidocs/"}, merge=True)
 
