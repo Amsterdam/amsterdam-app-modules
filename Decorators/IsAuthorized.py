@@ -23,14 +23,10 @@ class IsAuthorized:
         self.func = func
 
     def __call__(self, *args, **kwargs):
-        try:
-            http_authorization = request.headers.get('AUTHORIZATION', None)
-
-            if http_authorization is not None:
-                if self.is_valid_authorization_token(encrypted_token=http_authorization):
-                    return self.func(*args, **kwargs)
-        except Exception as error:  # pragma: no cover
-            pass
+        http_authorization = request.headers.get('AUTHORIZATION', None)
+        if http_authorization is not None:
+            if self.is_valid_authorization_token(encrypted_token=http_authorization):
+                return self.func(*args, **kwargs)
 
         # Access is not allowed, abort with 401
         return Response(json.dumps({'status': False, 'result': 'Access forbidden'}),

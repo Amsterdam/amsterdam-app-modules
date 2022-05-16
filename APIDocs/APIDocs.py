@@ -72,6 +72,40 @@ class APIDocs:
         }
     }
 
+    response_404 = {
+        "description": "No such object",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "description": "Response status"
+                },
+                "result": {
+                    "type": "string",
+                    "description": "No such object"
+                }
+            }
+        }
+    }
+
+    response_422 = {
+        "description": "Error: UNPROCESSABLE ENTITY",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "description": "Response status"
+                },
+                "result": {
+                    "type": "string",
+                    "description": "Error: UNPROCESSABLE ENTITY"
+                }
+            }
+        }
+    }
+
     response_504 = {
         "description": "The up-stream server for storing modules could not be reached",
         "schema": {
@@ -141,8 +175,6 @@ class APIDocs:
     modules_get = {
         "tags": ["Modules"],
         "summary": "Get modules",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
         "parameters": [
             {
                 "name": "slug",
@@ -217,6 +249,7 @@ class APIDocs:
             "200": response_200,
             "400": response_400,
             "401": response_401,
+            "422": response_422,
             "504": response_504
         }
     }
@@ -545,6 +578,8 @@ class APIDocs:
             "200": response_200,
             "400": response_400,
             "401": response_401,
+            "404": response_404,
+            "422": response_422,
             "504": response_504
         }
     }

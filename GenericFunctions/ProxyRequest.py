@@ -1,7 +1,9 @@
 import os
 import requests
+import json
 from GenericFunctions.AESCipher import AESCipher
 from uuid import uuid4
+from flask import Response
 
 
 class ProxyRequest:
@@ -13,13 +15,15 @@ class ProxyRequest:
         self.url = None
         self.token = AESCipher(str(uuid4()), os.getenv('AES_SECRET')).encrypt()
         self.headers = {'Accept': 'application/json', 'IngestAuthorization': self.token}
+        self.response = None
 
     def set_result(self):
         if self.request.status_code == 403:
-            return {'status': False, 'result': self.request.reason}
+            self.response = Response(json.dumps({'status': False, 'result': self.request.reason}), status=self.request.status_code)
         else:
-            self.request.headers['Content-Type'] = 'application/json; charset=utf-8'
-            return self.request.json()
+            headers = {'Content-Type': 'application/json'}
+            response_body = json.dumps(self.request.json())
+            self.response = Response(response_body, headers=headers, status=self.request.status_code)
 
     def set_url(self):
         host = os.getenv('TARGET', 'api-server')
