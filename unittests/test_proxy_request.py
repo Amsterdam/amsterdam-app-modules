@@ -24,7 +24,8 @@ def test_get():
     with MockBackendServer(pact=False):
         if wait_for_provider_is_alive('127.0.0.1', 8000):
             with ProxyRequest('/api/v1/modules?slug=mock', method='GET') as req:
-                result = req.set_result()
+                req.set_result()
+                result = req.response.json
 
             expected_result = {
                 'result': [{'description': 'string', 'icon': 'string', 'slug': 'string', 'title': 'string', 'version': 'string'}],
@@ -42,7 +43,8 @@ def test_post():
     with MockBackendServer():
         if wait_for_provider_is_alive('127.0.0.1', 8000):
             with ProxyRequest('/api/v1/modules', method='POST', data={}) as req:
-                result = req.set_result()
+                req.set_result()
+                result = req.response.json
 
             TestCase().assertDictEqual(result, {"result": "string", "status": True})
         else:
@@ -55,7 +57,8 @@ def test_patch():
     with MockBackendServer():
         if wait_for_provider_is_alive('127.0.0.1', 8000):
             with ProxyRequest('/api/v1/modules', method='PATCH', data={}) as req:
-                result = req.set_result()
+                req.set_result()
+                result = req.response.json
 
             TestCase().assertDictEqual(result, {"result": "string", "status": True})
         else:
@@ -68,7 +71,8 @@ def test_delete():
     with MockBackendServer():
         if wait_for_provider_is_alive('127.0.0.1', 8000):
             with ProxyRequest('/api/v1/modules', method='DELETE', data={}) as req:
-                result = req.set_result()
+                req.set_result()
+                result = req.response.json
 
             TestCase().assertDictEqual(result, {"result": "string", "status": True})
         else:
