@@ -1,6 +1,5 @@
 import threading
 import time
-import os
 import Configuration
 from flask import Flask
 from routes import *
@@ -41,30 +40,27 @@ template = {
 
 
 class APIServer:
-    def __init__(self, debug=False):
-        self.debug = debug
-        self.ip = os.getenv('HOST', '0.0.0.0')
-        self.port = int(os.getenv('PORT', 9000))
+    def __init__(self):
+        self.logger = Configuration.environment['logger']
+        self.debug = Configuration.environment['DEBUG']
+        self.ip = Configuration.environment['flask']['HOST']
+        self.port = Configuration.environment['flask']['PORT']
         self.http_server = None
-        Configuration.global_parameters = self.__dict__
-        Configuration.global_parameters['backend_host'] = os.getenv('TARGET', 'api-server')
-        Configuration.global_parameters['backend_port'] = int(os.getenv('TARGET_PORT', 8000))
         self.app = Flask('Amsterdam-App-Module Server on port: {port}'.format(port=self.port))
-
+        self.thread = None
         Swagger(self.app, template=template, config={"specs_route": "/api/v1/apidocs/"}, merge=True)
 
-        # threading.Thread(target=self.run).start()
-
     def __enter__(self):
-        threading.Thread(target=self.run).start()
+        self.thread = threading.Thread(target=self.run)
+        self.thread.start()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
 
     def run(self):
-        print('Server is listing on port: {port}'.format(port=self.port), flush=True)
-        print('API-DOCS: http://{}:{}/api/v1/apidocs'.format(self.ip, self.port), flush=True)
+        self.logger.info('Server is listing on port: {port}'.format(port=self.port))
+        self.logger.info('API-DOCS: http://{}:{}/api/v1/apidocs'.format(self.ip, self.port))
         self.app.config['JSON_SORT_KEYS'] = True
         self.app.config['TEMPLATES_AUTO_RELOAD'] = True
         self.app.config['SECRET_KEY'] = str(time.time())

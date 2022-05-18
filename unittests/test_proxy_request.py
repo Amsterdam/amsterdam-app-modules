@@ -1,6 +1,7 @@
 import os
 import socket
 import time
+import Configuration
 from GenericFunctions.ProxyRequest import ProxyRequest
 from MockBackendServer.MockBackendServer import MockBackendServer
 from unittest import TestCase
@@ -19,10 +20,12 @@ def wait_for_provider_is_alive(host, port):
 
 
 def test_get():
-    os.environ['AES_SECRET'] = 'mock'
-    os.environ['TARGET'] = '127.0.0.1'
+    Configuration.environment['AES_SECRET'] = 'mock'
+    Configuration.environment['TARGET'] = '127.0.0.1'
+    Configuration.environment['TARGET_PORT'] = 8000
+
     with MockBackendServer(pact=False):
-        if wait_for_provider_is_alive('127.0.0.1', 8000):
+        if wait_for_provider_is_alive(Configuration.environment['TARGET'], Configuration.environment['TARGET_PORT']):
             with ProxyRequest('/api/v1/modules?slug=mock', method='GET') as req:
                 req.set_result()
                 result = req.response.json
@@ -38,10 +41,11 @@ def test_get():
 
 
 def test_post():
-    os.environ['AES_SECRET'] = 'mock'
-    os.environ['TARGET'] = '127.0.0.1'
+    Configuration.environment['AES_SECRET'] = 'mock'
+    Configuration.environment['TARGET'] = '127.0.0.1'
+    Configuration.environment['TARGET_PORT'] = 8000
     with MockBackendServer():
-        if wait_for_provider_is_alive('127.0.0.1', 8000):
+        if wait_for_provider_is_alive(Configuration.environment['TARGET'], Configuration.environment['TARGET_PORT']):
             with ProxyRequest('/api/v1/modules', method='POST', data={}) as req:
                 req.set_result()
                 result = req.response.json
@@ -52,10 +56,11 @@ def test_post():
 
 
 def test_patch():
-    os.environ['AES_SECRET'] = 'mock'
-    os.environ['TARGET'] = '127.0.0.1'
+    Configuration.environment['AES_SECRET'] = 'mock'
+    Configuration.environment['TARGET'] = '127.0.0.1'
+    Configuration.environment['TARGET_PORT'] = 8000
     with MockBackendServer():
-        if wait_for_provider_is_alive('127.0.0.1', 8000):
+        if wait_for_provider_is_alive(Configuration.environment['TARGET'], Configuration.environment['TARGET_PORT']):
             with ProxyRequest('/api/v1/modules', method='PATCH', data={}) as req:
                 req.set_result()
                 result = req.response.json
@@ -66,10 +71,11 @@ def test_patch():
 
 
 def test_delete():
-    os.environ['AES_SECRET'] = 'mock'
-    os.environ['TARGET'] = '127.0.0.1'
+    Configuration.environment['AES_SECRET'] = 'mock'
+    Configuration.environment['TARGET'] = '127.0.0.1'
+    Configuration.environment['TARGET_PORT'] = 8000
     with MockBackendServer():
-        if wait_for_provider_is_alive('127.0.0.1', 8000):
+        if wait_for_provider_is_alive(Configuration.environment['TARGET'], Configuration.environment['TARGET_PORT']):
             with ProxyRequest('/api/v1/modules', method='DELETE', data={}) as req:
                 req.set_result()
                 result = req.response.json

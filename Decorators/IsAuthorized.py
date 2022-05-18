@@ -1,6 +1,6 @@
-import os
 import functools
 import json
+import Configuration
 from uuid import UUID
 from flask import Response, request
 from GenericFunctions.AESCipher import AESCipher
@@ -36,7 +36,7 @@ class IsAuthorized:
     @staticmethod
     def is_valid_authorization_token(encrypted_token=None):
         try:
-            token = UUID(AESCipher(encrypted_token, os.getenv('AES_SECRET')).decrypt(), version=4)
+            token = UUID(AESCipher(encrypted_token, Configuration.environment['AES_SECRET']).decrypt(), version=4)
             return isinstance(token, UUID)
         except:
             return False

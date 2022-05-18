@@ -1,7 +1,6 @@
 import json
 from . import routes
 from APIDocs.APIDocs import APIDocs
-from Decorators.IsReachable import is_reachable
 from Decorators.AppVersion import app_version_header
 from Decorators.IsAuthorized import IsAuthorized
 from flasgger import swag_from
@@ -24,7 +23,6 @@ def validation_error_inform_error(err, data, schema):
 
 @routes.route('/modules', methods=['GET'])
 @swag_from(APIDocs.modules_get)
-@is_reachable
 def modules_get():
     url = '/api/v1/modules?slug={slug}'.format(slug=request.args.get('slug'))
     with ProxyRequest(url, request.method) as proxy_request:
@@ -35,7 +33,6 @@ def modules_get():
 @routes.route('/modules', methods=['POST'])
 @swag_from(APIDocs.modules_post, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def modules_post():
     data = request.json
     with ProxyRequest('/api/v1/modules', 'POST', data=data) as proxy_request:
@@ -46,7 +43,6 @@ def modules_post():
 @routes.route('/modules', methods=['PATCH'])
 @swag_from(APIDocs.modules_patch, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def modules_patch():
     data = request.json
     with ProxyRequest('/api/v1/modules', 'PATCH', data=data) as proxy_request:
@@ -57,7 +53,6 @@ def modules_patch():
 @routes.route('/modules', methods=['DELETE'])
 @swag_from(APIDocs.modules_delete, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def modules_delete():
     data = request.json
     with ProxyRequest('/api/v1/modules', 'DELETE', data=data) as proxy_request:
@@ -67,7 +62,6 @@ def modules_delete():
 
 @routes.route('/modules_by_app', methods=['GET'])
 @swag_from(APIDocs.modules_by_app_get)
-@is_reachable
 def modules_by_app_get():
     url = '/api/v1/modules_by_app?appVersion={appVersion}'.format(appVersion=request.args.get('appVersion'))
     with ProxyRequest(url, request.method) as proxy_request:
@@ -78,7 +72,6 @@ def modules_by_app_get():
 @routes.route('/modules_by_app', methods=['POST'])
 @swag_from(APIDocs.modules_by_app_post, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def modules_by_app_post():
     data = request.json
     with ProxyRequest('/api/v1/modules_by_app', 'POST', data=data) as proxy_request:
@@ -89,7 +82,6 @@ def modules_by_app_post():
 @routes.route('/modules_by_app', methods=['PATCH'])
 @swag_from(APIDocs.modules_by_app_patch, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def modules_by_app_patch():
     data = request.json
     with ProxyRequest('/api/v1/modules_by_app', 'PATCH', data=data) as proxy_request:
@@ -100,7 +92,6 @@ def modules_by_app_patch():
 @routes.route('/modules_by_app', methods=['DELETE'])
 @swag_from(APIDocs.modules_by_app_delete, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def modules_by_app_delete():
     data = request.json
     with ProxyRequest('/api/v1/modules_by_app', 'DELETE', data=data) as proxy_request:
@@ -111,7 +102,6 @@ def modules_by_app_delete():
 @routes.route('/modules_order', methods=['GET'])
 @swag_from(APIDocs.module_order_get)
 @app_version_header
-@is_reachable
 def module_order_get():
     url = '/api/v1/modules_order?appVersion={appVersion}'.format(appVersion=request.headers.get('appVersion'))
     with ProxyRequest(url, request.method) as proxy_request:
@@ -122,7 +112,6 @@ def module_order_get():
 @routes.route('/modules_order', methods=['POST'])
 @swag_from(APIDocs.module_order_post, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def modules_order_post():
     data = request.json
     with ProxyRequest('/api/v1/modules_order', request.method, data=data) as proxy_request:
@@ -133,7 +122,6 @@ def modules_order_post():
 @routes.route('/modules_order', methods=['PATCH'])
 @swag_from(APIDocs.module_order_patch, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def module_order_patch():
     data = request.json
     with ProxyRequest('/api/v1/modules_order', request.method, data=data) as proxy_request:
@@ -144,7 +132,6 @@ def module_order_patch():
 @routes.route('/modules_order', methods=['DELETE'])
 @swag_from(APIDocs.module_order_delete, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
-@is_reachable
 def module_order_delete():
     data = request.json
     with ProxyRequest('/api/v1/modules_order', request.method, data=data) as proxy_request:
@@ -154,7 +141,6 @@ def module_order_delete():
 
 @routes.route('/modules_for_app', methods=['GET'])
 @swag_from(APIDocs.modules_for_app_get)
-@is_reachable
 def modules_for_app_get():
     url = '/api/v1/modules_for_app?appVersion={appVersion}'.format(appVersion=request.headers.get('appVersion'))
     with ProxyRequest(url, request.method) as proxy_request:

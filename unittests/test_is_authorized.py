@@ -1,5 +1,6 @@
 import os
 import uuid
+import Configuration
 from Decorators.IsAuthorized import IsAuthorized
 from GenericFunctions.AESCipher import AESCipher
 from flask import Flask
@@ -13,9 +14,9 @@ def test_authorized():
     def foo():
         return True
 
-    os.environ['AES_SECRET'] = 'mock'
+    Configuration.environment['AES_SECRET'] = 'mock'
     id = str(uuid.uuid4())
-    secret = AESCipher(id, os.getenv('AES_SECRET')).encrypt()
+    secret = AESCipher(id, Configuration.environment['AES_SECRET']).encrypt()
 
     with app.test_request_context() as context:
         context.request.headers = {'AUTHORIZATION': secret}
@@ -29,7 +30,7 @@ def test_unauthorized():
     def foo():
         return True
 
-    os.environ['AES_SECRET'] = 'mock'
+    Configuration.environment['AES_SECRET'] = 'mock'
 
     with app.test_request_context() as context:
         context.request.headers = {'AUTHORIZATION': 'foo'}

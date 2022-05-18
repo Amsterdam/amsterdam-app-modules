@@ -24,7 +24,8 @@ def test_apidocs(mock_print):
     os.environ['HOST'] = '127.0.0.1'
     os.environ['PORT'] = '8001'
     os.environ['AES_SECRET'] = 'mock'
-    with APIServer(debug=False) as server:
+    os.environ['DEBUG'] = 'false'
+    with APIServer() as server:
         if wait_for_provider_is_alive():
             result = requests.get('http://127.0.0.1:8001/apispec_1.json')
 

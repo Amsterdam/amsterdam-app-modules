@@ -1,5 +1,5 @@
+import Configuration
 from Crypto import Random
-from GenericFunctions.Logger import Logger
 from Crypto.Cipher import AES
 from hashlib import md5
 from pybase64 import b64encode, b64decode
@@ -7,7 +7,7 @@ from pybase64 import b64encode, b64decode
 
 class AESCipher:
     def __init__(self, data, secret):
-        self.logger = Logger()
+        self.logger = Configuration.environment['logger']
         self.data = data
         self.secret = secret.encode()
         self.block_size = 16
