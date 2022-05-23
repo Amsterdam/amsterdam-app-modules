@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 environment = {
     'flask': {
         'HOST': os.getenv('HOST', '0.0.0.0'),
-        'PORT': os.getenv('PORT', 8001)
+        'PORT': int(os.getenv('PORT', 8001))
     },
     'TARGET': os.getenv('TARGET', 'api-server'),
     'TARGET_PORT': int(os.getenv('TARGET_PORT', 8000)),

@@ -650,7 +650,8 @@ class APIDocs:
                                     "slug": slug,
                                     "title": title,
                                     "icon": icon,
-                                    "status": status
+                                    "status": status,
+                                    "version": version
                                 }
                             }
                         }
