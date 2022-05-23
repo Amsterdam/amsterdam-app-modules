@@ -31,5 +31,5 @@ COPY main.py /code/
 
 # Install python requirements
 RUN chmod +x /code/init.sh
-EXPOSE 8000
+EXPOSE 9000
 CMD ["/bin/sh", "/code/init.sh"]

@@ -3,7 +3,6 @@ version: '3.7'
 services:
   module-server:
     build: .
-    container_name: test-modules-server
     environment:
       - HOST=${HOST}
       - PORT=${PORT}
@@ -11,5 +10,5 @@ services:
       - TARGET_PORT=${TARGET_PORT}
       - AES_SECRET=${AES_SECRET}
     ports:
-      - "9000:9000"
+      - "${PORT:-9000}:${PORT:-9000}"
     restart: always
