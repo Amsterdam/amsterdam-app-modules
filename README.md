@@ -22,18 +22,30 @@ Clone this project and in the root folder of this project run the command below 
     docker build -t amsterdam-app-modules -f build-docker-image/Dockerfile .
 
 # Execute
-You can point to an TARGET server of your choosing by passing the environment parameter TARGET with the docker run 
-command. This can either be a fully qualified domain name or ip-address. You can also pass a TARGET-PORT parameter. 
+create a file called 'env' in the root of the project and populated the parameters
 
-    AES_SECRET: A shared secret (required)
-    TARGET: FQDN or ip address of the recieving end (default: api-server)
-    TARGET_PORT: The tcp port on the recieving end (default: 8000)
-    
-    docker run --name amsterdam-app-modules -p 8000:8000 -e <AES_SECRET> -e TARGET=<FQDN or ip-address> TARGET_PORT=<int> amsterdam-app-modules
+Explanation of the parameters
+
+- HOST: The ip-address where this services is reachable (e.g. 0.0.0.0 all)
+- PORT: The port number where this services is reachable (e.g. 9000)
+- AES_SECRET: A shared secret (required)
+- TARGET: FQDN or ip address of the recieving end (default: api-server)
+- TARGET_PORT: The tcp port on the recieving end (default: 8000)
+  
+Example:
+
+    HOST=0.0.0.0
+    PORT=9001
+    TARGET=api.test.backend.luscinia-solutions.com
+    TARGET_PORT=8001
+    AES_SECRET=some-secret
+
+You can start the container by running the start.sh script. This will build and run the image with set parameters.
     
 # API documentation
 
     /api/v1/apidocs
 
 # Dependencies
+
 This software works in conjunction with https://github.com/Amsterdam/amsterdam-app-backend as a TARGET.
