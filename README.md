@@ -21,6 +21,11 @@ Clone this project and in the root folder of this project run the command below 
 
     docker build -t amsterdam-app-modules -f build-docker-image/Dockerfile .
 
+### Create container on m1 arch for amd64
+    
+    docker buildx build --platform=linux/amd64 -f build-docker-image/Dockerfile . -t registry-ams.luscinia-solutions.com/backend-modules:tst-latest
+    docker buildx build --platform=linux/amd64 -f build-docker-image/Dockerfile . -t registry-ams.luscinia-solutions.com/backend-modules:prd-latest
+
 # Execute
 create a file called 'env' in the root of the project and populated the parameters
 
