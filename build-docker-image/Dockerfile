@@ -18,8 +18,7 @@ RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
 FROM python:3.9-alpine as PROD_IMAGE
 COPY --from=BASE_IMAGE /code/venv /code/venv/
 
-# Copy source into image
-COPY build-docker-image/requirements.txt /code
+# Copy source into imagek
 COPY APIDocs/* /code/APIDocs/
 COPY Configuration/* /code/Configuration/
 COPY Decorators/* /code/Decorators/
