@@ -1,0 +1,92 @@
+.logo {
+  position: absolute;
+  width: 375px;
+  height: 100px;
+  left: 0px;
+  top: 0px;
+  background: url(/public/Amsterdam-logo.svg);
+}
+
+.aangemeld {
+  position: absolute;
+  top: 62.5px;
+  left: 339.75px;
+  bottom: 0%;
+  width: 22.5px;
+  height: 22.5px;
+
+  /* Primary colours/primary-blue */
+}
+
+.navigation {
+  position: absolute;
+  width: 144px;
+  height: 29px;
+  left: 15px;
+  top: 110px;
+
+
+  /* Desktop/body-small */
+  font-family: 'Amsterdam Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 160%;
+  /* identical to box height, or 29px */
+
+  letter-spacing: 0.2px;
+  color: #004699;
+}
+
+a:link,
+visited,
+hove,
+active {
+  text-decoration: none;
+  color: #004699;
+}
+
+.mainpage_title {
+  position: absolute;
+  width: 335px;
+  height: 51px;
+  left: 18px;
+  top: 133px;
+
+  /* Mobile/H1-small */
+
+  font-family: 'Amsterdam Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 110%;
+  /* or 33px */
+
+  color: #000000;
+
+}
+
+.page_title {
+  position: absolute;
+  width: 335px;
+  height: 51px;
+  left: 18px;
+  top: 159px;
+
+  /* Mobile/H1-small */
+
+  font-family: 'Amsterdam Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 110%;
+  /* or 33px */
+
+  color: #000000;
+}
+
+.DUMMY {
+  position: absolute;
+  top: 180px;
+  color: #004699;
+}

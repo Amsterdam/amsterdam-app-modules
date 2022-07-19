@@ -19,7 +19,7 @@ template = {
         },
         "version": "1.0.0"
     },
-    "basePath": "/api/v1",
+    "basePath": "",
     "securityDefinitions": {
         "APIKeyAuth": {
             "type": "apiKey",
@@ -70,7 +70,7 @@ class APIServer:
         self.app.config['REMEMBER_COOKIE_HTTPONLY'] = True
         self.app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
         self.app.debug = True
-        self.app.register_blueprint(routes, url_prefix='/api/v1')
+        self.app.register_blueprint(routes, url_prefix='')
 
         self.http_server = WSGIServer(self.app, host=self.ip, port=self.port)
         self.http_server.start()

@@ -21,7 +21,7 @@ def validation_error_inform_error(err, data, schema):
     abort(Response(json.dumps(response), status=400, mimetype='application/json'))
 
 
-@routes.route('/modules', methods=['GET'])
+@routes.route('/api/v1/modules', methods=['GET'])
 @swag_from(APIDocs.modules_get)
 def modules_get():
     url = '/api/v1/modules?slug={slug}'.format(slug=request.args.get('slug'))
@@ -30,7 +30,7 @@ def modules_get():
     return proxy_request.response
 
 
-@routes.route('/modules', methods=['POST'])
+@routes.route('/api/v1/modules', methods=['POST'])
 @swag_from(APIDocs.modules_post, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def modules_post():
@@ -40,7 +40,7 @@ def modules_post():
     return proxy_request.response
 
 
-@routes.route('/modules', methods=['PATCH'])
+@routes.route('/api/v1/modules', methods=['PATCH'])
 @swag_from(APIDocs.modules_patch, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def modules_patch():
@@ -50,7 +50,7 @@ def modules_patch():
     return proxy_request.response
 
 
-@routes.route('/modules', methods=['DELETE'])
+@routes.route('/api/v1/modules', methods=['DELETE'])
 @swag_from(APIDocs.modules_delete, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def modules_delete():
@@ -60,7 +60,7 @@ def modules_delete():
     return proxy_request.response
 
 
-@routes.route('/modules_by_app', methods=['GET'])
+@routes.route('/api/v1/modules_by_app', methods=['GET'])
 @swag_from(APIDocs.modules_by_app_get)
 def modules_by_app_get():
     url = '/api/v1/modules_by_app?appVersion={appVersion}'.format(appVersion=request.args.get('appVersion'))
@@ -69,7 +69,7 @@ def modules_by_app_get():
     return proxy_request.response
 
 
-@routes.route('/modules_by_app', methods=['POST'])
+@routes.route('/api/v1/modules_by_app', methods=['POST'])
 @swag_from(APIDocs.modules_by_app_post, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def modules_by_app_post():
@@ -79,7 +79,7 @@ def modules_by_app_post():
     return proxy_request.response
 
 
-@routes.route('/modules_by_app', methods=['PATCH'])
+@routes.route('/api/v1/modules_by_app', methods=['PATCH'])
 @swag_from(APIDocs.modules_by_app_patch, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def modules_by_app_patch():
@@ -89,7 +89,7 @@ def modules_by_app_patch():
     return proxy_request.response
 
 
-@routes.route('/modules_by_app', methods=['DELETE'])
+@routes.route('/api/v1/modules_by_app', methods=['DELETE'])
 @swag_from(APIDocs.modules_by_app_delete, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def modules_by_app_delete():
@@ -99,7 +99,7 @@ def modules_by_app_delete():
     return proxy_request.response
 
 
-@routes.route('/modules_order', methods=['GET'])
+@routes.route('/api/v1/modules_order', methods=['GET'])
 @swag_from(APIDocs.module_order_get)
 @app_version_header
 def module_order_get():
@@ -109,7 +109,7 @@ def module_order_get():
     return proxy_request.response
 
 
-@routes.route('/modules_order', methods=['POST'])
+@routes.route('/api/v1/modules_order', methods=['POST'])
 @swag_from(APIDocs.module_order_post, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def modules_order_post():
@@ -119,7 +119,7 @@ def modules_order_post():
     return proxy_request.response
 
 
-@routes.route('/modules_order', methods=['PATCH'])
+@routes.route('/api/v1/modules_order', methods=['PATCH'])
 @swag_from(APIDocs.module_order_patch, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def module_order_patch():
@@ -129,7 +129,7 @@ def module_order_patch():
     return proxy_request.response
 
 
-@routes.route('/modules_order', methods=['DELETE'])
+@routes.route('/api/v1/modules_order', methods=['DELETE'])
 @swag_from(APIDocs.module_order_delete, validation=True, validation_error_handler=validation_error_inform_error)
 @IsAuthorized
 def module_order_delete():
@@ -139,7 +139,7 @@ def module_order_delete():
     return proxy_request.response
 
 
-@routes.route('/modules_for_app', methods=['GET'])
+@routes.route('/api/v1/modules_for_app', methods=['GET'])
 @swag_from(APIDocs.modules_for_app_get)
 def modules_for_app_get():
     url = '/api/v1/modules_for_app?appVersion={appVersion}'.format(appVersion=request.headers.get('appVersion'))
