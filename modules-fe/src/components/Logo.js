@@ -1,11 +1,13 @@
-import { useLocation } from 'react-router-dom';
+import { useContext } from "react"
+import AuthContext from "../context/AuthProvider"
 
 const Logo = () => {
-    const location = useLocation()
+    const authContext = useContext(AuthContext)
+    const hasAccessToken = authContext.auth.hasOwnProperty('access')
 
     return (
         <div className="logo">
-            {(location.pathname !== '/login') && (
+            {hasAccessToken && (
                 <img
                     className="aangemeld"
                     src='/Shape.svg'

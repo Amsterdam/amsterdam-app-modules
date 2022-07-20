@@ -1,6 +1,6 @@
-import Logo from "./Logo"
-import Navigation from "./Navigation"
-import PageTitle from './PageTitle'
+import Logo from "../components/Logo"
+import Navigation from "../components/Navigation"
+import PageTitle from '../components/PageTitle'
 
 const NewModule = () => {
     return (

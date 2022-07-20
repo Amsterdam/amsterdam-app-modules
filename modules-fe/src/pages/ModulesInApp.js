@@ -1,8 +1,12 @@
+import { useAPICall } from '../components/APICalls'
 import { Link } from 'react-router-dom'
-import Logo from "./Logo"
-import PageTitle from './PageTitle'
+import Logo from "../components/Logo"
+import PageTitle from '../components/PageTitle'
 
 const ModulesInApp = () => {
+    const modules_in_app = useAPICall('/tasks')
+    console.log(modules_in_app.data)
+
     return (
         <div>
             {/* Logo */}
@@ -28,6 +32,10 @@ const ModulesInApp = () => {
                 <p>
                     <Link to='/new-app-version'>NewAppVersion</Link>
                 </p>
+
+                {modules_in_app.data.map((item) => (
+                    <p key={item.id}>{item.day}</p>
+                ))}
             </div>
         </div >
     )

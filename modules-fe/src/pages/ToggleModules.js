@@ -1,6 +1,6 @@
-import Logo from "./Logo"
-import Navigation from "./Navigation"
-import PageTitle from './PageTitle'
+import Logo from "../components/Logo"
+import Navigation from "../components/Navigation"
+import PageTitle from '../components/PageTitle'
 
 const ToggleModules = () => {
     return (
@@ -12,7 +12,7 @@ const ToggleModules = () => {
             <Navigation location='/' text='Terug' />
 
             {/* Title component */}
-            <PageTitle pageTitle='Zet een module aan / uit' />
+            <PageTitle pageTitle='Zet een module aan/uit' />
         </div>
     )
 }

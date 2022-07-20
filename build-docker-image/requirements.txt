@@ -1,5 +1,6 @@
 flasgger
 flask
+flask-cors
 pycryptodome
 PyYAML
 requests

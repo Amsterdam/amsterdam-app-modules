@@ -677,3 +677,26 @@ class APIDocs:
             "504": response_504
         }
     }
+
+    get_token = {
+        "tags": ["JWT"],
+        "summary": "Request JWT",
+        "parameters": [
+            {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "id": "get_token",
+                    "required": ["username", "password"],
+                    "properties": {
+                        "username": {"type": "string", "description": "username"},
+                        "password": {"type": "string", "description": "password"}
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "401": response_401
+        }
+    }

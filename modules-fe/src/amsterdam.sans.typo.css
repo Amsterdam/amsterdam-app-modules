@@ -2,312 +2,59 @@
     font-family: amsterdam sans;
     font-style: normal;
     font-weight: 300;
-    src: url(/public/fonts/AmsterdamSans/woff/AmsterdamSans-Light.woff) format("woff")
+    src: url('/public/fonts/AmsterdamSans/woff2/AmsterdamSans-Light.woff2') format('woff2'),
+        /* Super Modern Browsers */
+        url('/public/fonts/AmsterdamSans/woff/AmsterdamSans-Light.woff') format('woff'),
+        /* Pretty Modern Browsers */
+
 }
 
 @font-face {
     font-family: amsterdam sans;
     font-style: normal;
     font-weight: 400;
-    src: url(/public/fonts/AmsterdamSans/woff/AmsterdamSans-Regular.woff) format("woff")
+    src: url('/public/fonts/AmsterdamSans/woff2/AmsterdamSans-Regular.woff2') format('woff2'),
+        /* Super Modern Browsers */
+        url('/public/fonts/AmsterdamSans/woff/AmsterdamSans-Regular.woff') format('woff'),
+        /* Pretty Modern Browsers */
 }
 
 @font-face {
     font-family: amsterdam sans;
     font-style: italic;
     font-weight: 400;
-    src: url(/public/fonts/AmsterdamSans/woff/AmsterdamSans-Italic.woff) format("woff")
+    src: url('/public/fonts/AmsterdamSans/woff2/AmsterdamSans-Italic.woff2') format('woff2'),
+        /* Super Modern Browsers */
+        url('/public/fonts/AmsterdamSans/woff/AmsterdamSans-Italic.woff') format('woff'),
+        /* Pretty Modern Browsers */
 }
 
 @font-face {
     font-family: amsterdam sans;
     font-style: normal;
     font-weight: 700;
-    src: url(/public/fonts/AmsterdamSans/woff/AmsterdamSans-Bold.woff) format("woff")
+    src: url('/public/fonts/AmsterdamSans/woff2/AmsterdamSans-Bold.woff2') format('woff2'),
+        /* Super Modern Browsers */
+        url('/public/fonts/AmsterdamSans/woff/AmsterdamSans-Bold.woff') format('woff'),
+        /* Pretty Modern Browsers */
 }
 
 @font-face {
     font-family: amsterdam sans;
     font-style: italic;
     font-weight: 700;
-    src: url(/public/fonts/AmsterdamSans/woff/AmsterdamSans-BoldItalic.woff) format("woff")
+    src: url('/public/fonts/AmsterdamSans/woff2/AmsterdamSans-BoldItalic.woff2') format('woff2'),
+        /* Super Modern Browsers */
+        url('/public/fonts/AmsterdamSans/woff/AmsterdamSans-BoldItalic.woff') format('woff'),
+        /* Pretty Modern Browsers */
 }
 
 @font-face {
     font-family: amsterdam sans;
     font-style: normal;
     font-weight: 800;
-    src: url(/public/fonts/AmsterdamSans/woff/AmsterdamSans-ExtraBold.woff) format("woff")
-}
-
-.contents-wrapper h1,
-.related-news h1 {
-    font-weight: 700
-}
-
-body {
-    font-family: amsterdam sans, arial, sans-serif
-}
-
-a {
-    text-decoration: none
-}
-
-a .sizespec,
-a:hover .sizespec {
-    font-size: 80%;
-    text-decoration: none
-}
-
-.grid-blok.grid-campagnetitel {
-    padding: 1.454em 0 0 10px
-}
-
-.contents-wrapper h1,
-.related-news h1 {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #000;
-    float: left;
-    padding: 0 10px;
-    width: 100%
-}
-
-.contents-wrapper h1+.subtitle,
-.contents-wrapper h1+.source,
-.related-news h1+.subtitle,
-.related-news h1+.source {
-    padding-left: 10px
-}
-
-@media screen and (max-width:1023px) {
-
-    .contents-wrapper h1,
-    .related-news h1 {
-        padding: 0 3.33333%
-    }
-
-    .contents-wrapper h1+.subtitle,
-    .contents-wrapper h1+.source,
-    .related-news h1+.subtitle,
-    .related-news h1+.source {
-        padding-left: 3.33333%
-    }
-}
-
-.related-news h1 {
-    margin: 0
-}
-
-.related-news h1 {
-    margin-top: 20px
-}
-
-.grid-paginatitel h1+.subtitle {
-    padding-left: 0
-}
-
-.contents-wrapper .grid-blok h1 {
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 18px
-}
-
-.fullscreen .contents-wrapper h1 {
-    width: auto
-}
-
-.grid-rol-uitgelicht h2,
-.grid-blok .grid-element h2.blok-titel.small-titel,
-.contents-wrapper .left_margezone h2,
-.contents-wrapper .right_margezone h2 {
-    margin-bottom: 10px
-}
-
-.contents-wrapper .left_margezone h2,
-.contents-wrapper .right_margezone h2 {
-    margin: 0 0 14px
-}
-
-h1 .dash,
-h1 .submode,
-h2 .dash,
-h2 .submode {
-    display: none
-}
-
-h2,
-label.blok-titel {
-    margin: 18px 0 14px
-}
-
-h2 a,
-label.blok-titel a {
-    color: #000
-}
-
-.grid-blok:not(.hasbgcolor) .grid-element h2.blok-titel,
-.grid-blok:not(.hasbgcolor) .grid-element .grid-title h2 {
-    margin-top: 0
-}
-
-.grid-blok:not(.hasbgcolor) .grid-element h2.blok-titel.small-titel,
-.grid-blok:not(.hasbgcolor) .grid-element .grid-title h2.small-titel {
-    margin-bottom: 17px;
-    margin-top: 5px
-}
-
-.grid-blok:not(.hasbgcolor) .grid-element h2.blok-titel.results-title,
-.grid-blok:not(.hasbgcolor) .grid-element .grid-title h2.results-title {
-    margin-top: 30px
-}
-
-.grid-blok.hascrease .grid-element .blok-titel.tekstbrowser+.iprox-rich-content {
-    margin-top: 18px
-}
-
-.contents-wrapper .iprox-rich-content table {
-    font-size: 1rem
-}
-
-.grid-rol-uitgelicht h2,
-.contents-wrapper .left_margezone h2,
-.contents-wrapper .right_margezone h2 {
-    font-size: 1.273em
-}
-
-.grid-rol-uitgelicht h2,
-.contents-wrapper.contains-long-read .left_margezone h2,
-.contents-wrapper.contains-long-read .right_margezone h2 {
-    font-size: 1em;
-    line-height: 22px
-}
-
-.grid-blok .grid-element h2.blok-titel.small-titel {
-    font-size: 1.25em;
-    line-height: 22px
-}
-
-.contents-wrapper .right_margezone h3 {
-    font-size: 1em;
-    line-height: 22px
-}
-
-.contents-wrapper .left_margezone .hastitle.hascrease h2,
-.contents-wrapper .right_margezone .hastitle.hascrease h2 {
-    margin: 18px 0 14px
-}
-
-h3 {
-    color: #333
-}
-
-h4 {
-    color: #666
-}
-
-.contents-wrapper .grid-pagina h4,
-.contents-wrapper .grid-blok.nocrease .iprox-rich-content h4 {
-    color: #000;
-    margin: 17px 0 0
-}
-
-h5 {
-    color: #333
-}
-
-.contents-wrapper .grid-pagina h5,
-.contents-wrapper .grid-blok .iprox-rich-content h5 {
-    margin: 0
-}
-
-h6 {
-    color: #666
-}
-
-.contents-wrapper .grid-pagina h6,
-.contents-wrapper .grid-blok .iprox-rich-content h6 {
-    margin: 0
-}
-
-.iprox-content a,
-.iprox-rich-content a {
-    text-decoration: underline
-}
-
-.iprox-rich-content img.css-float-left {
-    float: left;
-    margin: 0 10px 5px 0
-}
-
-.iprox-rich-content img.css-float-right {
-    float: right;
-    margin: 0 0 10px 5px
-}
-
-.iprox-rich-content ul {
-    list-style-type: none;
-    margin: 0 0 1em;
-    padding: 0
-}
-
-.iprox-rich-content ul.links li {
-    background-image: none !important;
-    padding-left: 0
-}
-
-.iprox-rich-content ul.links li a {
-    text-decoration: none
-}
-
-.footer-wrapper ul {
-    list-style-type: none;
-    margin: 0 0 1em;
-    padding: 0
-}
-
-.margezone ul.links {
-    list-style-type: none;
-    margin: 0;
-    padding: 0
-}
-
-.margezone ul.links li a {
-    display: inline-block;
-    padding-left: 15px
-}
-
-.grid-blok.bgcolor-none ul.links li .meta a,
-.grid-blok.bgcolor-none ul.links li .meta a:hover {
-    background-image: none;
-    padding-left: 0
-}
-
-.selected strong,
-.huidige strong,
-.letter strong {
-    font-weight: 400
-}
-
-.main_navigation ul li a,
-.grid-element h2.blok-titel {
-    -webkit-hyphens: auto;
-    -ms-hyphens: auto;
-    hyphens: auto;
-    white-space: normal
-}
-
-.ui-autocomplete .ui-menu-item .ui-state-hover,
-.ui-autocomplete .ui-menu-item .ui-widget-content .ui-state-hover,
-.ui-autocomplete .ui-menu-item .ui-widget-header .ui-state-hover,
-.ui-autocomplete .ui-menu-item .ui-state-focus,
-.ui-autocomplete .ui-menu-item .ui-widget-content .ui-state-focus,
-.ui-autocomplete .ui-menu-item .ui-widget-header .ui-state-focus {
-    background: 0 0
-}
-
-.ui-autocomplete .ui-menu-item .ui-state-hover,
-.ui-autocomplete .ui-menu-item .ui-widget-content .ui-state-hover,
-.ui-autocomplete .ui-menu-item .ui-widget-header .ui-state-hover {
-    border-color: transparent
+    src: url('/public/fonts/AmsterdamSans/woff2/AmsterdamSans-ExtraBold.woff2') format('woff2'),
+        /* Super Modern Browsers */
+        url('/public/fonts/AmsterdamSans/woff/AmsterdamSans-ExtraBold.woff') format('woff'),
+        /* Pretty Modern Browsers */
 }

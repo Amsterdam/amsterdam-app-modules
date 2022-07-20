@@ -21,6 +21,15 @@ def validation_error_inform_error(err, data, schema):
     abort(Response(json.dumps(response), status=400, mimetype='application/json'))
 
 
+@routes.route('/api/v1/get-token', methods=['POST'])
+@swag_from(APIDocs.get_token)
+def get_token():
+    data = request.json
+    with ProxyRequest('/api/v1/get-token/', 'POST', data=data) as proxy_request:
+        proxy_request.set_result()
+    return proxy_request.response
+
+
 @routes.route('/api/v1/modules', methods=['GET'])
 @swag_from(APIDocs.modules_get)
 def modules_get():
@@ -35,7 +44,8 @@ def modules_get():
 @IsAuthorized
 def modules_post():
     data = request.json
-    with ProxyRequest('/api/v1/modules', 'POST', data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules', 'POST', data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 

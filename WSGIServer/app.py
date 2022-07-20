@@ -2,6 +2,7 @@ import threading
 import time
 import Configuration
 from flask import Flask
+from flask_cors import CORS
 from routes import *
 from wsgiserver import WSGIServer
 from flasgger import Swagger
@@ -47,6 +48,7 @@ class APIServer:
         self.port = Configuration.environment['flask']['PORT']
         self.http_server = None
         self.app = Flask('Amsterdam-App-Module Server on port: {port}'.format(port=self.port))
+        cors = CORS(self.app, resources={r"/api/v1/*": {"origins": "*"}})
         self.thread = None
         Swagger(self.app, template=template, config={"specs_route": "/api/v1/apidocs/"}, merge=True)
 
