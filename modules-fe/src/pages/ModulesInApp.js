@@ -1,11 +1,34 @@
-import { useAPICall } from '../components/APICalls'
 import { Link } from 'react-router-dom'
 import Logo from "../components/Logo"
 import PageTitle from '../components/PageTitle'
+import { useContext } from 'react'
+import AuthContext from '../context/AuthProvider'
+import { getMethod, postMethod } from '../components/APICalls'
+import { useState, useEffect } from 'react'
 
 const ModulesInApp = () => {
-    const modules_in_app = useAPICall('/tasks')
-    console.log(modules_in_app.data)
+    const { auth, setAuth } = useContext(AuthContext)
+    const [appVersions, setAppVersions] = useState([])
+    const [test, setTest] = useState({})
+    useEffect(() => {
+        const getData = async () => {
+            const { data, response } = await getMethod('app-versions', {}, auth.access)
+            setAppVersions(data.result);
+        }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        const getData = async () => {
+            const { data, response } = await postMethod('get-token', {}, { username: 'redactie@amsterdam.nl', password: 'gd@3bFC12' }, '')
+            setTest(data.access);
+        }
+        getData();
+    }, []);
+
+    console.log('auth', auth)
+    console.log('appVersions', appVersions)
+    console.log('test', test)
 
     return (
         <div>
@@ -32,10 +55,11 @@ const ModulesInApp = () => {
                 <p>
                     <Link to='/new-app-version'>NewAppVersion</Link>
                 </p>
-
-                {modules_in_app.data.map((item) => (
-                    <p key={item.id}>{item.day}</p>
+                <p>{auth.access}</p>
+                {appVersions.map(reptile => (
+                    <p>{reptile}</p>
                 ))}
+                <p>{test}</p>
             </div>
         </div >
     )

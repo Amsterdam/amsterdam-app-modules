@@ -1,59 +1,65 @@
-import { useState, useEffect } from "react"
+import { ApiServer, EndPoints } from "./APIRoutes"
 
-const apiServer = 'http://172.16.100.117:9000'
+function setUrl(path, params) {
+    let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&')
+    let apiServer = ApiServer()
+    let paths = EndPoints()
+    return apiServer + paths[path] + queryString
+}
 
-// Fetch Tasks
-export function useAPICall(path) {
-    const url = apiServer + path
-    const [data, setData] = useState([])
+function setHeaders(token = null) {
+    let header = { 'Content-type': 'application/json' }
+    if (token !== null) { header.authorization = token }
+    return header
+}
 
-    async function getMethod(_url) {
-        try {
-            const response = await fetch(_url)
-            const data = await response.json()
-            setData(data)
-            return { data, response }
-        } catch (error) {
-            return {}
-        }
-    }
+export async function getMethod(path, query, token) {
+    const url = setUrl(path, query)
+    const headers = setHeaders(token)
 
-    async function postMethod(payload) {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-        const data = await response.json()
-        getMethod()
-        return { data, response }
-    }
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: headers
+    })
+    const data = await response.json()
+    return { data, response }
+}
 
-    async function patchMethod(payload) {
-        const response = await fetch(url, {
-            method: 'PATCH',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-        const data = await response.json()
-        getMethod()
-        return { data, response }
-    }
+export async function postMethod(path, query, payload, token) {
+    const url = setUrl(path, query)
+    const headers = setHeaders(token)
 
-    async function deleteMethod(payload) {
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-        const data = await response.json()
-        getMethod()
-        return { data, response }
-    }
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(payload)
+    })
+    const data = await response.json()
+    return { data, response }
+}
 
-    useEffect(() => {
-        getMethod(url)
-    }, [url])
+export async function usePatchMethod(path, query, payload, token) {
+    const url = setUrl(path, query)
+    const headers = setHeaders(token)
 
-    return { 'data': data, 'post': postMethod, 'patch': patchMethod, 'delete': deleteMethod }
+    const response = await fetch(url, {
+        method: 'PATCH',
+        headers: headers,
+        body: JSON.stringify(payload)
+    })
+    const data = await response.json()
+    return { data, response }
+}
+
+export async function useDeleteMethod(path, query, payload, token) {
+    const url = setUrl(path, query)
+    const headers = setHeaders(token)
+
+    const response = await fetch(url, {
+        method: 'DELETE',
+        headers: headers,
+        body: JSON.stringify(payload)
+    })
+    const data = await response.json()
+    return { data, response }
 }
