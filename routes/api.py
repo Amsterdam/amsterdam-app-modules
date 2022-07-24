@@ -156,3 +156,12 @@ def modules_for_app_get():
     with ProxyRequest(url, request.method) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
+
+
+@routes.route('/api/v1/modules_app_versions', methods=['GET'])
+@swag_from(APIDocs.modules_app_versions)
+def modules_all():
+    url = '/api/v1/modules_app_versions'
+    with ProxyRequest(url, request.method) as proxy_request:
+        proxy_request.set_result()
+    return proxy_request.response

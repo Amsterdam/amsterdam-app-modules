@@ -172,6 +172,49 @@ class APIDocs:
         "description": description
     }
 
+    modules_app_versions = {
+        "tags": ["App versions"],
+        "summary": "Get modules",
+        "responses": {
+            "200": {
+                "description": "Sorted list of app versions",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "descriptions": "version number"
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "string",
+                            "description": "error message"
+                        }
+                    }
+                }
+            },
+            "504": response_504
+        }
+    }
+
     modules_get = {
         "tags": ["Modules"],
         "summary": "Get modules",
