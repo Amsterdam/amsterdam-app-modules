@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 const ModulesInApp = () => {
     const { auth, setAuth } = useContext(AuthContext)
     const [appVersions, setAppVersions] = useState([])
-    const [test, setTest] = useState({})
+    const [test, setTest] = useState(null)
     useEffect(() => {
         const getData = async () => {
             const { data, response } = await getMethod('app-versions', {}, auth.access)
@@ -26,9 +26,9 @@ const ModulesInApp = () => {
         getData();
     }, []);
 
-    console.log('auth', auth)
+    //console.log('auth', auth)
     console.log('appVersions', appVersions)
-    console.log('test', test)
+    //console.log('test', test)
 
     return (
         <div>
@@ -56,8 +56,8 @@ const ModulesInApp = () => {
                     <Link to='/new-app-version'>NewAppVersion</Link>
                 </p>
                 <p>{auth.access}</p>
-                {appVersions.map(reptile => (
-                    <p>{reptile}</p>
+                {appVersions.map(version => (
+                    <p>{version}</p>
                 ))}
                 <p>{test}</p>
             </div>
