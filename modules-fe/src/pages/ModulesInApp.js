@@ -1,34 +1,25 @@
 import { Link } from 'react-router-dom'
 import Logo from "../components/Logo"
 import PageTitle from '../components/PageTitle'
-import { useContext } from 'react'
-import AuthContext from '../context/AuthProvider'
-import { getMethod, postMethod } from '../components/APICalls'
-import { useState, useEffect } from 'react'
+import useAPICalls from '../components/useAPICalls'
+import { useState, useEffect, useContext } from 'react'
 
 const ModulesInApp = () => {
-    const { auth, setAuth } = useContext(AuthContext)
     const [appVersions, setAppVersions] = useState([])
-    const [test, setTest] = useState(null)
+    const { getMethod, postMethod } = useAPICalls()
+
     useEffect(() => {
         const getData = async () => {
-            const { data, response } = await getMethod('app-versions', {}, auth.access)
-            setAppVersions(data.result);
+            const { data, response } = await getMethod('app-versions', {})
+            if (response.status === 200) {
+                setAppVersions(data.result);
+                // Debug 
+                console.log('appVersions', appVersions)
+            }
         }
         getData();
     }, []);
 
-    useEffect(() => {
-        const getData = async () => {
-            const { data, response } = await postMethod('get-token', {}, { username: 'redactie@amsterdam.nl', password: 'gd@3bFC12' }, '')
-            setTest(data.access);
-        }
-        getData();
-    }, []);
-
-    //console.log('auth', auth)
-    console.log('appVersions', appVersions)
-    //console.log('test', test)
 
     return (
         <div>
@@ -37,6 +28,8 @@ const ModulesInApp = () => {
 
             {/* Title component */}
             <PageTitle pageTitle='Modules in app' />
+
+            {/* Drop down input field for appVersions */}
 
             {/* Dummy links to test navigation */}
             <div className='DUMMY'>
@@ -55,11 +48,10 @@ const ModulesInApp = () => {
                 <p>
                     <Link to='/new-app-version'>NewAppVersion</Link>
                 </p>
-                <p>{auth.access}</p>
+
                 {appVersions.map(version => (
                     <p>{version}</p>
                 ))}
-                <p>{test}</p>
             </div>
         </div >
     )

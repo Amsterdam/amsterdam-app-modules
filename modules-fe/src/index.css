@@ -179,6 +179,48 @@ active {
   color: #000000;
 }
 
+.inputfield {
+  /* Text input mobile */
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 24px;
+  margin-top: 10px;
+  margin-left: 15px;
+  gap: 10px;
+
+  width: 344px;
+  height: 44px;
+
+  /* Primary colours/primary-black */
+  border: 1px solid #000000;
+
+}
+
+.button-full-width {
+  /* Auto layout */
+  padding: 0px;
+
+  position: absolute;
+  width: 344px;
+  height: 48px;
+  margin-top: 10px;
+  left: 15px;
+
+  /* Primary colours/primary-blue */
+  background: #004699;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
 .DUMMY {
   position: absolute;
   top: 180px;

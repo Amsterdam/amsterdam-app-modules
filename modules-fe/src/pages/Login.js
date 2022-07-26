@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useContext } from 'react'
 import AuthContext from '../context/AuthProvider'
 import Logo from "../components/Logo"
 import PageTitle from '../components/PageTitle'
-import { postMethod } from '../components/APICalls'
+import useAPICalls from '../components/useAPICalls'
 
 const Login = () => {
     const { auth, setAuth } = useContext(AuthContext);
@@ -11,31 +11,38 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [success, setSuccess] = useState(false);
+    const { postMethod } = useAPICalls()
 
     useEffect(() => {
         usernameRef.current.focus()
     }, [])
 
+    const callLogin = async () => {
+        console.log('HIERO', postMethod)
+        // DEBUG TODO: remove
+        const payload = { username: 'redactie@amsterdam.nl', password: 'gd@3bFC12' }
+        const object = await postMethod('get-token', {}, payload)
+        if (object.response.status === 200) {
+            const accessToken = object.data?.access
+            const refreshToken = object.data?.refresh
+            const data = { access: accessToken, refresh: refreshToken }
+            setAuth(data)
+            setSuccess(true)
+        }
+    }
+
+    // DEBUG
+    callLogin()
+
     const useSubmitLogin = async (e) => {
         e.preventDefault()
         try {
-            const object = await postMethod('get-token', {}, { username, password })
-            if (object.response.status === 200) {
-                const accessToken = object.data?.access
-                const refreshToken = object.data?.refresh
-                const data = { access: accessToken, refresh: refreshToken }
-                setAuth(data)
-                setUsername('')
-                setPassword('')
-                setSuccess(true)
-            } else {
-                setUsername('')
-                setPassword('')
-            }
+            callLogin()
+            setUsername('')
+            setPassword('')
         } catch (error) {
             console.log(error)
         }
-
     }
 
     return (

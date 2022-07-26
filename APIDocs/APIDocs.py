@@ -743,3 +743,25 @@ class APIDocs:
             "401": response_401
         }
     }
+
+    refresh_token = {
+        "tags": ["JWT"],
+        "summary": "Refresh JWT",
+        "parameters": [
+            {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "id": "refresh_token",
+                    "required": ["refresh"],
+                    "properties": {
+                        "refresh": {"type": "string", "description": "refresh token"}
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "401": response_401
+        }
+    }
