@@ -1,9 +1,5 @@
 const InputField = ({ identifier, value, setValue }) => {
-    const handleChange = event => {
-        setValue(event.target.value)
-        // DEBUG
-        console.log(identifier, 'value is:', event.target.value)
-    }
+    const handleChange = event => { setValue(event.target.value) }
 
     return (
         <input

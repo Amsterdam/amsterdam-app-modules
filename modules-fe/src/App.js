@@ -28,7 +28,7 @@ const App = () => {
           <Route path="/new-module" element={<NewModule />} />
           <Route path="/edit-module" element={<EditModule />} />
           <Route path="/edit-modules" element={<EditModules />} />
-          <Route path="/toggle-modules" element={<ToggleModules />} />
+          <Route path="/toggle-modules/:appversion" element={<ToggleModules />} />
           <Route path="/new-app-version" element={<NewAppVersion />} />
         </Routes>
       </BrowserRouter>

@@ -4,7 +4,6 @@ import Navigation from "../components/Navigation"
 import PageTitle from '../components/PageTitle'
 import InputField from "../components/InputField"
 import useAPICalls from "../components/useAPICalls"
-import Gutter from "../components/Gutter"
 
 const NewModule = () => {
     const [error, setError] = useState('')
@@ -22,17 +21,23 @@ const NewModule = () => {
     const useSubmit = async (e) => {
         e.preventDefault()
         const payload = { slug: slug, title: title, icon: icon, description: description, version: version }
+
+        // Check for empty values
+        const emptyKeys = Object.keys(payload).filter((key) => payload[key] === '').join(', ')
+        if (emptyKeys) {
+            setError((emptyKeys + ' not set'))
+            return
+        }
+
         try {
             const object = await postMethod('modules', {}, payload)
             if (object.response.status === 200) {
-                console.log(payload)
                 setSlug('')
                 setTitle('')
                 setIcon('')
                 setDescription('')
                 setVersion('')
             } else {
-                console.log(object.data)
                 if (object.data.hasOwnProperty('result')) {
                     if (object.data.result.hasOwnProperty('error')) {
                         setError(object.data.result.error)
@@ -58,9 +63,7 @@ const NewModule = () => {
             <PageTitle pageTitle='Nieuwe module' />
 
             {/* Input fields*/}
-            <div className='DUMMY'>
-
-
+            <div className='page_body'>
                 <form style={{ maxWidth: '344px' }} onSubmit={useSubmit}>
                     <InputField identifier={'Slug'} value={slug} setValue={setSlug} />
                     <InputField identifier={'Title'} value={title} setValue={setTitle} />

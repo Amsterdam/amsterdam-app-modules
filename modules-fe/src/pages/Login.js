@@ -7,10 +7,8 @@ import useAPICalls from '../components/useAPICalls'
 const Login = () => {
     const { auth, setAuth } = useContext(AuthContext);
     const usernameRef = useRef();
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [success, setSuccess] = useState(false);
     const { postMethod } = useAPICalls()
 
     useEffect(() => {
@@ -18,21 +16,18 @@ const Login = () => {
     }, [])
 
     const callLogin = async () => {
-        console.log('HIERO', postMethod)
-        // DEBUG TODO: remove
-        const payload = { username: 'redactie@amsterdam.nl', password: 'gd@3bFC12' }
+        const payload = { username, password }
         const object = await postMethod('get-token', {}, payload)
         if (object.response.status === 200) {
             const accessToken = object.data?.access
             const refreshToken = object.data?.refresh
             const data = { access: accessToken, refresh: refreshToken }
             setAuth(data)
-            setSuccess(true)
+
+            // Persist login on page refresh
+            window.localStorage.setItem('auth', JSON.stringify(data));
         }
     }
-
-    // DEBUG
-    callLogin()
 
     const useSubmitLogin = async (e) => {
         e.preventDefault()
@@ -47,7 +42,7 @@ const Login = () => {
 
     return (
         <>
-            {success
+            {auth.access
                 ? (<h1>je bent ingelogd</h1>)
                 : (
                     <div>

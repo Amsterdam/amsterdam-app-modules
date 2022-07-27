@@ -15,6 +15,9 @@ export function EndPoints() {
         'modules_by_app': '/api/v1/modules_by_app',
 
         // CRUD Module order
-        'modules_order': '/api/v1/modules_order'
+        'modules_order': '/api/v1/modules_order',
+
+        // Get Modules for app version (header: appVersion: <string>)
+        'modules_for_app': '/api/v1/modules_for_app'
     }
 }

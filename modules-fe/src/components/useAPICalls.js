@@ -9,18 +9,44 @@ const useAPICalls = () => {
         let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&')
         let apiServer = ApiServer()
         let paths = EndPoints()
-        return apiServer + paths[path] + queryString
+        return apiServer + paths[path] + (queryString ? '?' + queryString : '')
     }
 
-    function setHeaders() {
+    const setHeaders = async () => {
+        let token = undefined
+        if (auth.refresh) { token = await refreshToken() }
+
         let header = { 'Content-type': 'application/json' }
-        if (auth.access) { header.authorization = auth.access }
+        if (token) { header.authorization = token }
         return header
+    }
+
+    const refreshToken = async () => {
+        const headers = { 'Content-type': 'application/json' }
+        const url = setUrl('refresh-token', {})
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({ refresh: auth.refresh })
+            })
+
+            const data = await response.json()
+            if (data.access) {
+                setAuth({ access: data.access, refresh: auth.refresh })
+                return data.access
+            } else {
+                setAuth({})
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
 
     const getMethod = async (path, query) => {
         const url = setUrl(path, query)
-        const headers = setHeaders()
+        const headers = await setHeaders()
 
         const response = await fetch(url, {
             method: 'GET',
@@ -32,20 +58,24 @@ const useAPICalls = () => {
 
     const postMethod = async (path, query, payload) => {
         const url = setUrl(path, query)
-        const headers = setHeaders()
+        const headers = await setHeaders()
 
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(payload)
-        })
-        const data = await response.json()
-        return { data, response }
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(payload)
+            })
+            const data = await response.json()
+            return { data, response }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const patchMethod = async (path, query, payload) => {
         const url = setUrl(path, query)
-        const headers = setHeaders()
+        const headers = await setHeaders()
 
         const response = await fetch(url, {
             method: 'PATCH',
@@ -58,7 +88,7 @@ const useAPICalls = () => {
 
     const deleteMethod = async (path, query, payload) => {
         const url = setUrl(path, query)
-        const headers = setHeaders()
+        const headers = await setHeaders()
 
         const response = await fetch(url, {
             method: 'DELETE',

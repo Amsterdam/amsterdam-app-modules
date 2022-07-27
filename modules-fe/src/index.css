@@ -201,6 +201,39 @@ active {
 
 }
 
+.select {
+  /* Text input mobile */
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  padding: 8px 24px;
+  margin-left: 15px;
+
+  width: 344px;
+  height: 44px;
+
+  /* Primary colours/primary-black */
+  border: 1px solid #000000;
+}
+
+ul {
+  list-style-type: none;
+  margin: 15px;
+  padding: 0;
+
+  /* Desktop/body-small */
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 160%;
+  /* identical to box height, or 29px */
+
+  letter-spacing: 0.2px;
+
+  color: #000000;
+}
+
 .button-full-width {
   /* Auto layout */
   padding: 0px;
@@ -221,8 +254,31 @@ active {
   flex-grow: 0;
 }
 
-.DUMMY {
+#wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 105px;
+  width: 360px;
+  display: flex;
+  text-align: center;
+  line-height: 40px;
+}
+
+.block {
+  flex: 0 0 110px;
+  margin: 5px;
+  background-color: #004699;
+  color: #FFFFFF;
+}
+
+.bigger {
+  flex: 344px;
+  color: #FFFFFF;
+}
+
+.page_body {
   position: absolute;
-  top: 180px;
+  top: 190px;
   color: #004699;
 }
