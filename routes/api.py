@@ -38,6 +38,7 @@ def refresh_token():
         proxy_request.set_result()
     return proxy_request.response
 
+
 @routes.route('/api/v1/modules', methods=['GET'])
 @swag_from(APIDocs.modules_get)
 def modules_get():
