@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
 import Logo from "../components/Logo"
 import Navigation from "../components/Navigation"
 import PageTitle from '../components/PageTitle'
@@ -6,6 +7,7 @@ import InputField from "../components/InputField"
 import useAPICalls from "../components/useAPICalls"
 
 const NewModule = () => {
+    const { appversion } = useParams()
     const [error, setError] = useState('')
     const [slug, setSlug] = useState('')
     const [title, setTitle] = useState('')
@@ -20,18 +22,20 @@ const NewModule = () => {
 
     const useSubmit = async (e) => {
         e.preventDefault()
-        const payload = { slug: slug, title: title, icon: icon, description: description, version: version }
+        const payloadModule = { slug: slug, title: title, icon: icon, description: description, version: version }
+        const payloadModuleByApp = { appVersion: appversion, moduleSlug: slug, moduleVersion: version, status: 1 }
 
         // Check for empty values
-        const emptyKeys = Object.keys(payload).filter((key) => payload[key] === '').join(', ')
+        const emptyKeys = Object.keys(payloadModule).filter((key) => payloadModule[key] === '').join(', ')
         if (emptyKeys) {
             setError((emptyKeys + ' not set'))
             return
         }
 
         try {
-            const object = await postMethod('modules', {}, payload)
-            if (object.response.status === 200) {
+            const object = await postMethod('modules', {}, payloadModule)
+            const result = await postMethod('modules_by_app', {}, payloadModuleByApp)
+            if (object.response.status === 200 && result.response.status === 200) {
                 setSlug('')
                 setTitle('')
                 setIcon('')

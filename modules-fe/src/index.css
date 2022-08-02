@@ -1,5 +1,12 @@
-body {
-  font-family: 'Amsterdam Sans';
+body,
+button,
+caption,
+input,
+legend,
+select,
+textarea {
+  /* weight style font-size/line-height font-family (FYI) */
+  font: 400 normal 16px/1.5 'amsterdam sans', sans-serif !important;
 }
 
 .username {
@@ -255,14 +262,16 @@ ul {
 }
 
 #wrapper {
+  position: absolute;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   height: 105px;
   width: 360px;
   display: flex;
+  left: 10px;
   text-align: center;
-  line-height: 40px;
+  line-height: 45px;
 }
 
 .block {
@@ -280,5 +289,7 @@ ul {
 .page_body {
   position: absolute;
   top: 190px;
+  max-width: '344px';
+  margin-top: 5px;
   color: #004699;
 }

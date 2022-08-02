@@ -12,12 +12,18 @@ const useAPICalls = () => {
         return apiServer + paths[path] + (queryString ? '?' + queryString : '')
     }
 
-    const setHeaders = async () => {
-        let token = undefined
-        if (auth.refresh) { token = await refreshToken() }
-
+    const setHeaders = async (extra_header) => {
         let header = { 'Content-type': 'application/json' }
-        if (token) { header.authorization = token }
+        for (let i in extra_header) {
+            let value = extra_header[i];
+            header[i] = value
+        }
+
+        if (auth.refresh) {
+            let token = await refreshToken()
+            if (token) { header.authorization = token }
+        }
+
         return header
     }
 
@@ -44,9 +50,9 @@ const useAPICalls = () => {
         }
     }
 
-    const getMethod = async (path, query) => {
+    const getMethod = async (path, query, extra_header) => {
         const url = setUrl(path, query)
-        const headers = await setHeaders()
+        const headers = await setHeaders(extra_header)
 
         const response = await fetch(url, {
             method: 'GET',
@@ -58,7 +64,7 @@ const useAPICalls = () => {
 
     const postMethod = async (path, query, payload) => {
         const url = setUrl(path, query)
-        const headers = await setHeaders()
+        const headers = await setHeaders({})
 
         try {
             const response = await fetch(url, {
@@ -75,7 +81,7 @@ const useAPICalls = () => {
 
     const patchMethod = async (path, query, payload) => {
         const url = setUrl(path, query)
-        const headers = await setHeaders()
+        const headers = await setHeaders({})
 
         const response = await fetch(url, {
             method: 'PATCH',
@@ -88,7 +94,7 @@ const useAPICalls = () => {
 
     const deleteMethod = async (path, query, payload) => {
         const url = setUrl(path, query)
-        const headers = await setHeaders()
+        const headers = await setHeaders({})
 
         const response = await fetch(url, {
             method: 'DELETE',

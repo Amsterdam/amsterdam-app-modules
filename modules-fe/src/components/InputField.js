@@ -1,4 +1,4 @@
-const InputField = ({ identifier, value, setValue }) => {
+const InputField = ({ identifier, value, readonly, setValue }) => {
     const handleChange = event => { setValue(event.target.value) }
 
     return (
@@ -7,6 +7,7 @@ const InputField = ({ identifier, value, setValue }) => {
             type="text"
             id={identifier}
             name={identifier}
+            readOnly={readonly}
             placeholder={identifier}
             onChange={handleChange}
             value={value}

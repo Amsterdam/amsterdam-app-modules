@@ -1,4 +1,4 @@
-export function ApiServer() { return 'http://172.16.100.117:9000' }
+export function ApiServer() { return 'http://0.0.0.0:9000' }
 export function EndPoints() {
     return {
         // LOGIN
@@ -8,7 +8,10 @@ export function EndPoints() {
         // Available versions
         'app-versions': '/api/v1/modules_app_versions',
 
-        // CRUD Module
+        // Get Module
+        'module': '/api/v1/module',
+
+        // CRUD Modules
         'modules': '/api/v1/modules',
 
         // CRUD Module by app

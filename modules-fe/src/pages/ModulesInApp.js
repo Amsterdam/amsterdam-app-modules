@@ -3,6 +3,8 @@ import Logo from "../components/Logo"
 import PageTitle from '../components/PageTitle'
 import useAPICalls from '../components/useAPICalls'
 import { useState, useEffect, useRef } from 'react'
+import { Select } from '@amsterdam/asc-ui'
+import { Enlarge } from '@amsterdam/asc-assets'
 
 const ModulesInApp = () => {
     const hasFetchedData = useRef(false)
@@ -14,7 +16,7 @@ const ModulesInApp = () => {
 
     useEffect(() => {
         const getModulesByApp = async () => {
-            const { data, response } = await getMethod('modules_by_app', { appVersion: appVersion })
+            const { data, response } = await getMethod('modules_for_app', {}, { appVersion: appVersion })
             if (response.status === 200) {
                 setModulesByApp(data.result)
             }
@@ -57,35 +59,64 @@ const ModulesInApp = () => {
             {/* Dummy links to test navigation */}
             <div className='page_body'>
                 {/* Select appVersion */}
-                <select
-                    className='select'
-                    onChange={(event) => changeVersion(event.target.value)}
-                    value={appVersion}>
-                    {appVersions.map(version => (
-                        <option
-                            key={version}
-                            value={version}>
-                            Versie {version}
-                        </option>
-                    ))}
-                </select>
+                <div style={{
+                    position: 'absolute',
+                    left: '15px',
+                    width: '344px',
+                    height: '48px'
+                }}>
+                    <Select
+                        onChange={(event) => changeVersion(event.target.value)}
+                        value={appVersion}>
+                        {appVersions.map(version => (
+                            <option
+                                key={version}
+                                value={version}>
+                                Versie {version}
+                            </option>
+                        ))}
+                    </Select>
+                </div>
 
                 {/* Modules for this appVersion */}
-                <ul>
-                    {modulesByApp.map(module => (
-                        <li key={module.id}>{module.moduleSlug}</li>
-                    ))}
-                </ul>
+                <div style={{
+                    paddingTop: '5px'
+                }}>
+                    <ul>
+                        {modulesByApp.map(module => (
+                            <li key={module.id}>{module.title}</li>
+                        ))}
+                    </ul>
+                </div>
+
 
                 {/* Button navigation */}
                 <div id="wrapper">
-                    <Link className='block' to='/new-module'>1</Link>
-                    <Link className='block' to='/edit-module'>
+                    <Link className='block' to={`/new-module/${appVersion}`}>
+                        <Enlarge
+                            style={{
+                                fill: 'white',
+                                position: 'relative',
+                                top: '17px',
+                                display: 'flex',
+                                left: '50px'
+                            }}
+                            height={'14px'}
+                            alt='Voeg nieuwe module toe'
+                        />
+                    </Link>
+                    <Link className='block' to={`/edit-modules/${appVersion}`}>
                         <img
-                            style={{ marginTop: '15px' }}
+                            style={{
+                                fill: 'white',
+                                position: 'relative',
+                                top: '17px',
+                                display: 'flex',
+                                left: '50px'
+                            }}
                             height={'14px'}
                             src='/edit-white.svg'
-                            alt='Edit module' />
+                            alt='Bewerk module' />
                     </Link>
                     <Link className='block' to={`/toggle-modules/${appVersion}`}>Aan / Uit</Link>
                     <Link className='block bigger' to='/new-app-version'>Maak nieuwe app versie</Link>

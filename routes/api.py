@@ -39,6 +39,17 @@ def refresh_token():
     return proxy_request.response
 
 
+@routes.route('/api/v1/module', methods=['GET'])
+@swag_from(APIDocs.module_get)
+def module_get():
+    slug = request.args.get('slug')
+    version = request.args.get('version')
+    url = '/api/v1/module?slug={slug}&version={version}'.format(slug=slug, version=version)
+    with ProxyRequest(url, request.method) as proxy_request:
+        proxy_request.set_result()
+    return proxy_request.response
+
+
 @routes.route('/api/v1/modules', methods=['GET'])
 @swag_from(APIDocs.modules_get)
 def modules_get():
@@ -64,7 +75,8 @@ def modules_post():
 @IsAuthorized
 def modules_patch():
     data = request.json
-    with ProxyRequest('/api/v1/modules', 'PATCH', data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules', 'PATCH', data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 
@@ -74,7 +86,8 @@ def modules_patch():
 @IsAuthorized
 def modules_delete():
     data = request.json
-    with ProxyRequest('/api/v1/modules', 'DELETE', data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules', 'DELETE', data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 
@@ -93,7 +106,8 @@ def modules_by_app_get():
 @IsAuthorized
 def modules_by_app_post():
     data = request.json
-    with ProxyRequest('/api/v1/modules_by_app', 'POST', data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules_by_app', 'POST', data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 
@@ -103,7 +117,8 @@ def modules_by_app_post():
 @IsAuthorized
 def modules_by_app_patch():
     data = request.json
-    with ProxyRequest('/api/v1/modules_by_app', 'PATCH', data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules_by_app', 'PATCH', data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 
@@ -113,7 +128,8 @@ def modules_by_app_patch():
 @IsAuthorized
 def modules_by_app_delete():
     data = request.json
-    with ProxyRequest('/api/v1/modules_by_app', 'DELETE', data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules_by_app', 'DELETE', data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 
@@ -133,7 +149,8 @@ def module_order_get():
 @IsAuthorized
 def modules_order_post():
     data = request.json
-    with ProxyRequest('/api/v1/modules_order', request.method, data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules_order', request.method, data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 
@@ -143,7 +160,8 @@ def modules_order_post():
 @IsAuthorized
 def module_order_patch():
     data = request.json
-    with ProxyRequest('/api/v1/modules_order', request.method, data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules_order', request.method, data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 
@@ -153,7 +171,8 @@ def module_order_patch():
 @IsAuthorized
 def module_order_delete():
     data = request.json
-    with ProxyRequest('/api/v1/modules_order', request.method, data=data) as proxy_request:
+    authorization = request.headers.get('AUTHORIZATION')
+    with ProxyRequest('/api/v1/modules_order', request.method, data=data, authorization_header=authorization) as proxy_request:
         proxy_request.set_result()
     return proxy_request.response
 
