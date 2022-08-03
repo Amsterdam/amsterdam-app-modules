@@ -9,6 +9,29 @@ textarea {
   font: 400 normal 16px/1.5 'amsterdam sans', sans-serif !important;
 }
 
+.version {
+  /* Text input mobile */
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 24px;
+  gap: 10px;
+
+  position: relative;
+  width: 344px;
+  height: 44px;
+  left: 15px;
+  top: 15px;
+
+  /* Primary colours/primary-black */
+
+  border: 1px solid #000000;
+}
+
 .username {
   /* Text input mobile */
   box-sizing: border-box;
