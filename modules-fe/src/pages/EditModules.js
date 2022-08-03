@@ -10,8 +10,10 @@ import OrderModules from "../components/OrderModules"
 const EditModules = () => {
     const { appversion } = useParams()
     const hasFetchedData = useRef(false)
+    const newLog = useRef(false)
     const [modulesForApp, setModulesForApp] = useState([])
-    const { getMethod } = useAPICalls()
+    const [log, setLog] = useState('')
+    const { getMethod, patchMethod } = useAPICalls()
 
     useEffect(() => {
         const getModulesByApp = async () => {
@@ -27,6 +29,29 @@ const EditModules = () => {
         }
     }, [appversion, getMethod])
 
+    useEffect(() => {
+        if (newLog.current) {
+            setTimeout(() => {
+                setLog('')
+                newLog.current = false
+            }, 3000);
+        }
+    }, [log]);
+
+    const saveOrder = async () => {
+        const order = modulesForApp.map((module) => { return module.slug })
+        let payload = {
+            "appVersion": appversion,
+            "order": order
+        }
+
+        const { data, response } = await patchMethod('modules_order', {}, payload)
+        newLog.current = true
+        setLog(data.result)
+        if (response.status !== 200) {
+            console.log('save modules order failed:', payload)
+        }
+    }
 
     return (
         <div>
@@ -53,6 +78,23 @@ const EditModules = () => {
 
                 {/* Modules for this appVersion */}
                 <OrderModules appversion={appversion} modules={modulesForApp} />
+
+                <div style={{
+                    maxWidth: 144,
+                    color: 'red',
+                    marginLeft: '15px',
+                    height: '50px',
+                    display: 'flex',
+                    alignItems: 'center'
+                }}>
+                    {log}
+                </div>
+
+                <button
+                    className='saveButton'
+                    onClick={saveOrder}>
+                    <span className='submitlogintext'>Bewaar wijzigingen</span>
+                </button>
             </div>
         </div>
     )
