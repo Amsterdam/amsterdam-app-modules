@@ -55,6 +55,26 @@ textarea {
   border: 1px solid #000000;
 }
 
+.saveButton {
+  /* Auto layout */
+  padding: 0px;
+
+  position: relative;
+  width: 344px;
+  height: 48px;
+  left: 15px;
+  top: 15px;
+
+  /* Primary colours/primary-blue */
+  background: #004699;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
 .submitlogin {
   /* Auto layout */
   padding: 0px;

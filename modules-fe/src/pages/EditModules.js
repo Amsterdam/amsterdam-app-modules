@@ -53,7 +53,6 @@ const EditModules = () => {
 
                 {/* Modules for this appVersion */}
                 <OrderModules appversion={appversion} modules={modulesForApp} />
-
             </div>
         </div>
     )
