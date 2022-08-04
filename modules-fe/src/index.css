@@ -204,8 +204,8 @@ active {
 
   /* Mobile/H1-small */
   font-style: normal;
-  font-weight: 800;
-  font-size: 30px;
+  font-weight: 700;
+  font-size: 15px;
   line-height: 110%;
 
   color: #000000;
@@ -217,12 +217,12 @@ active {
   width: 335px;
   height: 51px;
   left: 18px;
-  top: 159px;
+  top: 133px;
 
   /* Mobile/H1-small */
   font-style: normal;
-  font-weight: 800;
-  font-size: 30px;
+  font-weight: 700;
+  font-size: 15px;
   line-height: 110%;
   /* or 33px */
 

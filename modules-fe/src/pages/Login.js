@@ -40,50 +40,48 @@ const Login = () => {
         }
     }
 
+
+    if (auth.access) {
+        return (<h1>U bent ingelogd</h1>)
+    }
     return (
-        <>
-            {auth.access
-                ? (<h1>je bent ingelogd</h1>)
-                : (
-                    <div>
-                        {/* Logo */}
-                        <Logo />
+        <div>
+            {/* Logo */}
+            <Logo />
 
-                        {/* Title component */}
-                        <PageTitle pageTitle='Inloggen' />
+            {/* Title component */}
+            <PageTitle pageTitle='Inloggen' />
 
-                        {/* Login form */}
-                        <form onSubmit={useSubmitLogin}>
-                            <input
-                                className='username'
-                                type='text'
-                                id='username'
-                                placeholder='E-mail'
-                                ref={usernameRef}
-                                autoComplete=""
-                                onChange={(e) => setUsername(e.target.value)}
-                                value={username}
-                                required />
+            {/* Login form */}
+            <form onSubmit={useSubmitLogin}>
+                <input
+                    className='username'
+                    type='text'
+                    id='username'
+                    placeholder='E-mail'
+                    ref={usernameRef}
+                    autoComplete=""
+                    onChange={(e) => setUsername(e.target.value)}
+                    value={username}
+                    required />
 
-                            <input
-                                className='password'
-                                type='password'
-                                id='password'
-                                placeholder='Wachtwoord'
-                                autoComplete=""
-                                onChange={(e) => setPassword(e.target.value)}
-                                value={password}
-                                required />
+                <input
+                    className='password'
+                    type='password'
+                    id='password'
+                    placeholder='Wachtwoord'
+                    autoComplete=""
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    required />
 
-                            <button className='submitlogin'>
-                                <span className='submitlogintext'>Inloggen</span>
-                            </button>
-                        </form>
+                <button className='submitlogin'>
+                    <span className='submitlogintext'>Inloggen</span>
+                </button>
+            </form>
 
-                        <div className="loginimage" />
-                    </div >
-                )}
-        </>
+            <div className="loginimage" />
+        </div >
     )
 }
 
