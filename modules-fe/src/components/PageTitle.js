@@ -6,9 +6,9 @@ const PageTitle = ({ pageTitle }) => {
 
     return (
         <div className={mainPage ? 'mainpage_title' : 'page_title'}>
-            <h1-small>
+            <h1>
                 {pageTitle}
-            </h1-small>
+            </h1>
         </div>
     )
 }

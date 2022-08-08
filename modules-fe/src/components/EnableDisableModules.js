@@ -13,6 +13,7 @@ const Module = (props) => {
     return (
         <div
             style={{
+                color: 'black',
                 marginTop: 15,
                 width: 324,
                 display: 'flex',

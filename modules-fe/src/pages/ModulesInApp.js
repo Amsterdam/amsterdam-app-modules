@@ -5,6 +5,7 @@ import useAPICalls from '../components/useAPICalls'
 import { useState, useEffect, useRef } from 'react'
 import { Select } from '@amsterdam/asc-ui'
 import { Enlarge } from '@amsterdam/asc-assets'
+import ListModules from '../components/ListModules'
 
 const ModulesInApp = () => {
     const hasFetchedData = useRef(false)
@@ -80,15 +81,10 @@ const ModulesInApp = () => {
 
                 {/* Modules for this appVersion */}
                 <div style={{
-                    paddingTop: '5px'
+                    paddingTop: '25px'
                 }}>
-                    <ul>
-                        {modulesByApp.map(module => (
-                            <li key={module.id}>{module.title}</li>
-                        ))}
-                    </ul>
+                    <ListModules modules={modulesByApp} />
                 </div>
-
 
                 {/* Button navigation */}
                 <div id="wrapper">
