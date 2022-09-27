@@ -1,4 +1,15 @@
-FROM python:3.9-alpine3.15 as BASE_IMAGE
+FROM node:current-alpine3.16 as build-phase-1
+
+# Add source
+COPY modules-fe /code/modules-fe
+
+# Build vue webside
+RUN cd /code/modules-fe \
+ && npm install \
+ && npm run build \
+ && cp -r build /code/static/
+
+FROM python:3.9-alpine3.15 as build-phase-2
 COPY build-docker-image/requirements.txt /root
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
  && mkdir /code \
@@ -11,14 +22,14 @@ RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
  && find / -name "*.pyc" -delete \
  && apk del .build-deps
 
+FROM python:3.9-alpine as PROD_IMAGE
 #
 # BUILD PRODUCTION IMAGE AND COPY DEPS FROM BASE_IMAGE
 #
 
-FROM python:3.9-alpine as PROD_IMAGE
-COPY --from=BASE_IMAGE /code/venv /code/venv/
-
-# Copy source into imagek
+# Copy source into image
+COPY --from=build-phase-2 /code/venv /code/venv/
+COPY --from=build-phase-1 /code/static /code/modules-fe
 COPY APIDocs/* /code/APIDocs/
 COPY Configuration/* /code/Configuration/
 COPY Decorators/* /code/Decorators/

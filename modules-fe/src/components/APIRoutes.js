@@ -1,4 +1,4 @@
-export function ApiServer() { return 'http://0.0.0.0:9000' }
+export function ApiServer() { return window.location.origin }
 export function EndPoints() {
     return {
         // LOGIN

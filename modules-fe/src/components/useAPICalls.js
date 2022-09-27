@@ -15,8 +15,7 @@ const useAPICalls = () => {
     const setHeaders = async (extra_header) => {
         let header = { 'Content-type': 'application/json' }
         for (let i in extra_header) {
-            let value = extra_header[i];
-            header[i] = value
+            header[i] = extra_header[i];
         }
 
         if (auth.refresh) {
