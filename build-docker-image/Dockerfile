@@ -6,8 +6,7 @@ COPY modules-fe /code/modules-fe
 # Build vue webside
 RUN cd /code/modules-fe \
  && npm install \
- && npm run build \
- && cp -r build /code/static/
+ && npm run build
 
 FROM python:3.9-alpine3.15 as build-phase-2
 COPY build-docker-image/requirements.txt /root
@@ -28,8 +27,8 @@ FROM python:3.9-alpine as PROD_IMAGE
 #
 
 # Copy source into image
+COPY --from=build-phase-1 /code/modules-fe/build /code/modules-fe/build
 COPY --from=build-phase-2 /code/venv /code/venv/
-COPY --from=build-phase-1 /code/static /code/modules-fe
 COPY APIDocs/* /code/APIDocs/
 COPY Configuration/* /code/Configuration/
 COPY Decorators/* /code/Decorators/
