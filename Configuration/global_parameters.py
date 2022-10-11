@@ -3,6 +3,9 @@ import logging
 import sys
 from distutils.util import strtobool
 
+# Current working directory
+cwd = os.getcwd()
+
 debug = bool(strtobool(os.getenv('DEBUG', 'false')))
 
 # Setup logging

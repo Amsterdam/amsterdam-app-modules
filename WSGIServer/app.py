@@ -2,6 +2,7 @@ import threading
 import time
 import Configuration
 from flask import Flask
+from flask_cors import CORS
 from routes import *
 from wsgiserver import WSGIServer
 from flasgger import Swagger
@@ -19,7 +20,7 @@ template = {
         },
         "version": "1.0.0"
     },
-    "basePath": "/api/v1",
+    "basePath": "",
     "securityDefinitions": {
         "APIKeyAuth": {
             "type": "apiKey",
@@ -47,6 +48,7 @@ class APIServer:
         self.port = Configuration.environment['flask']['PORT']
         self.http_server = None
         self.app = Flask('Amsterdam-App-Module Server on port: {port}'.format(port=self.port))
+        cors = CORS(self.app, resources={r"/api/v1/*": {"origins": "*"}})
         self.thread = None
         Swagger(self.app, template=template, config={"specs_route": "/api/v1/apidocs/"}, merge=True)
 
@@ -70,7 +72,7 @@ class APIServer:
         self.app.config['REMEMBER_COOKIE_HTTPONLY'] = True
         self.app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
         self.app.debug = True
-        self.app.register_blueprint(routes, url_prefix='/api/v1')
+        self.app.register_blueprint(routes, url_prefix='')
 
         self.http_server = WSGIServer(self.app, host=self.ip, port=self.port)
         self.http_server.start()

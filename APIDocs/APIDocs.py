@@ -172,6 +172,105 @@ class APIDocs:
         "description": description
     }
 
+    modules_app_versions = {
+        "tags": ["App versions"],
+        "summary": "Get modules",
+        "responses": {
+            "200": {
+                "description": "Sorted list of app versions",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "descriptions": "version number"
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "string",
+                            "description": "error message"
+                        }
+                    }
+                }
+            },
+            "504": response_504
+        }
+    }
+
+    module_get = {
+        "tags": ["Module"],
+        "summary": "Get module",
+        "parameters": [
+            {
+                "name": "slug",
+                "in": "query",
+                "required": True,
+                "type": "string",
+                "description": "slug for requesting modules"
+            },
+            {
+                "name": "version",
+                "in": "query",
+                "required": True,
+                "type": "string",
+                "description": "version for requesting modules"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Status and module",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "object",
+                            "properties": modules
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "boolean",
+                            "description": "Response status"
+                        },
+                        "result": {
+                            "type": "string",
+                            "description": "error message"
+                        }
+                    }
+                }
+            },
+            "504": response_504
+        }
+    }
+
     modules_get = {
         "tags": ["Modules"],
         "summary": "Get modules",
@@ -675,5 +774,50 @@ class APIDocs:
                 }
             },
             "504": response_504
+        }
+    }
+
+    get_token = {
+        "tags": ["JWT"],
+        "summary": "Request JWT",
+        "parameters": [
+            {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "id": "get_token",
+                    "required": ["username", "password"],
+                    "properties": {
+                        "username": {"type": "string", "description": "username"},
+                        "password": {"type": "string", "description": "password"}
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "401": response_401
+        }
+    }
+
+    refresh_token = {
+        "tags": ["JWT"],
+        "summary": "Refresh JWT",
+        "parameters": [
+            {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "id": "refresh_token",
+                    "required": ["refresh"],
+                    "properties": {
+                        "refresh": {"type": "string", "description": "refresh token"}
+                    }
+                }
+            }
+        ],
+        "responses": {
+            "200": response_200,
+            "401": response_401
         }
     }
