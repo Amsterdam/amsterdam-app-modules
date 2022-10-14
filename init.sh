@@ -5,7 +5,13 @@ function header {
 }
 
 function SERVER {
-  cd /code && . venv/bin/activate && python3 /code/main.py
+  if [ -z ${UNITTEST} ]; then
+    printf "Starting Module\n\n"
+    cd /code && . venv/bin/activate && python3 /code/main.py
+  else
+    printf "Starting unittests\n\n"
+    cd /code pytest --no-header --no-summary -q unittests/
+  fi  
 }
 
 function infinity_loop {
