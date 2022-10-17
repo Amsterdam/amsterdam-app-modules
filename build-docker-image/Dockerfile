@@ -4,6 +4,7 @@ RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
  && mkdir /code \
  && python3 -m venv --copies /code/venv \
  && . /code/venv/bin/activate \
+ && python3 -m pip install -U wheel setuptools
  && python3 -m pip --no-cache-dir install -r /root/requirements.txt \
  && rm -rf /tmp/* \
  && find / -name "*.so" -exec strip --strip-all {} \; \
