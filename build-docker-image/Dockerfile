@@ -1,6 +1,6 @@
 FROM python:3.9-alpine3.15 as BASE_IMAGE
 COPY build-docker-image/requirements.txt /root
-RUN apk update --no-cache --virtual .build-deps gcc musl-dev build-base \
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev build-base \
  && mkdir /code \
  && python3 -m venv --copies /code/venv \
  && . /code/venv/bin/activate \
