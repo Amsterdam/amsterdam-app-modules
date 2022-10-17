@@ -54,4 +54,3 @@ You can start the container by running the start.sh script. This will build and 
 # Dependencies
 
 This software works in conjunction with https://github.com/Amsterdam/amsterdam-app-backend as a TARGET.
-
