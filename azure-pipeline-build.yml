@@ -8,7 +8,7 @@ variables:
 - name: imageName
   value: amsterdam-app-modules
 - name: tag
-  value: $(imageName):$(Build.BuildNumber)
+  value: $(imageName)-unittest
 - name: unittestPassed
   value: false
 
