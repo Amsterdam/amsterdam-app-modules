@@ -26,6 +26,7 @@ COPY Decorators/* /code/Decorators/
 COPY GenericFunctions/* /code/GenericFunctions/
 COPY routes/* /code/routes/
 COPY WSGIServer/* /code/WSGIServer/
+COPY unittests/* /code/unittests
 COPY init.sh /code/
 COPY main.py /code/
 
