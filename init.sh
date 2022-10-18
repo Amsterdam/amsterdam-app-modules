@@ -22,8 +22,12 @@ function infinity_loop {
     done
   else
     printf "Starting unittests\n\n"
-    cd /code pytest --no-header --no-summary -q unittests/
-  fi  
+    export PYTHONPATH=/code && \
+    cd /code && \
+    source venv/bin/activate && \
+    python3 -m pip install pytest mock && \
+    pytest --no-header --no-summary -q unittests/
+  fi
 
 }
 
