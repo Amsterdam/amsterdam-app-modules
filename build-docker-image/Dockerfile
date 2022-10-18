@@ -27,6 +27,7 @@ COPY GenericFunctions/* /code/GenericFunctions/
 COPY routes/* /code/routes/
 COPY WSGIServer/* /code/WSGIServer/
 COPY unittests/* /code/unittests/
+COPY MockBackendServer/* /code/MockBackendServer/
 COPY init.sh /code/
 COPY main.py /code/
 

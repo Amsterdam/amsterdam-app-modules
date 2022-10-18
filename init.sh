@@ -24,6 +24,7 @@ function infinity_loop {
     printf "Starting unittests\n\n"
     cd /code && \
     source venv/bin/activate && \
+    export PYTHONPATH=/code && \
     pytest --no-header --no-summary -q unittests/
   fi  
 
