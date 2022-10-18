@@ -22,7 +22,9 @@ function infinity_loop {
     done
   else
     printf "Starting unittests\n\n"
-    cd /code && pytest --no-header --no-summary -q unittests/
+    cd /code &&
+    source venv/bin/activate &&
+    pytest --no-header --no-summary -q unittests/
   fi  
 
 }
