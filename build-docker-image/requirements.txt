@@ -5,6 +5,3 @@ PyYAML
 requests
 wsgiserver
 pybase64
-pact-python
-pytest
-mock

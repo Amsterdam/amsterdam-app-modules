@@ -25,8 +25,8 @@ function infinity_loop {
     export PYTHONPATH=/code && \
     cd /code && \
     source venv/bin/activate && \
-    # pytest --no-header --no-summary -q unittests/
-    pytest unittests/
+    python3 -m pip install pytest mock && \
+    pytest --no-header --no-summary -q unittests/
   fi
 
 }
