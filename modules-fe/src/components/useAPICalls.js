@@ -1,6 +1,7 @@
 import { ApiServer, EndPoints } from "./APIRoutes"
 import { useContext } from "react"
 import AuthContext from '../context/AuthProvider'
+import { isJwtExpired } from 'jwt-check-expiration';
 
 const useAPICalls = () => {
     const { auth, setAuth } = useContext(AuthContext)
@@ -19,7 +20,10 @@ const useAPICalls = () => {
         }
 
         if (auth.refresh) {
-            let token = await refreshToken()
+            let token = auth.access
+            if (isJwtExpired(token)) {
+                token = await refreshToken()
+            }
             if (token) { header.authorization = token }
         }
 

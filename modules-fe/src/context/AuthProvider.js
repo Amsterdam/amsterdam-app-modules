@@ -1,15 +1,17 @@
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 
 const AuthContext = createContext({})
 
-export const AuthProvider = ({ children }) => {
-    // retrieve login on page refresh
-    let data = JSON.parse(window.localStorage.getItem('auth'))
-    if (data === null) {
-        data = {}
-    }
-    const [auth, setAuth] = useState(data)
+// retrieve login on page refresh
+let localStorageAuthState = JSON.parse(window.localStorage.getItem('auth')) ?? {}
 
+export const AuthProvider = ({ children }) => {
+    const [auth, setAuth] = useState(localStorageAuthState)
+
+    useEffect(() => {
+        // persist login in local storage
+        window.localStorage.setItem('auth', JSON.stringify(auth));
+    }, [auth, auth.access, auth.refresh])
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>
             {children}
