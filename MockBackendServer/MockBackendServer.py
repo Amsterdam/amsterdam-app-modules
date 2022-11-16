@@ -62,7 +62,6 @@ class MockBackendServer:
             app_version_header = request.headers.get('appVersion', None)
             return any([ingest_authorization_header, authorization_header, app_version_header])
 
-
         @self.app.route('/api/v1/module_order', methods=['GET'])
         def api_v1_module_order_get():
             if self.pact is True:

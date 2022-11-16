@@ -1,7 +1,9 @@
 import os
+import uuid
 import socket
 import time
 import Configuration
+from GenericFunctions.AESCipher import AESCipher
 from GenericFunctions.ProxyRequest import ProxyRequest
 from MockBackendServer.MockBackendServer import MockBackendServer
 from unittest import TestCase
@@ -44,9 +46,13 @@ def test_post():
     Configuration.environment['AES_SECRET'] = 'mock'
     Configuration.environment['TARGET'] = '127.0.0.1'
     Configuration.environment['TARGET_PORT'] = 8000
+
+    id = str(uuid.uuid4())
+    secret = AESCipher(id, Configuration.environment['AES_SECRET']).encrypt()
+
     with MockBackendServer():
         if wait_for_provider_is_alive(Configuration.environment['TARGET'], Configuration.environment['TARGET_PORT']):
-            with ProxyRequest('/api/v1/modules', method='POST', data={}) as req:
+            with ProxyRequest('/api/v1/modules', method='POST', data={}, authorization_header=secret) as req:
                 req.set_result()
                 result = req.response.json
 
@@ -59,9 +65,13 @@ def test_patch():
     Configuration.environment['AES_SECRET'] = 'mock'
     Configuration.environment['TARGET'] = '127.0.0.1'
     Configuration.environment['TARGET_PORT'] = 8000
+
+    id = str(uuid.uuid4())
+    secret = AESCipher(id, Configuration.environment['AES_SECRET']).encrypt()
+
     with MockBackendServer():
         if wait_for_provider_is_alive(Configuration.environment['TARGET'], Configuration.environment['TARGET_PORT']):
-            with ProxyRequest('/api/v1/modules', method='PATCH', data={}) as req:
+            with ProxyRequest('/api/v1/modules', method='PATCH', data={}, authorization_header=secret) as req:
                 req.set_result()
                 result = req.response.json
 
@@ -74,9 +84,13 @@ def test_delete():
     Configuration.environment['AES_SECRET'] = 'mock'
     Configuration.environment['TARGET'] = '127.0.0.1'
     Configuration.environment['TARGET_PORT'] = 8000
+
+    id = str(uuid.uuid4())
+    secret = AESCipher(id, Configuration.environment['AES_SECRET']).encrypt()
+
     with MockBackendServer():
         if wait_for_provider_is_alive(Configuration.environment['TARGET'], Configuration.environment['TARGET_PORT']):
-            with ProxyRequest('/api/v1/modules', method='DELETE', data={}) as req:
+            with ProxyRequest('/api/v1/modules', method='DELETE', data={}, authorization_header=secret) as req:
                 req.set_result()
                 result = req.response.json
 
