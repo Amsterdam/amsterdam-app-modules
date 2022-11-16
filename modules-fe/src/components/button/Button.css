@@ -4,5 +4,6 @@
   justify-content: center;
   padding: 8px 16px;
   background-color: var(--main-bg-color);
+  color: var(--inverted-text-color);
   border: 0;
 }
