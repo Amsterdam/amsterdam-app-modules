@@ -1,40 +1,32 @@
-FROM node:current-alpine3.16 as build-phase-1
-
-# Add source
-COPY modules-fe /code/modules-fe
-
-# Build vue webside
-RUN cd /code/modules-fe \
- && npm install \
- && npm run build
-
-FROM python:3.9-alpine3.15 as build-phase-2
+FROM python:3.9-alpine3.15 as BASE_IMAGE
 COPY build-docker-image/requirements.txt /root
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev build-base linux-headers \
  && mkdir /code \
  && python3 -m venv --copies /code/venv \
  && . /code/venv/bin/activate \
+ && python3 -m pip install -U wheel setuptools \
  && python3 -m pip --no-cache-dir install -r /root/requirements.txt \
  && rm -rf /tmp/* \
- && find / -name "*.so" -exec strip --strip-all {} \; \
  && find / -name "*.c" -delete \
  && find / -name "*.pyc" -delete \
  && apk del .build-deps
 
-FROM python:3.9-alpine as PROD_IMAGE
 #
 # BUILD PRODUCTION IMAGE AND COPY DEPS FROM BASE_IMAGE
 #
 
-# Copy source into image
-COPY --from=build-phase-1 /code/modules-fe/build /code/modules-fe/build
-COPY --from=build-phase-2 /code/venv /code/venv/
+FROM python:3.9-alpine as PROD_IMAGE
+COPY --from=BASE_IMAGE /code/venv /code/venv/
+
+# Copy source into imagek
 COPY APIDocs/* /code/APIDocs/
 COPY Configuration/* /code/Configuration/
 COPY Decorators/* /code/Decorators/
 COPY GenericFunctions/* /code/GenericFunctions/
 COPY routes/* /code/routes/
 COPY WSGIServer/* /code/WSGIServer/
+COPY unittests/* /code/unittests/
+COPY MockBackendServer/* /code/MockBackendServer/
 COPY init.sh /code/
 COPY main.py /code/
 
