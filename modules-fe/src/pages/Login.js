@@ -23,9 +23,6 @@ const Login = () => {
             const refreshToken = object.data?.refresh
             const data = { access: accessToken, refresh: refreshToken }
             setAuth(data)
-
-            // Persist login on page refresh
-            window.localStorage.setItem('auth', JSON.stringify(data));
         }
     }
 
