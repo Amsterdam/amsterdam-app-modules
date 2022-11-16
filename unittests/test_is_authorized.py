@@ -33,7 +33,7 @@ def test_unauthorized():
     Configuration.environment['AES_SECRET'] = 'mock'
 
     with app.test_request_context() as context:
-        context.request.headers = {'AUTHORIZATION': 'foo'}
+        context.request.headers = {'AUTHORIZATION': None}
         result = foo()
 
     assert result.status == '401 UNAUTHORIZED'

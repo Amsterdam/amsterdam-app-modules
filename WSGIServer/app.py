@@ -78,4 +78,8 @@ class APIServer:
         self.http_server.start()
 
     def stop(self):
-        self.http_server.stop()
+        try:
+            self.http_server.stop()
+        except AttributeError:
+            pass
+
