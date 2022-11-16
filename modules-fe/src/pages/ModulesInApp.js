@@ -1,11 +1,13 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Logo from "../components/Logo"
 import PageTitle from '../components/PageTitle'
 import useAPICalls from '../components/useAPICalls'
 import { useState, useEffect, useRef } from 'react'
 import { Select } from '@amsterdam/asc-ui'
 import { Enlarge } from '@amsterdam/asc-assets'
+import { ReactComponent as Edit } from '../assets/icons/edit.svg'
 import ListModules from '../components/ListModules'
+import Button from '../components/button/Button'
 
 const ModulesInApp = () => {
     const hasFetchedData = useRef(false)
@@ -14,6 +16,7 @@ const ModulesInApp = () => {
     const [appVersion, setAppVersion] = useState('')
     const [modulesByApp, setModulesByApp] = useState([])
     const { getMethod } = useAPICalls()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getModulesByApp = async () => {
@@ -88,34 +91,18 @@ const ModulesInApp = () => {
 
                 {/* Button navigation */}
                 <div id="wrapper">
-                    <Link className='block' to={`/new-module/${appVersion}`}>
-                        <Enlarge
-                            style={{
-                                fill: 'white',
-                                position: 'relative',
-                                top: '17px',
-                                display: 'flex',
-                                left: '50px'
-                            }}
-                            height={'14px'}
-                            alt='Voeg nieuwe module toe'
-                        />
-                    </Link>
-                    <Link className='block' to={`/edit-modules/${appVersion}`}>
-                        <img
-                            style={{
-                                fill: 'white',
-                                position: 'relative',
-                                top: '17px',
-                                display: 'flex',
-                                left: '50px'
-                            }}
-                            height={'14px'}
-                            src='/edit-white.svg'
-                            alt='Bewerk module' />
-                    </Link>
-                    <Link className='block' to={`/toggle-modules/${appVersion}`}>Aan / Uit</Link>
-                    <Link className='block bigger' to='/new-app-version'>Maak nieuwe app versie</Link>
+                    <Button onClick={() => navigate(`/new-module/${appVersion}`)}>
+                        <Enlarge fill="white" height="14px" />
+                    </Button>
+                    <Button onClick={() => navigate(`/edit-modules/${appVersion}`)}>
+                        <Edit fill="white" height="14px" />
+                    </Button>
+                    <Button onClick={() => navigate(`/toggle-modules/${appVersion}`)}>
+                        Aan / Uit
+                    </Button>
+                    <Button onClick={() => navigate('/new-app-version')}>
+                        Maak nieuwe app versie
+                    </Button>
                 </div>
 
                 {/*
