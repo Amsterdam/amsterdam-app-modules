@@ -23,8 +23,8 @@ type Props = {
 };
 
 // retrieve login on page refresh
-let localStorageAuthState: AuthTokens = JSON.parse(window.localStorage.getItem('auth') ?? '') ?? {}
-
+const localStorageAuthState: AuthTokens =
+  JSON.parse(window.localStorage.getItem("auth") ?? "") ?? {};
 
 export const AuthProvider = ({ children }: Props) => {
   const [auth, setAuth] = useState<AuthTokens>(localStorageAuthState);
@@ -33,8 +33,8 @@ export const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     // persist login in local storage
-    window.localStorage.setItem('auth', JSON.stringify(auth));
-  }, [auth, auth.access, auth.refresh])
+    window.localStorage.setItem("auth", JSON.stringify(auth));
+  }, [auth, auth.access, auth.refresh]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
