@@ -1,17 +1,10 @@
-import { StrictMode } from "react";
-import { GlobalStyle, ThemeProvider } from "@amsterdam/asc-ui";
-import App from "App";
-import { AuthProvider } from "./context/AuthProvider";
+import { StrictMode } from 'react';
+import App from './App';
 
 const Root = () => (
-  <StrictMode>
-    <AuthProvider>
-      <ThemeProvider>
-        <GlobalStyle />
+    <StrictMode>
         <App />
-      </ThemeProvider>
-    </AuthProvider>
-  </StrictMode>
+    </StrictMode>
 );
 
 export default Root;
