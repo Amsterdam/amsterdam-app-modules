@@ -26,7 +26,10 @@ function infinity_loop {
     cd /code && \
     source venv/bin/activate && \
     python3 -m pip install pytest mock && \
-    pytest --no-header --no-summary -q unittests/
+    pytest --no-header --no-summary -q unittests/ && \
+    printf "Starting pylint\n\n"
+    python3 -m pip install pylint && \
+    pylint $(find . -type f -name "*py" | grep -v venv)
   fi
 
 }

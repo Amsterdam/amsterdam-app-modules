@@ -1,13 +1,17 @@
-import click
-import socket
+""" Mock server implementation
+"""
+
 import threading
+import socket
+import click
 from flask import Flask, jsonify, request
 
 
 class MockBackendServer:
+    """ Mock server which provides the backend servers API responses
+    """
     def __init__(self, pact=True):
         self.pact = pact
-        self.ip = '127.0.0.1'
         self.port = 8000
         self.http_server = None
         self.monkey_patch()
@@ -33,14 +37,19 @@ class MockBackendServer:
 
     @staticmethod
     def secho(text, file=None, nl=None, err=None, color=None, **styles):
-        pass
+        """ Mock secho """
+        return
 
     @staticmethod
     def echo(text, file=None, nl=None, err=None, color=None, **styles):
-        pass
+        """ Mock echo """
+        return
 
     @staticmethod
     def monkey_patch():
+        """ Monkey patch socket connection
+        :return:
+        """
         socket.socket._bind = socket.socket.bind
 
         def my_socket_bind(self, *args, **kwargs):
@@ -50,16 +59,20 @@ class MockBackendServer:
         socket.socket.bind = my_socket_bind
 
     def run(self):
-        def get_json(request):
+        """ Backend-server run method
+        :return:
+        """
+
+        def get_json(req):
             try:
-                return request.json
-            except:
+                return req.json
+            except Exception:
                 return None
 
-        def get_header(request):
-            ingest_authorization_header = request.headers.get('IngestAuthorization', None)
-            authorization_header = request.headers.get('Authorization', None)
-            app_version_header = request.headers.get('appVersion', None)
+        def get_header(req):
+            ingest_authorization_header = req.headers.get('IngestAuthorization', None)
+            authorization_header = req.headers.get('Authorization', None)
+            app_version_header = req.headers.get('appVersion', None)
             return any([ingest_authorization_header, authorization_header, app_version_header])
 
         @self.app.route('/api/v1/module_order', methods=['GET'])
@@ -210,4 +223,3 @@ class MockBackendServer:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
-

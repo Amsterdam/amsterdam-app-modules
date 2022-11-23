@@ -20,7 +20,7 @@ steps:
 
 - script: | 
     docker run -e UNITTEST=true $(tag) && echo "##vso[task.setvariable variable=unittestPassed;]true"
-  displayName: 'Run unittests'
+  displayName: 'Run unittests && pylint'
 
 # Handling the result needs to be in a different step because only then variable wil be expanded
 # See: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#macro-syntax-variables
@@ -28,4 +28,4 @@ steps:
     if [ $(unittestPassed) == 'false' ]; then
       exit 1
     fi    
-  displayName: 'Fail pipeline if unittest result is false'
+  displayName: 'Fail pipeline if unittest/pylint result is false'

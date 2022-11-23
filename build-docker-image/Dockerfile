@@ -18,19 +18,22 @@ RUN apk add --no-cache --virtual .build-deps gcc musl-dev build-base linux-heade
 FROM python:3.9-alpine as PROD_IMAGE
 COPY --from=BASE_IMAGE /code/venv /code/venv/
 
-# Copy source into imagek
+# Copy source into image
 COPY APIDocs/* /code/APIDocs/
 COPY Configuration/* /code/Configuration/
 COPY Decorators/* /code/Decorators/
 COPY GenericFunctions/* /code/GenericFunctions/
 COPY routes/* /code/routes/
-COPY WSGIServer/* /code/WSGIServer/
+COPY APIServer/* /code/APIServer/
 COPY unittests/* /code/unittests/
 COPY MockBackendServer/* /code/MockBackendServer/
 COPY init.sh /code/
 COPY main.py /code/
 
-# Install python requirements
+# Copy pylint.rc file for linting
+COPY .pylintrc /code/
+
+# Install entry script
 RUN chmod +x /code/init.sh
 EXPOSE 9000
 CMD ["/bin/sh", "/code/init.sh"]

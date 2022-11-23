@@ -1,9 +1,9 @@
+""" Decorator for checking authorization header
+"""
+
 import functools
 import json
-import Configuration
-from uuid import UUID
 from flask import Response, request
-from GenericFunctions.AESCipher import AESCipher
 
 
 class IsAuthorized:

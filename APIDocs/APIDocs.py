@@ -1,4 +1,10 @@
+""" Swagger documentation
+"""
+
+
 class APIDocs:
+    """ Dicts for each response and api call
+    """
     response_200 = {
         "description": "Response status",
         "schema": {
