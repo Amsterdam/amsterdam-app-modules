@@ -24,7 +24,7 @@ type Props = {
 
 // retrieve login on page refresh
 const localStorageAuthState: AuthTokens =
-  JSON.parse(window.localStorage.getItem("auth") ?? "") ?? {};
+  JSON.parse(window.localStorage.getItem("auth") ?? "{}") ?? {};
 
 export const AuthProvider = ({ children }: Props) => {
   const [auth, setAuth] = useState<AuthTokens>(localStorageAuthState);
