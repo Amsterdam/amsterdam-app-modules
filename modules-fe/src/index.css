@@ -61,15 +61,3 @@
   --text-line-height-h1: 1.4;
   --text-line-height-body: 1.6;
 }
-
-body,
-button,
-caption,
-input,
-legend,
-select,
-textarea {
-  font-family: 'Amsterdam Sans', serif;
-  font-size: 18px;
-  line-height: 1.6;
-}

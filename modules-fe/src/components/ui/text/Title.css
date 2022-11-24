@@ -1,0 +1,5 @@
+.Title {
+  font-family: 'Amsterdam Sans', serif;
+  font-size: var(--text-font-size-h1);
+  line-height: var(--text-line-height-h1);
+}
