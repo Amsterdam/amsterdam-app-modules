@@ -73,44 +73,12 @@ const ModulesScreen = () => {
                 <Title>Modules</Title>
                 <List>
                     {modules.map(({ icon, slug, title }) => (
-                        <>
-                            <ListItem key={slug}>
-                                <Row gutter="md" valign="baseline">
-                                    <Icon name={icon} />
-                                    <Phrase>{title}</Phrase>
-                                </Row>
-                            </ListItem>
-                            <ListItem key={slug}>
-                                <Row gutter="md" valign="baseline">
-                                    <Icon name={icon} />
-                                    <Phrase>{title}</Phrase>
-                                </Row>
-                            </ListItem>
-                            <ListItem key={slug}>
-                                <Row gutter="md" valign="baseline">
-                                    <Icon name={icon} />
-                                    <Phrase>{title}</Phrase>
-                                </Row>
-                            </ListItem>
-                            <ListItem key={slug}>
-                                <Row gutter="md" valign="baseline">
-                                    <Icon name={icon} />
-                                    <Phrase>{title}</Phrase>
-                                </Row>
-                            </ListItem>
-                            <ListItem key={slug}>
-                                <Row gutter="md" valign="baseline">
-                                    <Icon name={icon} />
-                                    <Phrase>{title}</Phrase>
-                                </Row>
-                            </ListItem>
-                            <ListItem key={slug}>
-                                <Row gutter="md" valign="baseline">
-                                    <Icon name={icon} />
-                                    <Phrase>{title}</Phrase>
-                                </Row>
-                            </ListItem>
-                        </>
+                        <ListItem key={slug}>
+                            <Row gutter="md" valign="baseline">
+                                <Icon name={icon} />
+                                <Phrase>{title}</Phrase>
+                            </Row>
+                        </ListItem>
                     ))}
                 </List>
             </Column>
