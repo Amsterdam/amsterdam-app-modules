@@ -1,3 +1,4 @@
+import Column from '../components/ui/layout/Column';
 import Row from '../components/ui/layout/Row';
 import Icon from '../components/ui/media/Icon';
 import List from '../components/ui/text/List';
@@ -66,7 +67,7 @@ const ModulesScreen = () => {
     }
 
     return (
-        <div>
+        <Column gutter="md">
             <Title>Modules</Title>
             <List>
                 {modules.map(({ icon, slug, title }) => (
@@ -78,7 +79,7 @@ const ModulesScreen = () => {
                     </ListItem>
                 ))}
             </List>
-        </div>
+        </Column>
     );
 };
 

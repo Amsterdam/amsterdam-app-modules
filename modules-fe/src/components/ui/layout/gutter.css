@@ -1,0 +1,8 @@
+[data-gutter = "no"] {gap: var(--size-spacing-no)}
+[data-gutter = "xs"] {gap: var(--size-spacing-xs)}
+[data-gutter = "sm"] {gap: var(--size-spacing-sm)}
+[data-gutter = "md"] {gap: var(--size-spacing-md)}
+[data-gutter = "lg"] {gap: var(--size-spacing-lg)}
+[data-gutter = "xl"] {gap: var(--size-spacing-xl)}
+[data-gutter = "xxl"] {gap: var(--size-spacing-xxl)}
+[data-gutter = "xxxl"] {gap: var(--size-spacing-xxxl)}
