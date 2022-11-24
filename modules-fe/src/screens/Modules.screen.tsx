@@ -1,5 +1,4 @@
 import Box from '../components/ui/layout/Box'
-import Column from '../components/ui/layout/Column'
 import Row from '../components/ui/layout/Row'
 import Screen from '../components/ui/layout/Screen'
 import Icon from '../components/ui/media/Icon'
@@ -74,21 +73,21 @@ const ModulesScreen = () => {
 
   return (
     <Screen>
-      <Column gutter="md">
+      <Box>
         <Title>Modules</Title>
-        <List>
-          {sortedModules.map(({icon, slug, title}) => (
-            <ListItem key={slug}>
-              <Box>
-                <Row gutter="md" valign="baseline">
-                  <Icon name={icon} />
-                  <Phrase>{title}</Phrase>
-                </Row>
-              </Box>
-            </ListItem>
-          ))}
-        </List>
-      </Column>
+      </Box>
+      <List>
+        {sortedModules.map(({icon, slug, title}) => (
+          <ListItem key={slug}>
+            <Box>
+              <Row gutter="md" valign="baseline">
+                <Icon name={icon} />
+                <Phrase>{title}</Phrase>
+              </Row>
+            </Box>
+          </ListItem>
+        ))}
+      </List>
     </Screen>
   )
 }

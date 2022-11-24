@@ -7,6 +7,6 @@
 
 .Container {
   width: var(--size-screen-width);
-  padding: var(--size-spacing-lg);
+  padding: var(--size-spacing-md);
   background-color: var(--bg-color-cutout);
 }
