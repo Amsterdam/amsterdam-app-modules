@@ -1,3 +1,4 @@
+import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Row from '../components/ui/layout/Row'
 import Screen from '../components/ui/layout/Screen'
@@ -67,7 +68,9 @@ const ModulesScreen = () => {
     return <p>Helaas</p>
   }
 
-  const sortedModules = [...modules].sort((a, b) => a.title.localeCompare(b.title, 'nl'))
+  const sortedModules = [...modules].sort((a, b) =>
+    a.title.localeCompare(b.title, 'nl'),
+  )
 
   return (
     <Screen>
@@ -76,10 +79,12 @@ const ModulesScreen = () => {
         <List>
           {sortedModules.map(({icon, slug, title}) => (
             <ListItem key={slug}>
-              <Row gutter="md" valign="baseline">
-                <Icon name={icon} />
-                <Phrase>{title}</Phrase>
-              </Row>
+              <Box>
+                <Row gutter="md" valign="baseline">
+                  <Icon name={icon} />
+                  <Phrase>{title}</Phrase>
+                </Row>
+              </Box>
             </ListItem>
           ))}
         </List>
