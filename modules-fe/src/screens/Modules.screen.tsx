@@ -1,3 +1,6 @@
+import Row from '../components/ui/layout/Row';
+import List from '../components/ui/text/List';
+import ListItem from '../components/ui/text/ListItem';
 import { Module } from '../types/module';
 
 const modules: Pick<Module, 'slug' | 'title'>[] = [
@@ -53,11 +56,13 @@ const ModulesScreen = () => {
     return (
         <div>
             <h1>Modules</h1>
-            <ul>
+            <List>
                 {modules.map(module => (
-                    <li key={module.slug}>{module.title}</li>
+                    <ListItem key={module.slug}>
+                        <Row gutter="md">{module.title}</Row>
+                    </ListItem>
                 ))}
-            </ul>
+            </List>
         </div>
     );
 };
