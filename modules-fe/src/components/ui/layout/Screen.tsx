@@ -1,14 +1,14 @@
-import { ReactNode } from 'react';
-import './Screen.css';
+import {ReactNode} from 'react'
+import './Screen.css'
 
 type Props = {
-    children: ReactNode;
-};
+  children: ReactNode
+}
 
-const Screen = ({ children }: Props) => (
-    <div className="Screen">
-        <div className="Container">{children}</div>
-    </div>
-);
+const Screen = ({children}: Props) => (
+  <div className="Screen">
+    <div className="Container">{children}</div>
+  </div>
+)
 
-export default Screen;
+export default Screen

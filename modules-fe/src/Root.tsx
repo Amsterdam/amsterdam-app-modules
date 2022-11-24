@@ -1,10 +1,10 @@
-import { StrictMode } from 'react';
-import App from './App';
+import {StrictMode} from 'react'
+import App from './App'
 
 const Root = () => (
-    <StrictMode>
-        <App />
-    </StrictMode>
-);
+  <StrictMode>
+    <App />
+  </StrictMode>
+)
 
-export default Root;
+export default Root

@@ -1,3 +1,3 @@
-const Box = () => <h1>Box</h1>;
+const Box = () => <h1>Box</h1>
 
-export default Box;
+export default Box

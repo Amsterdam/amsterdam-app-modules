@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
-import './List.css';
+import {ReactNode} from 'react'
+import './List.css'
 
 type Props = {
-    children: ReactNode;
-};
+  children: ReactNode
+}
 
-const List = ({ children }: Props) => <ul className="List">{children}</ul>;
+const List = ({children}: Props) => <ul className="List">{children}</ul>
 
-export default List;
+export default List

@@ -1,26 +1,31 @@
-import './Icon.css';
-import { IconName, IconPath } from './iconPath';
-import { IconSize } from './types';
+import './Icon.css'
+import {IconName, IconPath} from './iconPath'
+import {IconSize} from './types'
 
 export type IconProps = {
-    /**
-     * The name of the icon to display.
-     */
-    name: IconName;
-    /**
-     * The size of the icon.
-     */
-    size?: keyof typeof IconSize;
-};
+  /**
+   * The name of the icon to display.
+   */
+  name: IconName
+  /**
+   * The size of the icon.
+   */
+  size?: keyof typeof IconSize
+}
 
-const Icon = ({ name, size = 'md' }: IconProps) => {
-    const svgSize = IconSize[size];
+const Icon = ({name, size = 'md'}: IconProps) => {
+  const svgSize = IconSize[size]
 
-    return (
-        <svg className="Icon" fillRule="evenodd" height={svgSize} viewBox="0 0 32 32" width={svgSize}>
-            <path d={IconPath[name]} />
-        </svg>
-    );
-};
+  return (
+    <svg
+      className="Icon"
+      fillRule="evenodd"
+      height={svgSize}
+      viewBox="0 0 32 32"
+      width={svgSize}>
+      <path d={IconPath[name]} />
+    </svg>
+  )
+}
 
-export default Icon;
+export default Icon

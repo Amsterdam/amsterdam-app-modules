@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
-import './Phrase.css';
+import {ReactNode} from 'react'
+import './Phrase.css'
 
 type Props = {
-    children: ReactNode;
-};
+  children: ReactNode
+}
 
-const Phrase = ({ children }: Props) => <span className="Phrase">{children}</span>;
+const Phrase = ({children}: Props) => <span className="Phrase">{children}</span>
 
-export default Phrase;
+export default Phrase

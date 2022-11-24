@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
-import './ListItem.css';
+import {ReactNode} from 'react'
+import './ListItem.css'
 
 type Props = {
-    children: ReactNode;
-};
+  children: ReactNode
+}
 
-const ListItem = ({ children }: Props) => <li className="ListItem">{children}</li>;
+const ListItem = ({children}: Props) => <li className="ListItem">{children}</li>
 
-export default ListItem;
+export default ListItem

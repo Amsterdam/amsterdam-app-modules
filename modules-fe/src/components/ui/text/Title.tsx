@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
-import './Title.css';
+import {ReactNode} from 'react'
+import './Title.css'
 
 type Props = {
-    children: ReactNode;
-};
+  children: ReactNode
+}
 
-const Title = ({ children }: Props) => <h1 className="Title">{children}</h1>;
+const Title = ({children}: Props) => <h1 className="Title">{children}</h1>
 
-export default Title;
+export default Title
