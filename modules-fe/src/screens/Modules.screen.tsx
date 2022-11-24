@@ -67,12 +67,14 @@ const ModulesScreen = () => {
     return <p>Helaas</p>
   }
 
+  const sortedModules = [...modules].sort((a, b) => a.title.localeCompare(b.title, 'nl'))
+
   return (
     <Screen>
       <Column gutter="md">
         <Title>Modules</Title>
         <List>
-          {modules.map(({icon, slug, title}) => (
+          {sortedModules.map(({icon, slug, title}) => (
             <ListItem key={slug}>
               <Row gutter="md" valign="baseline">
                 <Icon name={icon} />
