@@ -71,7 +71,7 @@ const ModulesScreen = () => {
             <List>
                 {modules.map(({ icon, slug, title }) => (
                     <ListItem key={slug}>
-                        <Row gutter="md">
+                        <Row gutter="md" valign="baseline">
                             <Icon name={icon} />
                             <Phrase>{title}</Phrase>
                         </Row>

@@ -11,3 +11,9 @@
 [data-gutter = "xl"] {gap: var(--size-spacing-xl)}
 [data-gutter = "xxl"] {gap: var(--size-spacing-xxl)}
 [data-gutter = "xxxl"] {gap: var(--size-spacing-xxxl)}
+
+[data-valign = 'baseline'] {align-items: baseline;}
+[data-valign = 'center'] {align-items: center;}
+[data-valign = 'end'] {align-items: flex-end;}
+[data-valign = 'start'] {align-items: flex-start;}
+[data-valign = 'stretch'] {align-items: stretch;}

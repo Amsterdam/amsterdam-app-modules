@@ -1,15 +1,16 @@
 import { ReactNode } from 'react';
 import './Row.css';
-import { SpacingToken } from './types';
+import { CrossAxisAlignment, SpacingToken } from './types';
 
 type Props = {
     children: ReactNode;
     gutter?: keyof typeof SpacingToken;
+    valign?: CrossAxisAlignment;
 };
 
-const Row = ({ children, gutter }: Props) => {
+const Row = ({ children, gutter, valign }: Props) => {
     return (
-        <div className="Row" data-gutter={gutter}>
+        <div className="Row" data-gutter={gutter} data-valign={valign}>
             {children}
         </div>
     );
