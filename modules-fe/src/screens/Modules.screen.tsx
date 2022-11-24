@@ -1,5 +1,6 @@
 import Column from '../components/ui/layout/Column';
 import Row from '../components/ui/layout/Row';
+import Screen from '../components/ui/layout/Screen';
 import Icon from '../components/ui/media/Icon';
 import List from '../components/ui/text/List';
 import ListItem from '../components/ui/text/ListItem';
@@ -67,19 +68,53 @@ const ModulesScreen = () => {
     }
 
     return (
-        <Column gutter="md">
-            <Title>Modules</Title>
-            <List>
-                {modules.map(({ icon, slug, title }) => (
-                    <ListItem key={slug}>
-                        <Row gutter="md" valign="baseline">
-                            <Icon name={icon} />
-                            <Phrase>{title}</Phrase>
-                        </Row>
-                    </ListItem>
-                ))}
-            </List>
-        </Column>
+        <Screen>
+            <Column gutter="md">
+                <Title>Modules</Title>
+                <List>
+                    {modules.map(({ icon, slug, title }) => (
+                        <>
+                            <ListItem key={slug}>
+                                <Row gutter="md" valign="baseline">
+                                    <Icon name={icon} />
+                                    <Phrase>{title}</Phrase>
+                                </Row>
+                            </ListItem>
+                            <ListItem key={slug}>
+                                <Row gutter="md" valign="baseline">
+                                    <Icon name={icon} />
+                                    <Phrase>{title}</Phrase>
+                                </Row>
+                            </ListItem>
+                            <ListItem key={slug}>
+                                <Row gutter="md" valign="baseline">
+                                    <Icon name={icon} />
+                                    <Phrase>{title}</Phrase>
+                                </Row>
+                            </ListItem>
+                            <ListItem key={slug}>
+                                <Row gutter="md" valign="baseline">
+                                    <Icon name={icon} />
+                                    <Phrase>{title}</Phrase>
+                                </Row>
+                            </ListItem>
+                            <ListItem key={slug}>
+                                <Row gutter="md" valign="baseline">
+                                    <Icon name={icon} />
+                                    <Phrase>{title}</Phrase>
+                                </Row>
+                            </ListItem>
+                            <ListItem key={slug}>
+                                <Row gutter="md" valign="baseline">
+                                    <Icon name={icon} />
+                                    <Phrase>{title}</Phrase>
+                                </Row>
+                            </ListItem>
+                        </>
+                    ))}
+                </List>
+            </Column>
+        </Screen>
     );
 };
 
