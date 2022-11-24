@@ -52,6 +52,14 @@
   --size-spacing-xl: 40px;
   --size-spacing-xxl: 80px;
   --size-spacing-xxxl: 120px;
+
+  /* font sizes */
+  --text-font-size-h1: 32px;
+  --text-font-size-body: 18px;
+
+  /* line heights */
+  --text-line-height-h1: 1.4;
+  --text-line-height-body: 1.6;
 }
 
 body,
