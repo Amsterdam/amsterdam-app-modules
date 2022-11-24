@@ -39,7 +39,7 @@ const modules: Pick<Module, 'slug' | 'title'>[] = [
     }
 ];
 
-const ModulesPage = () => {
+const ModulesScreen = () => {
     // const { data: modules, isLoading } = useGetModulesQuery(undefined);
 
     // if (isLoading) {
@@ -62,4 +62,4 @@ const ModulesPage = () => {
     );
 };
 
-export default ModulesPage;
+export default ModulesScreen;
