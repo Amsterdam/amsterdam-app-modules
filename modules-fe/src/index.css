@@ -53,3 +53,13 @@
   --size-spacing-xxl: 80px;
   --size-spacing-xxxl: 120px;
 }
+
+body,
+button,
+caption,
+input,
+legend,
+select,
+textarea {
+  font-family: 'Amsterdam Sans';
+}
