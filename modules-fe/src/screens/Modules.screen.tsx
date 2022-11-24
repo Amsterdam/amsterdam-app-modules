@@ -1,3 +1,4 @@
+import Header from '../components/features/Header'
 import Box from '../components/ui/layout/Box'
 import Row from '../components/ui/layout/Row'
 import Screen from '../components/ui/layout/Screen'
@@ -73,6 +74,7 @@ const ModulesScreen = () => {
 
   return (
     <Screen>
+      <Header />
       <Box>
         <Title>Modules</Title>
       </Box>
