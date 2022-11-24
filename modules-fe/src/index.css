@@ -61,5 +61,7 @@ input,
 legend,
 select,
 textarea {
-  font-family: 'Amsterdam Sans';
+  font-family: 'Amsterdam Sans', serif;
+  font-size: 18px;
+  line-height: 1.6;
 }
