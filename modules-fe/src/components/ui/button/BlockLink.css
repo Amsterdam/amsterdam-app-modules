@@ -1,0 +1,17 @@
+.BlockLink {
+  display: block;
+  border: none;
+  background: none;
+  color: currentColor;
+  text-decoration: initial;
+}
+
+.BlockLink:hover {
+  background-color: var(--bg-color-blocklink-hover);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.BlockLink:active {
+  background-color: var(--bg-color-blocklink-active);
+}

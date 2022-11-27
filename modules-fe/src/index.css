@@ -27,6 +27,7 @@
   --baseColor-secondary-purple: #a00078;
   --baseColor-secondary-yellow: #ffe600;
 
+  --baseColor-custom-grey0: #f7f9fa;
   --baseColor-custom-grey1: #f3f5f7;
 
   /* background colors */
@@ -35,6 +36,8 @@
   --bg-color-inactive: var(--baseColor-neutral-grey4);
   --bg-color-inverse: var(--baseColor-neutral-grey5);
   --bg-color-screen: var(--baseColor-custom-grey1);
+  --bg-color-blocklink-hover: var(--baseColor-custom-grey0);
+  --bg-color-blocklink-active: var(--baseColor-custom-grey1);
 
   /* text colors */
   --text-color-default: var(--baseColor-primary-black);
