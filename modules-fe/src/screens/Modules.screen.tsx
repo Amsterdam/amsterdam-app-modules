@@ -1,4 +1,5 @@
 import Header from '../components/features/Header'
+import BlockLink from '../components/ui/button/BlockLink'
 import Box from '../components/ui/layout/Box'
 import Row from '../components/ui/layout/Row'
 import Screen from '../components/ui/layout/Screen'
@@ -81,12 +82,14 @@ const ModulesScreen = () => {
       <List>
         {sortedModules.map(({icon, slug, title}) => (
           <ListItem key={slug}>
-            <Box>
-              <Row gutter="md" valign="baseline">
-                <Icon name={icon} />
-                <Phrase>{title}</Phrase>
-              </Row>
-            </Box>
+            <BlockLink href={`#${slug}`}>
+              <Box>
+                <Row gutter="md" valign="baseline">
+                  <Icon name={icon} />
+                  <Phrase>{title}</Phrase>
+                </Row>
+              </Box>
+            </BlockLink>
           </ListItem>
         ))}
       </List>
