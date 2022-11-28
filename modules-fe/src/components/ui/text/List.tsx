@@ -7,7 +7,10 @@ type Props = {
 }
 
 const List = ({children, withMarker = false}: Props) => (
-  <ul className="List" data-list-marker={withMarker}>
+  // We explicitly set the accessibility role for make Safari recognize this as a list.
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/list-style#accessibility_concerns
+  // eslint-disable-next-line jsx-a11y/no-redundant-roles
+  <ul className="List" data-list-marker={withMarker} role="list">
     {children}
   </ul>
 )
