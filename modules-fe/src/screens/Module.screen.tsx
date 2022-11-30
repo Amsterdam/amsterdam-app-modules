@@ -12,7 +12,9 @@ const sortedVersions = [...moduleVersions].sort((a, b) =>
   b.version.localeCompare(a.version, 'nl'),
 )
 
-const latestVersionTitle = sortedVersions[sortedVersions.length - 1].title
+const latestVersionTitle = sortedVersions[0].title
+
+console.log(sortedVersions)
 
 const ModuleScreen = () => {
   const slug = 'construction-work'
