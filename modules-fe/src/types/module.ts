@@ -8,3 +8,8 @@ export type Module = {
   icon: IconName
   description: string
 }
+
+export type ModuleVersion = {
+  version: string
+  title: string
+}

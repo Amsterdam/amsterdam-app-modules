@@ -1,16 +1,17 @@
+import {StrictMode} from 'react'
 import {Provider} from 'react-redux'
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import ModulesScreen from './screens/Modules.screen'
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
+import {routes} from './routes'
 import {store} from './store/store'
 
+const router = createBrowserRouter(routes)
+
 const App = () => (
-  <Provider store={store}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<ModulesScreen />} />
-      </Routes>
-    </BrowserRouter>
-  </Provider>
+  <StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </StrictMode>
 )
 
 export default App

@@ -1,15 +1,16 @@
 import {ReactNode} from 'react'
 import './BlockLink.css'
+import {Link} from 'react-router-dom'
 
 type Props = {
   children: ReactNode
-  href: string
+  to: string
 }
 
-const BlockLink = ({children, href}: Props) => (
-  <a className="BlockLink" href={href}>
+const BlockLink = ({children, to}: Props) => (
+  <Link className="BlockLink" to={to}>
     {children}
-  </a>
+  </Link>
 )
 
 export default BlockLink
