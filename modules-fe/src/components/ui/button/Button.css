@@ -1,0 +1,9 @@
+.Button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background-color: var(--bg-color-emphasis);
+  color: var(--text-color-inverse);
+  border: 0;
+}

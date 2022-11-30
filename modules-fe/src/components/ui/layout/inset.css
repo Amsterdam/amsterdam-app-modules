@@ -1,0 +1,8 @@
+[data-inset="no"] {padding: var(--size-spacing-no)}
+[data-inset="xs"] {padding: var(--size-spacing-xs)}
+[data-inset="sm"] {padding: var(--size-spacing-sm)}
+[data-inset="md"] {padding: var(--size-spacing-md)}
+[data-inset="lg"] {padding: var(--size-spacing-lg)}
+[data-inset="xl"] {padding: var(--size-spacing-xl)}
+[data-inset="xxl"] {padding: var(--size-spacing-xxl)}
+[data-inset="xxxl"] {padding: var(--size-spacing-xxxl)}

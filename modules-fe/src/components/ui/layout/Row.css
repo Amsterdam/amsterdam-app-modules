@@ -1,0 +1,9 @@
+.Row {
+  display: flex;
+}
+
+[data-valign="baseline"] {align-items: baseline;}
+[data-valign="center"] {align-items: center;}
+[data-valign="end"] {align-items: flex-end;}
+[data-valign="start"] {align-items: flex-start;}
+[data-valign="stretch"] {align-items: stretch;}
