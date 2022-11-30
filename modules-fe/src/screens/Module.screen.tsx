@@ -8,7 +8,9 @@ import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
 import Title from '../components/ui/text/Title'
 
-const sortedVersions = [...moduleVersions].sort((a, b) =>
+const slug = 'construction-work'
+
+const sortedVersions = [...moduleVersions[slug]].sort((a, b) =>
   b.version.localeCompare(a.version, 'nl'),
 )
 
@@ -16,30 +18,26 @@ const latestVersionTitle = sortedVersions[0].title
 
 console.log(sortedVersions)
 
-const ModuleScreen = () => {
-  const slug = 'construction-work'
-
-  return (
-    <Screen>
-      <Header />
-      <Box>
-        <Title>Module: {latestVersionTitle}</Title>
-      </Box>
-      <List>
-        {sortedVersions.map(({title, version}) => (
-          <ListItem key={version}>
-            <BlockLink to={`/module/${slug}/edit`}>
-              <Box>
-                <Phrase>
-                  {title} {version}
-                </Phrase>
-              </Box>
-            </BlockLink>
-          </ListItem>
-        ))}
-      </List>
-    </Screen>
-  )
-}
+const ModuleScreen = () => (
+  <Screen>
+    <Header />
+    <Box>
+      <Title>Module: {latestVersionTitle}</Title>
+    </Box>
+    <List>
+      {sortedVersions.map(({title, version}) => (
+        <ListItem key={version}>
+          <BlockLink to={`/module/${slug}/edit`}>
+            <Box>
+              <Phrase>
+                {title} {version}
+              </Phrase>
+            </Box>
+          </BlockLink>
+        </ListItem>
+      ))}
+    </List>
+  </Screen>
+)
 
 export default ModuleScreen
