@@ -1,10 +1,10 @@
 import {ReactNode} from 'react'
 import './BlockLink.css'
-import {Link} from 'react-router-dom'
+import {Link, LinkProps} from 'react-router-dom'
 
 type Props = {
   children: ReactNode
-  to: string
+  to: LinkProps['to']
 }
 
 const BlockLink = ({children, to}: Props) => (
