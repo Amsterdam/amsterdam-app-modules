@@ -1,9 +1,0 @@
-flasgger
-flask
-pycryptodome
-PyYAML
-requests
-wsgiserver
-pact-python
-pytest
-mock
