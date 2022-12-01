@@ -22,6 +22,7 @@ stages:
     steps:
     - script: |   
         echo 'Building docker container with tag: $(tag)'
+        echo $(Build.SourcesDirectory)
         docker build -f $(Build.SourcesDirectory)/build-docker-image/Dockerfile -t $(tag) .
       displayName: 'Build docker image'
 
