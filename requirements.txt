@@ -1,0 +1,14 @@
+bs4
+coverage
+django
+django-nose
+djangorestframework
+djangorestframework-simplejwt
+drf-yasg
+pkcs7==0.1.0
+psycopg2-binary>=2.8
+requests
+wheel
+Pillow
+pylint
+pylint-django
