@@ -12,6 +12,7 @@ from amsterdam_app_api.serializers import ModuleOrderSerializer
 from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
 from amsterdam_app_api.GenericFunctions.Logger import Logger
 from amsterdam_app_api.GenericFunctions.SetFilter import SetFilter
+from amsterdam_app_api.GenericFunctions.Sort import Sort
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_patch
@@ -157,9 +158,12 @@ def modules_patch(request):
 @IsAuthorized
 def modules_delete(request):
     """ DELETE modules """
-    # TODO Only delete if slug+version doesn't exist in any appVersion
-
     data = dict(request.data)
+    _modules_by_app = list(ModulesByApp.objects.filter(moduleSlug=data.get('slug'),
+                                                       moduleVersion=data.get('version')).all())
+    if _modules_by_app is not None:
+        return Response({'status': True, 'result': message.in_use}, status=409)
+
     modules_data = Modules.objects.filter(slug=data.get('slug'), version=data.get('version')).first()
     if modules_data is not None:
         modules_data.delete()
@@ -175,14 +179,15 @@ def modules_get(request):
     if slug is None:
         modules_data = list(Modules.objects.all().order_by('version'))
         data = {x['slug']: dict(x) for x in ModulesSerializer(modules_data, many=True).data}
-        response = [data[x] for x in data]
-        # TODO: Sort by title
-        return Response({'status': True, 'result': response}, status=200)
+        result = [data[x] for x in data]
+        sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
+
+        return Response({'status': True, 'result': sorted_result}, status=200)
 
     modules_data = list(Modules.objects.filter(slug=slug).all())
     serializer = ModulesSerializer(modules_data, many=True)
-    # TODO: Sort by version (reversed, newest on top)
-    return Response({'status': True, 'result': serializer.data}, status=200)
+    sorted_result = Sort().list_of_dicts(items=serializer.data, key='version', sort_order='asc')
+    return Response({'status': True, 'result': sorted_result}, status=200)
 
 
 @swagger_auto_schema(**as_modules_enable)

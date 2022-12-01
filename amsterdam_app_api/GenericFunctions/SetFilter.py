@@ -19,8 +19,8 @@ class SetFilter:
         """ Return filter
         :return: filter dictionary
         """
-        filter_dict = dict()
-        for kwarg in self.kwargs:
-            if self.kwargs[kwarg] is not None:
-                filter_dict[kwarg] = self.kwargs[kwarg]
+        filter_dict = {}
+        for key, value in self.kwargs.items():
+            if value is not None:
+                filter_dict[key] = value
         return filter_dict
