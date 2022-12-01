@@ -1,3 +1,19 @@
-.ListItem {
+[data-list-marker="false"] > * {
   list-style: none;
+}
+
+[data-list-marker="true"] {
+  --data-list-marker-width: 1ch
+}
+
+[data-list-marker="true"] > * {
+  margin-inline-start: var(--data-list-marker-width);
+  padding-inline-start: calc(var(--size-spacing-md) - var(--data-list-marker-width));
+}
+
+[data-list-marker="true"] > ::marker {
+  font-family: 'Amsterdam Sans', serif;
+  font-size: var(--text-font-size-body);
+  line-height: var(--text-line-height-body);
+  content: '\2022';
 }
