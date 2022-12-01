@@ -16,6 +16,7 @@ variables:
 steps:
 - script: |   
     echo 'Building docker container with tag: $(tag)'
+    echo $(Build.SourcesDirectory)
     docker build -f $(Build.SourcesDirectory)/Dockerfile -t $(tag) .
   displayName: 'Build docker image'
 
