@@ -11,6 +11,7 @@ from amsterdam_app_api.serializers import ModulesByAppSerializer
 from amsterdam_app_api.serializers import ModuleOrderSerializer
 from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
 from amsterdam_app_api.GenericFunctions.Logger import Logger
+from amsterdam_app_api.GenericFunctions.SetFilter import SetFilter
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_patch
@@ -20,6 +21,7 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_modules_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_delete
+from amsterdam_app_api.swagger.swagger_views_modules import as_modules_enable
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_patch
@@ -183,13 +185,44 @@ def modules_get(request):
     return Response({'status': True, 'result': serializer.data}, status=200)
 
 
+@swagger_auto_schema(**as_modules_enable)
+@IsAuthorized
+@api_view(['PATCH'])
+def modules_enable(request):
+    """ PATCH the status for a module by one of the following combinations:
+
+        slug
+        slug + moduleVersion
+        slug + moduleVersion + appVersion
+        slug + appVersion
+    """
+    data = dict(request.data)
+    slug = data.get('slug')
+    app_version = data.get('appVersion', None)
+    module_version = data.get('moduleVersion', None)
+    status = data.get('status')
+
+    # Set filter
+    query_filter = SetFilter(moduleSlug=slug, appVersion=app_version, moduleVersion=module_version).get()
+
+    # Get modules
+    _modules = list(ModulesByApp.objects.filter(**query_filter).all())
+    for _module in _modules:
+        _module.partial_update(status=status)
+
+    # Return result
+    return Response({'status': True, 'result': 'Module(s) patched'}, status=200)
+
+
 @swagger_auto_schema(**as_modules_by_app_get)
 @swagger_auto_schema(**as_modules_by_app_post)
 @swagger_auto_schema(**as_modules_by_app_patch)
 @swagger_auto_schema(**as_modules_by_app_delete)
 @api_view(['GET', 'POST', 'PATCH', 'DELETE'])
 def modules_by_app(request):
-    """ CRUD modules by app (POST, PATCH and DELETE needs authorization header) """
+    """ CRUD modules by app (POST, PATCH and DELETE needs authorization header)
+        status is implicitly set to 1 upon creation (POST) of a module
+    """
     data = Response({'status': False, 'result': 'Unprocessable entity'}, status=422)
     if request.method in ['GET']:
         data = modules_by_app_get(request)
@@ -205,10 +238,12 @@ def modules_by_app(request):
 
     return data
 
+
 @IsAuthorized
 def modules_by_app_post(request):
     """ POST modules by app """
     data = dict(request.data)
+    data['status'] = 1
     ModulesByApp.objects.create(**data)
     return Response({'status': True, 'result': 'ModuleByApp created'}, status=200)
 
