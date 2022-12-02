@@ -4,7 +4,7 @@ import './Logo.css'
 const Logo = () => (
   <div className="logo">
     <BlockLink to="/">
-      <img src="./logo.svg" alt="Gemeente Amsterdam" />
+      <img src="/logo.svg" alt="Gemeente Amsterdam" />
     </BlockLink>
   </div>
 )
