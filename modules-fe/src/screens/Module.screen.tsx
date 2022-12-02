@@ -33,7 +33,7 @@ const ModuleScreen = () => {
   }
 
   return (
-    <Column gutter="md">
+    <Column>
       <Box>
         <Title>Module: {moduleVersions[0].title}</Title>
       </Box>

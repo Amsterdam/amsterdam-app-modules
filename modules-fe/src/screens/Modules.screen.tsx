@@ -26,7 +26,7 @@ const ModulesScreen = () => {
   )
 
   return (
-    <Column gutter="md">
+    <Column>
       <Box>
         <Title>Modules</Title>
       </Box>
