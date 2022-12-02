@@ -1,1 +1,4 @@
-declare module 'jwt-check-expiration'
+declare module '*.svg' {
+  const content: string
+  export default content
+}

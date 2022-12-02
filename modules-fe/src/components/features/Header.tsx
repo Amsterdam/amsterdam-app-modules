@@ -1,12 +1,9 @@
-import BlockLink from '../ui/button/BlockLink'
 import Box from '../ui/layout/Box'
-import Phrase from '../ui/text/Phrase'
+import Logo from '../ui/media/Logo'
 
 const Header = () => (
   <Box>
-    <BlockLink to="/">
-      <Phrase>Gemeente Amsterdam</Phrase>
-    </BlockLink>
+    <Logo />
   </Box>
 )
 
