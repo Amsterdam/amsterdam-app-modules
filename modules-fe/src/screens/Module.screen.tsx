@@ -16,8 +16,6 @@ const sortedVersions = [...moduleVersions[slug]].sort((a, b) =>
 
 const latestVersionTitle = sortedVersions[0].title
 
-console.log(sortedVersions)
-
 const ModuleScreen = () => (
   <Screen>
     <Header />
@@ -30,7 +28,7 @@ const ModuleScreen = () => (
           <BlockLink to={`/module/${slug}/edit`}>
             <Box>
               <Phrase>
-                {title} {version}
+                {version} {title}
               </Phrase>
             </Box>
           </BlockLink>
