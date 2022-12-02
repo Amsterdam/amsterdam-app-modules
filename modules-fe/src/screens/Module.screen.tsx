@@ -1,8 +1,6 @@
 import {moduleVersions} from '../assets/mocks/module-versions'
-import Header from '../components/features/Header'
 import BlockLink from '../components/ui/button/BlockLink'
 import Box from '../components/ui/layout/Box'
-import Screen from '../components/ui/layout/Screen'
 import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
@@ -18,8 +16,7 @@ const sortedVersions = [...moduleVersions[moduleSlug]].sort((a, b) =>
 const latestVersionTitle = sortedVersions[0].title
 
 const ModuleScreen = () => (
-  <Screen>
-    <Header />
+  <>
     <Box>
       <Title>Module: {latestVersionTitle}</Title>
     </Box>
@@ -36,7 +33,7 @@ const ModuleScreen = () => (
         </ListItem>
       ))}
     </List>
-  </Screen>
+  </>
 )
 
 export default ModuleScreen
