@@ -7,10 +7,11 @@ import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
 import Title from '../components/ui/text/Title'
+import {ModuleSlug} from '../types/module'
 
-const slug = 'construction-work'
+const moduleSlug = ModuleSlug.ConstructionWork
 
-const sortedVersions = [...moduleVersions[slug]].sort((a, b) =>
+const sortedVersions = [...moduleVersions[moduleSlug]].sort((a, b) =>
   b.version.localeCompare(a.version, 'nl'),
 )
 
@@ -25,7 +26,7 @@ const ModuleScreen = () => (
     <List>
       {sortedVersions.map(({title, version}) => (
         <ListItem key={version}>
-          <BlockLink to={`/module/${slug}/edit`}>
+          <BlockLink to={`/module/${moduleSlug}/edit`}>
             <Box>
               <Phrase>
                 {version} {title}

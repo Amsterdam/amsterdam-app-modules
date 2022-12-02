@@ -1,10 +1,20 @@
 import {IconName} from '../components/ui/media/iconPath'
 
-export type Slug = string
+export enum ModuleSlug {
+  About = 'about',
+  ConstructionWork = 'construction-work',
+  ConstructionWorkEditor = 'construction-work-editor',
+  Contact = 'contact',
+  OpenWasteContainer = 'open-waste-container',
+  Redirects = 'redirects',
+  ReportProblem = 'report-problem',
+  WasteGuide = 'waste-guide',
+  Welcome = 'welcome',
+}
 
 export type Module = {
   title: string
-  slug: Slug
+  slug: ModuleSlug
   status: number
   version: string
   icon: IconName
@@ -12,6 +22,6 @@ export type Module = {
 }
 
 export type ModuleVersion = {
-  version: string
   title: string
+  version: string
 }

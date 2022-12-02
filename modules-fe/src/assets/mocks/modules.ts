@@ -1,49 +1,49 @@
-import {Module} from '../../types/module'
+import {Module, ModuleSlug} from '../../types/module'
 
 export const modules: Pick<Module, 'icon' | 'slug' | 'title'>[] = [
   {
     icon: 'construction-work',
-    slug: 'construction-work',
+    slug: ModuleSlug.ConstructionWork,
     title: 'Werkzaamheden',
   },
   {
     icon: 'alert',
-    slug: 'report-problem',
+    slug: ModuleSlug.ReportProblem,
     title: 'Melding doen',
   },
   {
     icon: 'chatting',
-    slug: 'contact',
+    slug: ModuleSlug.Contact,
     title: 'Contact',
   },
   {
     icon: 'checkmark',
-    slug: 'redirects',
+    slug: ModuleSlug.Redirects,
     title: 'Direct regelen',
   },
   {
     icon: 'info',
-    slug: 'about',
+    slug: ModuleSlug.About,
     title: 'Over deze app',
   },
   {
     icon: 'housing',
-    slug: 'welcome',
+    slug: ModuleSlug.Welcome,
     title: 'Welkomstscherm',
   },
   {
     icon: 'trash-bin',
-    slug: 'waste-guide',
+    slug: ModuleSlug.WasteGuide,
     title: 'Afvalwijzer',
   },
   {
     icon: 'announcement',
-    slug: 'construction-work-editor',
+    slug: ModuleSlug.ConstructionWorkEditor,
     title: 'Plaats berichten',
   },
   {
     icon: 'organic-waste-container',
-    slug: 'open-waste-container',
+    slug: ModuleSlug.OpenWasteContainer,
     title: 'Gft-container openen',
   },
 ]
