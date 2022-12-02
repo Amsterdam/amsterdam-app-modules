@@ -34,7 +34,7 @@ const ModuleScreen = () => {
       <List>
         {moduleVersions.map(({title, version}) => (
           <ListItem key={version}>
-            <BlockLink to={`/module/${slug}/edit`}>
+            <BlockLink to={`/modules/${slug}/${version}/edit`}>
               <Box>
                 <Phrase>
                   {version} – {title}

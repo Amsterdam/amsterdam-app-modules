@@ -17,3 +17,11 @@ export const getMostRecentModuleVersion = (
   const versions = getModuleVersions(moduleSlug)
   return versions ? versions[0] : undefined
 }
+
+export const getModuleVersion = (
+  moduleSlug: ModuleSlug | undefined,
+  version: string | undefined,
+) => {
+  const versions = getModuleVersions(moduleSlug)
+  return versions ? versions.find(v => v.version === version) : undefined
+}
