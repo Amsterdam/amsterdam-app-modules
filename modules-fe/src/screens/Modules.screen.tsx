@@ -1,6 +1,7 @@
 import {modules} from '../assets/mocks/modules'
 import BlockLink from '../components/ui/button/BlockLink'
 import Box from '../components/ui/layout/Box'
+import Column from '../components/ui/layout/Column'
 import Row from '../components/ui/layout/Row'
 import Icon from '../components/ui/media/Icon'
 import List from '../components/ui/text/List'
@@ -24,7 +25,7 @@ const ModulesScreen = () => {
   )
 
   return (
-    <>
+    <Column gutter="md">
       <Box>
         <Title>Modules</Title>
       </Box>
@@ -42,7 +43,7 @@ const ModulesScreen = () => {
           </ListItem>
         ))}
       </List>
-    </>
+    </Column>
   )
 }
 
