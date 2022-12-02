@@ -1,5 +1,6 @@
 import {modules} from '../assets/mocks/modules'
 import BlockLink from '../components/ui/button/BlockLink'
+import ErrorBox from '../components/ui/feedback/ErrorBox'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Row from '../components/ui/layout/Row'
@@ -17,7 +18,7 @@ const ModulesScreen = () => {
   // }
 
   if (!modules) {
-    return <p>Helaas</p>
+    return <ErrorBox message="Geen modules." />
   }
 
   const sortedModules = [...modules].sort((a, b) =>

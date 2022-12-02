@@ -1,6 +1,7 @@
 import {useParams} from 'react-router-dom'
 import {modulesVersions} from '../assets/mocks/modules-versions'
 import BlockLink from '../components/ui/button/BlockLink'
+import ErrorBox from '../components/ui/feedback/ErrorBox'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import List from '../components/ui/text/List'
@@ -18,12 +19,6 @@ const getModuleVersions = (moduleSlug: ModuleSlug | undefined) => {
     b.version.localeCompare(a.version, 'nl'),
   )
 }
-
-const ErrorBox = ({message}: {message: string}) => (
-  <Box>
-    <Phrase>{message}</Phrase>
-  </Box>
-)
 
 const ModuleScreen = () => {
   const {slug} = useParams()
