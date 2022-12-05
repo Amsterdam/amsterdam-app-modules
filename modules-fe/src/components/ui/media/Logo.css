@@ -1,5 +1,5 @@
-.logo {
-  display: inline-block;
-  width: 115px;
+.Logo {
+  display: block;
+  aspect-ratio: 115 / 40;
   height: 40px;
 }
