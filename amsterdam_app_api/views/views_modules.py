@@ -10,7 +10,8 @@ from amsterdam_app_api.serializers import ModulesSerializer
 from amsterdam_app_api.serializers import ModulesByAppSerializer
 from amsterdam_app_api.serializers import ModuleOrderSerializer
 from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
-from amsterdam_app_api.GenericFunctions.Logger import Logger
+from amsterdam_app_api.GenericFunctions.SetFilter import SetFilter
+from amsterdam_app_api.GenericFunctions.Sort import Sort
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_patch
@@ -20,6 +21,7 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_modules_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_delete
+from amsterdam_app_api.swagger.swagger_views_modules import as_modules_enable
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_patch
@@ -81,14 +83,9 @@ def module_order_ppd(request):
         return Response({'status': True, 'result': 'Module order updated or created'}, status=200)
 
     # Delete record
-    try:
-        data = dict(request.data)
-        ModuleOrder.objects.filter(appVersion=data.get('appVersion')).delete()
-        return Response({'status': True, 'result': 'Module order deleted'}, status=200)
-    except Exception as error:
-        logger = Logger()
-        logger.error('Module (DELETE): {error}'.format(error=error))
-        return Response({'status': False, 'result': str(error)}, status=500)
+    data = dict(request.data)
+    ModuleOrder.objects.filter(appVersion=data.get('appVersion')).delete()
+    return Response({'status': True, 'result': 'Module order deleted'}, status=200)
 
 
 @swagger_auto_schema(**as_module_get)
@@ -104,7 +101,7 @@ def module(request):
         if 'id' in data:
             del data['id']
         return Response({'status': True, 'result': data}, status=200)
-    return Response({'status': True, 'result': 'No such module'}, status=404)
+    return Response({'status': False, 'result': 'No such module'}, status=404)
 
 
 @swagger_auto_schema(**as_modules_get)
@@ -149,38 +146,79 @@ def modules_patch(request):
     if modules_data is not None:
         modules_data.partial_update(**data)
         return Response({'status': True, 'result': 'Module patched'}, status=200)
-    return Response({'status': True, 'result': message.no_record_found}, status=404)
+    return Response({'status': False, 'result': message.no_record_found}, status=404)
 
 
 @IsAuthorized
 def modules_delete(request):
     """ DELETE modules """
-    # TODO Only delete if slug+version doesn't exist in any appVersion
-
     data = dict(request.data)
+    _modules_by_app = list(ModulesByApp.objects.filter(moduleSlug=data.get('slug'),
+                                                       moduleVersion=data.get('version')).all())
+    if len(_modules_by_app) > 0:
+        return Response({'status': False, 'result': message.in_use}, status=409)
+
     modules_data = Modules.objects.filter(slug=data.get('slug'), version=data.get('version')).first()
     if modules_data is not None:
         modules_data.delete()
         return Response({'status': True, 'result': 'Module deleted'}, status=200)
-    return Response({'status': True, 'result': message.no_record_found}, status=404)
+    return Response({'status': False, 'result': message.no_record_found}, status=404)
 
 
 def modules_get(request):
     """ Get modules by slug (returns all for given slug) or if the slug is omitted
         return a (distinct slugs) list with the latest (highest) version number
     """
+    # initializing key
+    del_key = 'id'
+
     slug = request.GET.get('slug', None)
     if slug is None:
         modules_data = list(Modules.objects.all().order_by('version'))
         data = {x['slug']: dict(x) for x in ModulesSerializer(modules_data, many=True).data}
-        response = [data[x] for x in data]
-        # TODO: Sort by title
-        return Response({'status': True, 'result': response}, status=200)
+        data = [data[x] for x in data]
+
+        # Remove Key from Dictionary List
+        result = [{key: val for key, val in sub.items() if key != del_key} for sub in data]
+        sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
+
+        return Response({'status': True, 'result': sorted_result}, status=200)
 
     modules_data = list(Modules.objects.filter(slug=slug).all())
     serializer = ModulesSerializer(modules_data, many=True)
-    # TODO: Sort by version (reversed, newest on top)
-    return Response({'status': True, 'result': serializer.data}, status=200)
+    # Remove Key from Dictionary List
+    result = [{key: val for key, val in sub.items() if key != del_key} for sub in serializer.data]
+    sorted_result = Sort().list_of_dicts(items=result, key='version', sort_order='asc')
+    return Response({'status': True, 'result': sorted_result}, status=200)
+
+
+@swagger_auto_schema(**as_modules_enable)
+@IsAuthorized
+@api_view(['PATCH'])
+def modules_enable(request):
+    """ PATCH the status for a module by one of the following combinations:
+
+        slug
+        slug + moduleVersion
+        slug + moduleVersion + appVersion
+        slug + appVersion
+    """
+    data = dict(request.data)
+    slug = data.get('slug')
+    app_version = data.get('appVersion', None)
+    module_version = data.get('moduleVersion', None)
+    status = data.get('status')
+
+    # Set filter
+    query_filter = SetFilter(moduleSlug=slug, appVersion=app_version, moduleVersion=module_version).get()
+
+    # Get modules
+    _modules = list(ModulesByApp.objects.filter(**query_filter).all())
+    for _module in _modules:
+        _module.partial_update(status=status)
+
+    # Return result
+    return Response({'status': True, 'result': 'Module(s) patched'}, status=200)
 
 
 @swagger_auto_schema(**as_modules_by_app_get)
@@ -189,7 +227,9 @@ def modules_get(request):
 @swagger_auto_schema(**as_modules_by_app_delete)
 @api_view(['GET', 'POST', 'PATCH', 'DELETE'])
 def modules_by_app(request):
-    """ CRUD modules by app (POST, PATCH and DELETE needs authorization header) """
+    """ CRUD modules by app (POST, PATCH and DELETE needs authorization header)
+        status is implicitly set to 1 upon creation (POST) of a module
+    """
     data = Response({'status': False, 'result': 'Unprocessable entity'}, status=422)
     if request.method in ['GET']:
         data = modules_by_app_get(request)
@@ -205,10 +245,12 @@ def modules_by_app(request):
 
     return data
 
+
 @IsAuthorized
 def modules_by_app_post(request):
     """ POST modules by app """
     data = dict(request.data)
+    data['status'] = 1
     ModulesByApp.objects.create(**data)
     return Response({'status': True, 'result': 'ModuleByApp created'}, status=200)
 
@@ -222,7 +264,7 @@ def modules_by_app_patch(request):
     if modules_data is not None:
         modules_data.partial_update(**data)
         return Response({'status': True, 'result': 'ModuleByApp patched'}, status=200)
-    return Response({'status': True, 'result': message.no_record_found}, status=404)
+    return Response({'status': False, 'result': message.no_record_found}, status=404)
 
 
 @IsAuthorized
@@ -234,15 +276,19 @@ def modules_by_app_delete(request):
     if modules_data is not None:
         modules_data.delete()
         return Response({'status': True, 'result': 'ModuleByApp deleted'}, status=200)
-    return Response({'status': True, 'result': message.no_record_found}, status=404)
+    return Response({'status': False, 'result': message.no_record_found}, status=404)
 
 
 def modules_by_app_get(request):
     """ GET module by app """
     app_version = request.GET.get('appVersion')
     modules_data = list(ModulesByApp.objects.filter(appVersion=app_version).all())
-    serializer = ModulesByAppSerializer(modules_data, many=True)
-    return Response({'status': True, 'result': serializer.data}, status=200)
+    data = ModulesByAppSerializer(modules_data, many=True).data
+
+    # Remove Key from Dictionary List
+    del_key = 'id'
+    result = [{key: val for key, val in sub.items() if key != del_key} for sub in data]
+    return Response({'status': True, 'result': result}, status=200)
 
 
 @swagger_auto_schema(**as_modules_for_app_get)
@@ -255,7 +301,7 @@ def modules_for_app_get(request):
 
     _modules = []
     for module_by_app in modules_by_app_data:
-        _module = Modules.objects.filter(slug=module_by_app.moduleSlug).first()
+        _module = Modules.objects.filter(slug=module_by_app.moduleSlug, version=module_by_app.moduleVersion).first()
         if _module is not None:
             _modules.append({
                 'description': _module.description,

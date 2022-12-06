@@ -16,3 +16,4 @@ class Messages:
         self.no_such_database_model = 'No such database model'
         self.no_such_field_in_model = 'No such field in database model'
         self.unsupported_image_format = 'Unsupported image format'
+        self.in_use = "Cowardly refused to remove the module because the module is still in use"

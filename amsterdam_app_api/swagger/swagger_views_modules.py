@@ -29,8 +29,7 @@ modules_for_app = {
 modules_by_app = {
     "appVersion": version,
     "moduleSlug": slug,
-    "moduleVersion": version,
-    "status": status
+    "moduleVersion": version
 }
 
 modules = {
@@ -39,6 +38,13 @@ modules = {
     "icon": icon,
     "version": version,
     "description": description
+}
+
+modules_enable = {
+    "slug": slug,
+    "appVersion": version,
+    "moduleVersion": version,
+    "status": status
 }
 
 module_order = {
@@ -198,6 +204,30 @@ as_modules_delete = {
     'tags': ['Modules']
 }
 
+
+as_modules_enable = {
+    'methods': ['PATCH'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=["slug", "status"],
+        properties=modules_enable,
+    ),
+    'responses': {
+        200: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'status': True,
+                                      'result': 'string'
+                                  }
+                              })
+    },
+    'tags': ['Modules']
+}
 
 as_modules_by_app_get = {
     'methods': ['get'],
