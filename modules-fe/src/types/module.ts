@@ -13,12 +13,12 @@ export enum ModuleSlug {
 }
 
 export type Module = {
-  title: string
+  description: string
+  icon: IconName
   slug: ModuleSlug
   status: number
+  title: string
   version: string
-  icon: IconName
-  description: string
 }
 
 export type ModuleVersion = {
