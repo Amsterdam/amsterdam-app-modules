@@ -3,6 +3,7 @@ import ErrorBox from '../components/ui/feedback/ErrorBox'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Row from '../components/ui/layout/Row'
+import Screen from '../components/ui/layout/Screen'
 import Phrase from '../components/ui/text/Phrase'
 import Title from '../components/ui/text/Title'
 import {getModuleVersion} from '../services/modules.mock'
@@ -17,21 +18,23 @@ const EditModuleScreen = () => {
   }
 
   return (
-    <Box>
-      <Column gutter="xl">
-        <Title>
-          Module bewerken: {moduleVersion.title} {moduleVersion.version}
-        </Title>
-        <div>
-          <Row>
-            <Phrase>Naam: {moduleVersion.title}</Phrase>
-          </Row>
-          <Row>
-            <Phrase>Versie: {moduleVersion.version}</Phrase>
-          </Row>
-        </div>
-      </Column>
-    </Box>
+    <Screen>
+      <Box>
+        <Column gutter="xl">
+          <Title>
+            Module bewerken: {moduleVersion.title} {moduleVersion.version}
+          </Title>
+          <div>
+            <Row>
+              <Phrase>Naam: {moduleVersion.title}</Phrase>
+            </Row>
+            <Row>
+              <Phrase>Versie: {moduleVersion.version}</Phrase>
+            </Row>
+          </div>
+        </Column>
+      </Box>
+    </Screen>
   )
 }
 

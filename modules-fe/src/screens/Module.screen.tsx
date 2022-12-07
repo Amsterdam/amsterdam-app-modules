@@ -3,6 +3,7 @@ import BlockLink from '../components/ui/button/BlockLink'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
+import Screen from '../components/ui/layout/Screen'
 import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
@@ -27,24 +28,26 @@ const ModuleScreen = () => {
   }
 
   return (
-    <Column>
-      <Box>
-        <Title>Module: {mostRecentVersion?.title}</Title>
-      </Box>
-      <List>
-        {moduleVersions.map(({title, version}) => (
-          <ListItem key={version}>
-            <BlockLink to={`/modules/${slug}/${version}/edit`}>
-              <Box>
-                <Phrase>
-                  {version} – {title}
-                </Phrase>
-              </Box>
-            </BlockLink>
-          </ListItem>
-        ))}
-      </List>
-    </Column>
+    <Screen>
+      <Column>
+        <Box>
+          <Title>Module: {mostRecentVersion?.title}</Title>
+        </Box>
+        <List>
+          {moduleVersions.map(({title, version}) => (
+            <ListItem key={version}>
+              <BlockLink to={`/modules/${slug}/${version}/edit`}>
+                <Box>
+                  <Phrase>
+                    {version} – {title}
+                  </Phrase>
+                </Box>
+              </BlockLink>
+            </ListItem>
+          ))}
+        </List>
+      </Column>
+    </Screen>
   )
 }
 

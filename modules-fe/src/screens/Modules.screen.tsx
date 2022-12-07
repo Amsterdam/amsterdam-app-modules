@@ -4,6 +4,7 @@ import ErrorBox from '../components/ui/feedback/ErrorBox'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Row from '../components/ui/layout/Row'
+import Screen from '../components/ui/layout/Screen'
 import Icon from '../components/ui/media/Icon'
 import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
@@ -26,25 +27,27 @@ const ModulesScreen = () => {
   )
 
   return (
-    <Column>
-      <Box>
-        <Title>Modules</Title>
-      </Box>
-      <List>
-        {sortedModules.map(({icon, slug, title}) => (
-          <ListItem key={slug}>
-            <BlockLink to={`/modules/${slug}`}>
-              <Box>
-                <Row gutter="md" valign="baseline">
-                  <Icon name={icon} />
-                  <Phrase>{title}</Phrase>
-                </Row>
-              </Box>
-            </BlockLink>
-          </ListItem>
-        ))}
-      </List>
-    </Column>
+    <Screen>
+      <Column>
+        <Box>
+          <Title>Modules</Title>
+        </Box>
+        <List>
+          {sortedModules.map(({icon, slug, title}) => (
+            <ListItem key={slug}>
+              <BlockLink to={`/modules/${slug}`}>
+                <Box>
+                  <Row gutter="md" valign="baseline">
+                    <Icon name={icon} />
+                    <Phrase>{title}</Phrase>
+                  </Row>
+                </Box>
+              </BlockLink>
+            </ListItem>
+          ))}
+        </List>
+      </Column>
+    </Screen>
   )
 }
 
