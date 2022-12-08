@@ -1,5 +1,6 @@
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import BlockLink from '../components/ui/button/BlockLink'
+import Button from '../components/ui/button/Button'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Box from '../components/ui/layout/Box'
@@ -18,6 +19,7 @@ const ModuleScreen = () => {
     slug: slug as ModuleSlug,
   })
   const mostRecentVersion = moduleVersions?.[0]
+  const navigate = useNavigate()
 
   if (!slug) {
     return <ErrorBox message="Geen slug." />
@@ -37,6 +39,12 @@ const ModuleScreen = () => {
         <Box>
           <Title>Module: {mostRecentVersion?.title}</Title>
         </Box>
+        <Button
+          onClick={() => {
+            navigate(`/modules/${slug}/create-version`)
+          }}>
+          Nieuw
+        </Button>
         <List>
           {moduleVersions.map(({title, version}) => (
             <ListItem key={version}>
