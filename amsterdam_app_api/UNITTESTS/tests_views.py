@@ -189,8 +189,8 @@ class Module(TestCase):
         expected_result = {
             'status': True,
             'result': [
-                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'},
-                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'}
+                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'}
             ]
         }
         self.assertEqual(response.status_code, 200)
@@ -290,7 +290,7 @@ class Module(TestCase):
         """ Test enable modules by slug """
         c = Client()
         data = {'slug': 'slug0', 'status': 0}
-        response = c.patch('/api/v1/modules/enable',
+        response = c.patch('/api/v1/modules_by_app/status',
                             data=data,
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
@@ -305,7 +305,7 @@ class Module(TestCase):
         """ Test enable modules by slug and moduleVersion """
         c = Client()
         data = {'slug': 'slug0', 'moduleVersion': '0.0.0', 'status': 0}
-        response = c.patch('/api/v1/modules/enable',
+        response = c.patch('/api/v1/modules_by_app/status',
                             data=data,
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
@@ -320,7 +320,7 @@ class Module(TestCase):
         """ Test enable modules by slug, moduleVersion and appVersion """
         c = Client()
         data = {'slug': 'slug0', 'moduleVersion': '0.0.0', 'appVersion': '0.0.0', 'status': 0}
-        response = c.patch('/api/v1/modules/enable',
+        response = c.patch('/api/v1/modules_by_app/status',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
                            content_type='application/json')
@@ -335,7 +335,7 @@ class Module(TestCase):
         """ Test enable modules by appVersion """
         c = Client()
         data = {'appVersion': '0.0.1', 'status': 0}
-        response = c.patch('/api/v1/modules/enable',
+        response = c.patch('/api/v1/modules_by_app/status',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
                            content_type='application/json')
