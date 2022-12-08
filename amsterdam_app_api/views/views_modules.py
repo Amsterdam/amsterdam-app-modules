@@ -188,7 +188,7 @@ def modules_get(request):
     serializer = ModulesSerializer(modules_data, many=True)
     # Remove Key from Dictionary List
     result = [{key: val for key, val in sub.items() if key != del_key} for sub in serializer.data]
-    sorted_result = Sort().list_of_dicts(items=result, key='version', sort_order='asc')
+    sorted_result = Sort().list_of_dicts(items=serializer.data, key='version', sort_order='desc')
     return Response({'status': True, 'result': sorted_result}, status=200)
 
 

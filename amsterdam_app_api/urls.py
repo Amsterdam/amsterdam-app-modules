@@ -40,7 +40,7 @@ urlpatterns = [
     path('modules_order', csrf_exempt(views_modules.module_order)),
     path('module', csrf_exempt(views_modules.module)),
     path('modules', csrf_exempt(views_modules.modules)),
-    path('modules/enable', csrf_exempt(views_modules.modules_enable)),
     path('modules_by_app', csrf_exempt(views_modules.modules_by_app)),
+    path('modules_by_app/status', csrf_exempt(views_modules.modules_enable)),
     path('modules_for_app', csrf_exempt(views_modules.modules_for_app_get))
 ]
