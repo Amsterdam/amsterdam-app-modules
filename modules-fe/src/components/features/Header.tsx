@@ -1,9 +1,9 @@
 import Box from '../ui/layout/Box'
-import Phrase from '../ui/text/Phrase'
+import Logo from '../ui/media/Logo'
 
 const Header = () => (
   <Box>
-    <Phrase>Gemeente Amsterdam</Phrase>
+    <Logo />
   </Box>
 )
 
