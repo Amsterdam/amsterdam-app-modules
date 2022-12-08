@@ -16,7 +16,7 @@ export const modulesApi = baseApi.injectEndpoints({
         `${window.location.origin}/api/v1/modules?slug=${slug}`,
       transformResponse: (response: {result: Module[]}) => response.result,
     }),
-    getModules: builder.query<Module[], undefined>({
+    getModules: builder.query<Module[], void>({
       query: () => `${window.location.origin}/api/v1/modules`,
       transformResponse: (response: {result: Module[]}) => response.result,
     }),
