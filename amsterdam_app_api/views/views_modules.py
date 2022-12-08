@@ -186,7 +186,7 @@ def modules_get(request):
 
     modules_data = list(Modules.objects.filter(slug=slug).all())
     serializer = ModulesSerializer(modules_data, many=True)
-    sorted_result = Sort().list_of_dicts(items=serializer.data, key='version', sort_order='asc')
+    sorted_result = Sort().list_of_dicts(items=serializer.data, key='version', sort_order='desc')
     return Response({'status': True, 'result': sorted_result}, status=200)
 
 
