@@ -13,7 +13,7 @@ import Title from '../components/ui/text/Title'
 import {useGetModulesQuery} from '../services/modules'
 
 const ModulesScreen = () => {
-  const {data: modules, isLoading} = useGetModulesQuery(undefined)
+  const {data: modules, isLoading} = useGetModulesQuery()
 
   if (isLoading) {
     return <LoadingBox />
