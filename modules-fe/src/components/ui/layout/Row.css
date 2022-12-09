@@ -2,6 +2,13 @@
   display: flex;
 }
 
+[data-align="around"] {justify-content: space-around;}
+[data-align="between"] {justify-content: space-between;}
+[data-align="center"] {justify-content: center;}
+[data-align="end"] {justify-content: flex-end;}
+[data-align="evenly"] {justify-content: space-evenly;}
+[data-align="start"] {justify-content: flex-start;}
+
 [data-valign="baseline"] {align-items: baseline;}
 [data-valign="center"] {align-items: center;}
 [data-valign="end"] {align-items: flex-end;}
