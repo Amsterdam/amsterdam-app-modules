@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/v1/', include('amsterdam_app_api.urls')),
 
     #
-    # WEB INTERFACE (react native website for module and version management)
+    # WEB INTERFACE (react website for module and version management)
     #
 
     # Main index file
