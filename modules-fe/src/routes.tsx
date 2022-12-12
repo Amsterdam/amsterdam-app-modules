@@ -16,7 +16,7 @@ export const routes: RouteObject[] = [
     element: <ModuleScreen />,
   },
   {
-    path: '/modules/:slug/create-version',
+    path: '/modules/:slug/create',
     element: <CreateModuleVersionScreen />,
   },
   {

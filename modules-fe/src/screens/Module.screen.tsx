@@ -41,7 +41,7 @@ const ModuleScreen = () => {
         </Box>
         <Button
           onClick={() => {
-            navigate(`/modules/${slug}/create-version`)
+            navigate(`/modules/${slug}/create`)
           }}>
           Nieuw
         </Button>
