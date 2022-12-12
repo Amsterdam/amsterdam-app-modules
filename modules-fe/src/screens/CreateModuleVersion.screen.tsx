@@ -1,5 +1,5 @@
 import {useCallback} from 'react'
-import {useForm, FormProvider, SubmitHandler} from 'react-hook-form'
+import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useLocation, useParams} from 'react-router-dom'
 import Input from 'components/ui/forms/Input'
 import Radio from 'components/ui/forms/Radio'
@@ -12,10 +12,11 @@ import Title from '../components/ui/text/Title'
 
 const createVersionSuggestions = (version: string) => {
   const [major, minor, patch] = version.split('.').map(Number)
+
   return [
     `${major}.${minor}.${patch + 1}`,
     `${major}.${minor + 1}.0`,
-    `${major + 1}.${minor}.0`,
+    `${major + 1}.0.0`,
   ]
 }
 
