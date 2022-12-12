@@ -43,7 +43,7 @@ const ModuleScreen = () => {
           label="Maak nieuwe versie"
           onClick={() => {
             navigate(`/modules/${slug}/create`, {
-              state: {title: mostRecentVersion?.title},
+              state: {mostRecentVersion},
             })
           }}
         />

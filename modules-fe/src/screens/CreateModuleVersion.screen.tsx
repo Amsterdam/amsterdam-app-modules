@@ -10,9 +10,19 @@ import Screen from '../components/ui/layout/Screen'
 import {iconNames} from '../components/ui/media/iconPath'
 import Title from '../components/ui/text/Title'
 
+const createVersionSuggestions = (version: string) => {
+  const [major, minor, patch] = version.split('.').map(Number)
+  return [
+    `${major}.${minor}.${patch + 1}`,
+    `${major}.${minor + 1}.0`,
+    `${major + 1}.${minor}.0`,
+  ]
+}
+
 const CreateModuleVersionScreen = () => {
   const {slug} = useParams()
   const {state} = useLocation()
+  const {title, version} = state.mostRecentVersion
   const form = useForm<Module>()
 
   const {handleSubmit} = form
@@ -28,7 +38,7 @@ const CreateModuleVersionScreen = () => {
     <Screen>
       <Column>
         <Box>
-          <Title>Nieuwe versie module: {state.title}</Title>
+          <Title>Nieuwe versie module: {title}</Title>
         </Box>
         <Box>
           <FormProvider {...form}>
@@ -59,7 +69,7 @@ const CreateModuleVersionScreen = () => {
               <Radio
                 label="Versie"
                 name="version"
-                options={['1.2.1', '1.3.0', '2.0.0']}
+                options={createVersionSuggestions(version)}
                 rules={{required: 'Kies een versie'}}
               />
               <button onClick={handleSubmit(onSubmitForm)} type="submit">
