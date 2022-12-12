@@ -1,14 +1,14 @@
 import {useCallback} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useLocation, useParams} from 'react-router-dom'
-import Input from 'components/ui/forms/Input'
-import Radio from 'components/ui/forms/Radio'
-import {Module} from 'types/module'
+import Input from '../components/ui/forms/Input'
+import RadioGroup from '../components/ui/forms/RadioGroup'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import {iconNames} from '../components/ui/media/iconPath'
 import Title from '../components/ui/text/Title'
+import {Module} from '../types/module'
 
 const createVersionSuggestions = (version: string) => {
   const [major, minor, patch] = version.split('.').map(Number)
@@ -68,7 +68,7 @@ const CreateModuleVersionScreen = () => {
                     'Geef de naam van een bestaand pictogram.',
                 }}
               />
-              <Radio
+              <RadioGroup
                 label="Versie"
                 name="version"
                 options={createVersionSuggestions(version)}

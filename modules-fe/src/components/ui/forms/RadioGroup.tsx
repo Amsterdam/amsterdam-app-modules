@@ -9,7 +9,7 @@ type Props = {
   options: string[]
 } & UseControllerProps
 
-const Radio = ({label, name, options, rules}: Props) => (
+const RadioGroup = ({label, name, options, rules}: Props) => (
   <Column gutter="sm">
     <Label text={label} />
     <Column>
@@ -45,4 +45,4 @@ const Radio = ({label, name, options, rules}: Props) => (
   </Column>
 )
 
-export default Radio
+export default RadioGroup
