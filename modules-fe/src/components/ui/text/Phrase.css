@@ -3,3 +3,6 @@
   font-size: var(--text-font-size-body);
   line-height: var(--text-line-height-body);
 }
+
+[data-color="default"] {color: var(--text-color-default);}
+[data-color="error"] {color: var(--text-color-warning);}
