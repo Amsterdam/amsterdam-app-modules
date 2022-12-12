@@ -1,5 +1,6 @@
 import {Controller, UseControllerProps} from 'react-hook-form'
 import Column from '../layout/Column'
+import Phrase from '../text/Phrase'
 import Label from './Label'
 
 type Props = {
@@ -15,6 +16,7 @@ const Input = ({defaultValue = '', label, name, rules}: Props) => {
         <Column gutter="sm">
           <Label text={label} />
           <input onChange={onChange} value={value} />
+          {!!error && <Phrase color="error">{error.message}</Phrase>}
         </Column>
       )}
       rules={rules}
