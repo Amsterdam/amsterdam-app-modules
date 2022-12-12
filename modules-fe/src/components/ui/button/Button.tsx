@@ -10,7 +10,7 @@ type Props = {
 const Button = ({label, onClick}: Props) => {
   return (
     <button onClick={onClick} className="Button" type="button">
-      <Phrase>{label}</Phrase>
+      <Phrase color="inverse">{label}</Phrase>
     </button>
   )
 }

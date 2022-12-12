@@ -3,7 +3,7 @@ import './Phrase.css'
 
 type Props = {
   children: ReactNode
-  color?: 'error' | 'default'
+  color?: 'default' | 'error' | 'inverse'
 }
 
 const Phrase = ({children, color = 'default'}: Props) => (
