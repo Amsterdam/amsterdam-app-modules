@@ -1,6 +1,7 @@
 import {useCallback} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useLocation, useParams} from 'react-router-dom'
+import Button from '../components/ui/button/Button'
 import Input from '../components/ui/forms/Input'
 import RadioGroup from '../components/ui/forms/RadioGroup'
 import Box from '../components/ui/layout/Box'
@@ -74,9 +75,7 @@ const CreateModuleVersionScreen = () => {
                 options={createVersionSuggestions(version)}
                 rules={{required: 'Selecteer één van de mogelijke versies.'}}
               />
-              <button onClick={handleSubmit(onSubmitForm)} type="submit">
-                Opslaan
-              </button>
+              <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
             </Column>
           </FormProvider>
         </Box>
