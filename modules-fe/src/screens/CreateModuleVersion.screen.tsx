@@ -48,30 +48,31 @@ const CreateModuleVersionScreen = () => {
                 label="Naam"
                 name="title"
                 rules={{
-                  required: 'Vul een titel in',
+                  required: 'Geef de module een naam.',
                 }}
               />
               <Input
                 label="Omschrijving"
                 name="description"
                 rules={{
-                  required: 'Vul een omschrijving in',
+                  required: 'Omschrijf de module in een paar woorden.',
                 }}
               />
               <Input
                 label="Pictogram"
                 name="icon"
                 rules={{
-                  required: 'Vul een pictogram in',
+                  required: 'Geef aan welk pictogram de module illustreert.',
                   validate: value =>
-                    iconNames.includes(value) || 'Kies een bestaand pictogram',
+                    iconNames.includes(value) ||
+                    'Geef de naam van een bestaand pictogram.',
                 }}
               />
               <Radio
                 label="Versie"
                 name="version"
                 options={createVersionSuggestions(version)}
-                rules={{required: 'Kies een versie'}}
+                rules={{required: 'Selecteer één van de mogelijke versies.'}}
               />
               <button onClick={handleSubmit(onSubmitForm)} type="submit">
                 Opslaan
