@@ -37,14 +37,6 @@ def index(request):
         return HttpResponse(content, content_type='text/html')
 
 
-def logo(request):
-    """ Main page file """
-    path = '{base_dir}/static/build/logo.svg'.format(base_dir=BASE_DIR)
-    with open(path, 'r') as f:
-        data = f.read()
-        return HttpResponse(data, content_type='image/svg+xml')
-
-
 def css_files(request):
     """ CSS files """
     path = '{base_dir}/static/build'.format(base_dir=BASE_DIR)
