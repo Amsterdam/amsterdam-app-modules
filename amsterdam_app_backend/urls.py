@@ -18,16 +18,34 @@ from django.urls import path, include, re_path
 from amsterdam_app_backend import views
 
 urlpatterns = [
+    #
+    # MAIN API for module backend
+    #
+
     path('api/v1/', include('amsterdam_app_api.urls')),
 
-    # WEB-UI
+    #
+    # WEB INTERFACE (react native website for module and version management)
+    #
+
+    # Main index file
     path('', views.index),
+
+    # Logo
     path('logo.svg', views.logo),
+
+    # CSS files
     re_path(r'^static/css/.*$', views.css_files),
+
+    # JS files
     re_path(r'^static/js/.*$', views.js_files),
-    re_path(r'^static/media/.*$', views.img_and_font_files),
+
+    # ASSETS files
+    re_path(r'^static/media/.*$', views.assets),
+
+    # FAVICON
     re_path(r'^favicon.ico$', views.favicon),
 
-    # Static
+    # Static files
     re_path(r'^static/.*$', views.static)
 ]

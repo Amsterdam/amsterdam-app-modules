@@ -61,8 +61,8 @@ def js_files(request):
         return HttpResponse(content, content_type='text/javascript')
 
 
-def img_and_font_files(request):
-    """ Images and fonts """
+def assets(request):
+    """ Assets e.g. images and fonts """
     path = '{base_dir}/static/build'.format(base_dir=BASE_DIR)
     with open('{path}/{filename}'.format(path=path, filename=request.path), 'rb') as f:
         data = f.read()
