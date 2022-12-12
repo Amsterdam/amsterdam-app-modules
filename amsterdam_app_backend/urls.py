@@ -31,9 +31,6 @@ urlpatterns = [
     # Main index file
     path('', views.index),
 
-    # Logo
-    path('logo.svg', views.logo),
-
     # CSS files
     re_path(r'^static/css/.*$', views.css_files),
 
