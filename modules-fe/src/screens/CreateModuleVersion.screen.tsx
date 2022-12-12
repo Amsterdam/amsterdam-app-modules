@@ -75,7 +75,7 @@ const CreateModuleVersionScreen = () => {
                 options={createVersionSuggestions(version)}
                 rules={{required: 'Selecteer één van de mogelijke versies.'}}
               />
-              <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
+              <Button label="Toevoegen" onClick={handleSubmit(onSubmitForm)} />
             </Column>
           </FormProvider>
         </Box>

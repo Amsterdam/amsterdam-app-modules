@@ -16,7 +16,12 @@ const Input = ({defaultValue = '', label, name, rules}: Props) => {
       render={({field: {onChange, value}, fieldState: {error}}) => (
         <Column gutter="sm">
           <Label text={label} />
-          <input className="Input" onChange={onChange} value={value} />
+          <input
+            className="Input"
+            data-has-error={!!error}
+            onChange={onChange}
+            value={value}
+          />
           {!!error && <Phrase color="error">{error.message}</Phrase>}
         </Column>
       )}

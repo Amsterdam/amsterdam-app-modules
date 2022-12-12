@@ -1,8 +1,10 @@
 .Input {
+  --border-color: var(--border-color-default);
   --border-width: var(--input-border-width);
   padding-block: calc(var(--size-spacing-sm) - var(--border-width));
   padding-inline: calc(var(--size-spacing-md) - var(--border-width));
-  border-color: var(--border-color-default);
+  border-color: var(--border-color);
+  border-style: solid;
   border-width: var(--border-width);
   font-family: 'Amsterdam Sans', serif;
   font-size: var(--text-font-size-body);
@@ -11,4 +13,8 @@
 
 .Input:focus {
   --border-width: var(--input-focus-border-width);
+}
+
+.Input[data-has-error="true"] {
+  --border-color: var(--border-color-warning);
 }
