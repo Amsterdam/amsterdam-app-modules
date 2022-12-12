@@ -3,6 +3,7 @@ import {useCallback} from 'react'
 import {useForm, FormProvider, SubmitHandler} from 'react-hook-form'
 import {useParams} from 'react-router-dom'
 import Input from 'components/ui/forms/Input'
+import Radio from 'components/ui/forms/Radio'
 import {Module} from 'types/module'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
@@ -54,6 +55,12 @@ const CreateModuleVersionScreen = () => {
                   validate: value =>
                     iconNames.includes(value) || 'Kies een bestaand pictogram',
                 }}
+              />
+              <Radio
+                label="Versie"
+                name="version"
+                options={['1.2.1', '1.3.0', '2.0.0']}
+                rules={{required: 'Kies een versie'}}
               />
               <button onClick={handleSubmit(onSubmitForm)} type="submit">
                 Opslaan
