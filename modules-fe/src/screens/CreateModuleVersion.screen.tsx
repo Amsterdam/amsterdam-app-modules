@@ -1,7 +1,6 @@
-import capitalize from 'lodash.capitalize'
 import {useCallback} from 'react'
 import {useForm, FormProvider, SubmitHandler} from 'react-hook-form'
-import {useParams} from 'react-router-dom'
+import {useLocation, useParams} from 'react-router-dom'
 import Input from 'components/ui/forms/Input'
 import Radio from 'components/ui/forms/Radio'
 import {Module} from 'types/module'
@@ -13,6 +12,7 @@ import Title from '../components/ui/text/Title'
 
 const CreateModuleVersionScreen = () => {
   const {slug} = useParams()
+  const {state} = useLocation()
   const form = useForm<Module>()
 
   const {handleSubmit} = form
@@ -28,7 +28,7 @@ const CreateModuleVersionScreen = () => {
     <Screen>
       <Column>
         <Box>
-          <Title>Nieuwe versie module: {capitalize(slug)}</Title>
+          <Title>Nieuwe versie module: {state.title}</Title>
         </Box>
         <Box>
           <FormProvider {...form}>

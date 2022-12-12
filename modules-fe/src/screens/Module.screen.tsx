@@ -42,7 +42,9 @@ const ModuleScreen = () => {
         <Button
           label="Maak nieuwe versie"
           onClick={() => {
-            navigate(`/modules/${slug}/create`)
+            navigate(`/modules/${slug}/create`, {
+              state: {title: mostRecentVersion?.title},
+            })
           }}
         />
         <List>
