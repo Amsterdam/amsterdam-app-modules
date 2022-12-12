@@ -1,3 +1,13 @@
+FROM node:alpine as build-phase-1
+
+# Add source
+COPY modules-fe /code/modules-fe
+
+# Build vue webside
+RUN cd /code/modules-fe \
+ && npm install \
+ && npm run build
+
 FROM python:3.9.0-slim-buster as deploy
 ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=on
@@ -17,6 +27,7 @@ RUN apt-get update  \
 
 # Copy sources to container
 COPY /static /code/static
+COPY --from=build-phase-1 /code/modules-fe/build /code/static/build
 COPY init.sh /code/
 COPY manage.py /code/
 COPY create_user.py /code/
