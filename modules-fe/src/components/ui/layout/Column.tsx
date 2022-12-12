@@ -1,16 +1,22 @@
 import {ReactNode} from 'react'
 import './Column.css'
 import './gutter.css'
-import {SpacingToken} from './types'
+import {CrossAxisAlignment, MainAxisAlignment, SpacingToken} from './types'
 
 type Props = {
+  align?: MainAxisAlignment
   children: ReactNode
   gutter?: keyof typeof SpacingToken
+  halign?: CrossAxisAlignment
 }
 
-const Column = ({children, gutter}: Props) => {
+const Column = ({align, children, gutter, halign}: Props) => {
   return (
-    <div className="Column" data-gutter={gutter}>
+    <div
+      className="Column"
+      data-align={align}
+      data-gutter={gutter}
+      data-halign={halign}>
       {children}
     </div>
   )

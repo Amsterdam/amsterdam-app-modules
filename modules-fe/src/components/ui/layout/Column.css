@@ -2,3 +2,16 @@
   display: flex;
   flex-direction: column;
 }
+
+[data-align="around"] {justify-content: space-around;}
+[data-align="between"] {justify-content: space-between;}
+[data-align="center"] {justify-content: center;}
+[data-align="end"] {justify-content: flex-end;}
+[data-align="evenly"] {justify-content: space-evenly;}
+[data-align="start"] {justify-content: flex-start;}
+
+[data-halign="baseline"] {align-items: baseline;}
+[data-halign="center"] {align-items: center;}
+[data-halign="end"] {align-items: flex-end;}
+[data-halign="start"] {align-items: flex-start;}
+[data-halign="stretch"] {align-items: stretch;}
