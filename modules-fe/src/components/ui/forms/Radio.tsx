@@ -9,42 +9,40 @@ type Props = {
   options: string[]
 } & UseControllerProps
 
-const Radio = ({label, name, options, rules}: Props) => {
-  return (
-    <Column gutter="sm">
-      <Label text={label} />
-      <Column>
-        {options.map((option, index) => (
-          <Controller
-            key={option}
-            name={name}
-            render={({field: {onChange}, fieldState: {error}}) => {
-              return (
-                <>
-                  <label htmlFor={`version-${option}`}>
-                    <Row gutter="sm">
-                      <input
-                        id={`version-${option}`}
-                        type="radio"
-                        name="version"
-                        onChange={onChange}
-                        value={option}
-                      />
-                      <Phrase>{option}</Phrase>
-                    </Row>
-                  </label>
-                  {!!error && index === options.length - 1 && (
-                    <Phrase color="error">{error.message}</Phrase>
-                  )}
-                </>
-              )
-            }}
-            rules={rules}
-          />
-        ))}
-      </Column>
+const Radio = ({label, name, options, rules}: Props) => (
+  <Column gutter="sm">
+    <Label text={label} />
+    <Column>
+      {options.map((option, index) => (
+        <Controller
+          key={option}
+          name={name}
+          render={({field: {onChange}, fieldState: {error}}) => {
+            return (
+              <Column gutter="sm" halign="start">
+                <label htmlFor={`version-${option}`}>
+                  <Row gutter="sm" valign="center">
+                    <input
+                      id={`version-${option}`}
+                      name="version"
+                      onChange={onChange}
+                      type="radio"
+                      value={option}
+                    />
+                    <Phrase>{option}</Phrase>
+                  </Row>
+                </label>
+                {!!error && index === options.length - 1 && (
+                  <Phrase color="error">{error.message}</Phrase>
+                )}
+              </Column>
+            )
+          }}
+          rules={rules}
+        />
+      ))}
     </Column>
-  )
-}
+  </Column>
+)
 
 export default Radio
