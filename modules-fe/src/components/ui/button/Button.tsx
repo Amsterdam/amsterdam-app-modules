@@ -1,15 +1,16 @@
-import {ReactNode, MouseEventHandler} from 'react'
+import {MouseEventHandler} from 'react'
 import './Button.css'
+import Phrase from '../text/Phrase'
 
 type Props = {
-  children: ReactNode
+  label: string
   onClick: MouseEventHandler<HTMLButtonElement>
 }
 
-const Button = ({children, onClick}: Props) => {
+const Button = ({label, onClick}: Props) => {
   return (
     <button onClick={onClick} className="Button" type="button">
-      {children}
+      <Phrase>{label}</Phrase>
     </button>
   )
 }
