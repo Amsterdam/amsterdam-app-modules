@@ -53,13 +53,21 @@ def js_files(request):
         return HttpResponse(content, content_type='text/javascript')
 
 
-def img_files(request):
-    """ Images """
+def assets(request):
+    """ Assets e.g. images and fonts """
     path = '{base_dir}/static/build'.format(base_dir=BASE_DIR)
     with open('{path}/{filename}'.format(path=path, filename=request.path), 'rb') as f:
         data = f.read()
+
+        # For SVG we know the mime-type
         if '.svg' in request.path:
             return HttpResponse(data, content_type='image/svg+xml')
+
+        # For fonts (woff2) we know the mime-type
+        if '.woff2' in request.path:
+            return HttpResponse(data, content_type='font/woff2')
+
+        # For an image we need to check the mime-type
         buffer = io.BytesIO(data)
         pil_image = PILImage.open(buffer)
         return HttpResponse(data, content_type=PILImage.MIME[pil_image.format])
