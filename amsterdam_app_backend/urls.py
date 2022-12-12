@@ -22,9 +22,10 @@ urlpatterns = [
 
     # WEB-UI
     path('', views.index),
+    path('logo.svg', views.logo),
     re_path(r'^static/css/.*$', views.css_files),
     re_path(r'^static/js/.*$', views.js_files),
-    re_path(r'^static/media/.*$', views.img_files),
+    re_path(r'^static/media/.*$', views.img_and_font_files),
     re_path(r'^favicon.ico$', views.favicon),
 
     # Static
