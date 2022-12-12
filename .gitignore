@@ -30,3 +30,5 @@ fcm_credentials.json
 # Persistent data directory for POSTGRES docker environment
 data
 data/db
+
+/static/build
