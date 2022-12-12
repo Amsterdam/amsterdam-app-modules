@@ -38,6 +38,8 @@
   --bg-color-screen: var(--baseColor-custom-grey1);
   --bg-color-blocklink-hover: var(--baseColor-custom-grey0);
   --bg-color-blocklink-active: var(--baseColor-custom-grey1);
+  --bg-color-button: var(--baseColor-primary-blue);
+  --bg-color-button-hover: var(--baseColor-functional-darkblue);
 
   /* text colors */
   --text-color-default: var(--baseColor-primary-black);
