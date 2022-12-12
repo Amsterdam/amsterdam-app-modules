@@ -3,7 +3,7 @@ FROM node:alpine as build-phase-1
 # Add source
 COPY modules-fe /code/modules-fe
 
-# Build vue webside
+# Build react webside
 RUN cd /code/modules-fe \
  && npm install \
  && npm run build
