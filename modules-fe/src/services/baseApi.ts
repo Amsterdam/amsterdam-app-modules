@@ -2,14 +2,14 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
 const authorizedEndpoints = ['createModule']
 
-const mockUniqueId = 'mock-unique-id'
+const mockAuthorizationKey = 'mock-authorization-id'
 
 export const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/',
     prepareHeaders: (headers, {endpoint}) => {
       if (authorizedEndpoints.includes(endpoint)) {
-        headers.set('Authorization', mockUniqueId)
+        headers.set('Authorization', mockAuthorizationKey)
       }
 
       return headers
