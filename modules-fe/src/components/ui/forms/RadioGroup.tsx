@@ -1,19 +1,18 @@
-import {Controller, UseControllerProps} from 'react-hook-form'
+import {Controller, UseControllerProps, useFormState} from 'react-hook-form'
 import Column from '../layout/Column'
 import Row from '../layout/Row'
 import Phrase from '../text/Phrase'
 import Label from './Label'
 
 type RadioProps = {
-  isLast: boolean
   option: string
 } & UseControllerProps
 
-const Radio = ({isLast, name, option, rules}: RadioProps) => (
+const Radio = ({name, option, rules}: RadioProps) => (
   <Controller
     key={option}
     name={name}
-    render={({field: {onChange}, fieldState: {error}}) => {
+    render={({field: {onChange}}) => {
       return (
         <Column gutter="sm" halign="start">
           <label htmlFor={`version-${option}`}>
@@ -28,7 +27,6 @@ const Radio = ({isLast, name, option, rules}: RadioProps) => (
               <Phrase>{option}</Phrase>
             </Row>
           </label>
-          {isLast && !!error && <Phrase color="error">{error.message}</Phrase>}
         </Column>
       )
     }}
@@ -41,19 +39,21 @@ type RadioGroupProps = {
   options: string[]
 } & UseControllerProps
 
-const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => (
-  <Column gutter="sm">
-    <Label text={label} />
-    <Column>
-      {options.map((option, index) => (
-        <Radio
-          isLast={index === options.length - 1}
-          key={option}
-          {...{name, option, rules}}
-        />
-      ))}
+const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => {
+  const {errors} = useFormState({name})
+  const error = errors[name]
+
+  return (
+    <Column gutter="sm">
+      <Label text={label} />
+      <Column>
+        {options.map(option => (
+          <Radio key={option} {...{name, option, rules}} />
+        ))}
+        {!!error && <Phrase color="error">{error.message as string}</Phrase>}
+      </Column>
     </Column>
-  </Column>
-)
+  )
+}
 
 export default RadioGroup
