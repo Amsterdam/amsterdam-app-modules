@@ -11,7 +11,7 @@ export const modulesApi = baseApi.injectEndpoints({
       query: module => ({
         url: `/api/v1/modules`,
         method: 'POST',
-        body: module,
+        body: {...module, status: 1},
       }),
       transformResponse: (response: {result: Module}) => response.result,
       invalidatesTags: ['Module'],
