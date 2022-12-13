@@ -20,6 +20,7 @@ const Radio = ({hasError, name, option, rules}: RadioProps) => (
           <label className="Radio" htmlFor={`version-${option}`}>
             <Row gutter="sm" valign="center">
               <input
+                hidden
                 id={`version-${option}`}
                 name="version"
                 onChange={onChange}
