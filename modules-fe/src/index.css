@@ -41,6 +41,12 @@
   --bg-color-button: var(--baseColor-primary-blue);
   --bg-color-button-hover: var(--baseColor-functional-darkblue);
 
+  --border-color-default: var(--baseColor-primary-black);
+  --border-color-warning: var(--baseColor-support-invalid);
+
+  --border-width-md: 1px;
+  --border-width-lg: 2px;
+
   /* text colors */
   --text-color-default: var(--baseColor-primary-black);
   --text-color-inverse: var(--baseColor-primary-white);
@@ -68,6 +74,9 @@
   /* line heights */
   --text-line-height-h1: 1.1;
   --text-line-height-body: 1.6;
+
+  --input-border-width: var(--border-width-md);
+  --input-focus-border-width: var(--border-width-lg);
 }
 
 body {
