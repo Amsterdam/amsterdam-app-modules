@@ -1,25 +1,23 @@
-.RadioIndicatorBorder[data-has-error="false"] {
-  --stroke-color: var(--border-color-pressable);
-  stroke: var(--stroke-color);
-  fill: var(--bg-color-cutout);
+.RadioIndicator {
+  --color: var(--border-color-pressable);
+}
+
+.RadioIndicator[data-has-error="true"] {
+  --color: var(--border-color-warning);
+}
+
+.RadioIndicator > :nth-child(1) {
   cx: 50%;
   cy: 50%;
   r: calc(11 / 24 * 100%);
+  stroke: var(--color);
   stroke-width: var(--border-width-lg);
+  fill: var(--bg-color-cutout);
 }
 
-.RadioIndicatorBorder[data-has-error="true"] {
-  --stroke-color: var(--border-color-warning);
-}
-
-.RadioIndicatorDot[data-has-error="false"] {
-  --fill-color: var(--border-color-pressable);
-  fill: var(--fill-color);
+.RadioIndicator > :nth-child(2) {
   cx: 50%;
   cy: 50%;
   r: calc(8 / 24 * 100%);
-}
-
-.RadioIndicatorDot[data-has-error="true"] {
-  --fill-color: var(--border-color-warning);
+  fill: var(--color);
 }
