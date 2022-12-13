@@ -1,6 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
-const authorizedEndpoints = ['']
+const authorizedEndpoints = ['createModule']
 
 const mockUniqueId = 'mock-unique-id'
 
