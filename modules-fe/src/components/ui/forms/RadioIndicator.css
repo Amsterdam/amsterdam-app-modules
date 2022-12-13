@@ -1,0 +1,25 @@
+.RadioIndicatorBorder[data-has-error="false"] {
+  --stroke-color: var(--border-color-pressable);
+  stroke: var(--stroke-color);
+  fill: var(--bg-color-cutout);
+  cx: 50%;
+  cy: 50%;
+  r: calc(11 / 24 * 100%);
+  stroke-width: var(--border-width-lg);
+}
+
+.RadioIndicatorBorder[data-has-error="true"] {
+  --stroke-color: var(--border-color-warning);
+}
+
+.RadioIndicatorDot[data-has-error="false"] {
+  --fill-color: var(--border-color-pressable);
+  fill: var(--fill-color);
+  cx: 50%;
+  cy: 50%;
+  r: calc(8 / 24 * 100%);
+}
+
+.RadioIndicatorDot[data-has-error="true"] {
+  --fill-color: var(--border-color-warning);
+}
