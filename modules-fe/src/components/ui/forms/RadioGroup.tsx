@@ -1,7 +1,6 @@
 import {UseControllerProps, useFormState} from 'react-hook-form'
 import Column from '../layout/Column'
 import Phrase from '../text/Phrase'
-import Label from './Label'
 import Radio from './Radio'
 
 type RadioGroupProps = {
@@ -15,7 +14,7 @@ const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => {
 
   return (
     <Column gutter="sm">
-      <Label text={label} />
+      <Phrase>{label}</Phrase>
       <Column>
         {options.map(option => (
           <Radio hasError={!!error} key={option} {...{name, option, rules}} />

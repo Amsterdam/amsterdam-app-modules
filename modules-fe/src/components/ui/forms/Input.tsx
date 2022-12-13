@@ -2,7 +2,6 @@ import {Controller, UseControllerProps} from 'react-hook-form'
 import './Input.css'
 import Column from '../layout/Column'
 import Phrase from '../text/Phrase'
-import Label from './Label'
 
 type Props = {
   label: string
@@ -15,7 +14,7 @@ const Input = ({defaultValue = '', label, name, rules}: Props) => {
       name={name}
       render={({field: {onChange, value}, fieldState: {error}}) => (
         <Column gutter="sm">
-          <Label text={label} />
+          <Phrase>{label}</Phrase>
           <input
             className="Input"
             data-has-error={!!error}
