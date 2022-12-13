@@ -1,4 +1,5 @@
 import {Controller, UseControllerProps} from 'react-hook-form'
+import Box from '../layout/Box'
 import Column from '../layout/Column'
 import Row from '../layout/Row'
 import Phrase from '../text/Phrase'
@@ -17,20 +18,22 @@ const Radio = ({hasError, name, option, rules}: RadioProps) => (
       return (
         <Column gutter="sm" halign="start">
           <label htmlFor={`version-${option}`}>
-            <Row gutter="sm" valign="center">
-              <input
-                id={`version-${option}`}
-                name="version"
-                onChange={onChange}
-                type="radio"
-                value={option}
-              />
-              <RadioIndicator
-                hasError={hasError}
-                isSelected={value === option}
-              />
-              <Phrase>{option}</Phrase>
-            </Row>
+            <Box insetVertical="xs">
+              <Row gutter="sm" valign="center">
+                <input
+                  id={`version-${option}`}
+                  name="version"
+                  onChange={onChange}
+                  type="radio"
+                  value={option}
+                />
+                <RadioIndicator
+                  hasError={hasError}
+                  isSelected={value === option}
+                />
+                <Phrase>{option}</Phrase>
+              </Row>
+            </Box>
           </label>
         </Column>
       )
