@@ -4,15 +4,37 @@ import Row from '../layout/Row'
 import Phrase from '../text/Phrase'
 import Label from './Label'
 
+type RadioIndicatorProps = {
+  hasError: boolean
+  isSelected: boolean
+}
+
+const RadioIndicator = ({hasError, isSelected}: RadioIndicatorProps) => (
+  <svg viewBox="0 0 24 24" width={24} height={24}>
+    <circle
+      cx="12"
+      cy="12"
+      fill="white"
+      r="11"
+      stroke={hasError ? '#ec0000' : '#004699'}
+      strokeWidth="2"
+    />
+    {isSelected && (
+      <circle cx="12" cy="12" fill={hasError ? '#ec0000' : '#004699'} r="8" />
+    )}
+  </svg>
+)
+
 type RadioProps = {
+  hasError: boolean
   option: string
 } & UseControllerProps
 
-const Radio = ({name, option, rules}: RadioProps) => (
+const Radio = ({hasError, name, option, rules}: RadioProps) => (
   <Controller
     key={option}
     name={name}
-    render={({field: {onChange}}) => {
+    render={({field: {onChange, value}}) => {
       return (
         <Column gutter="sm" halign="start">
           <label htmlFor={`version-${option}`}>
@@ -23,6 +45,10 @@ const Radio = ({name, option, rules}: RadioProps) => (
                 onChange={onChange}
                 type="radio"
                 value={option}
+              />
+              <RadioIndicator
+                hasError={hasError}
+                isSelected={value === option}
               />
               <Phrase>{option}</Phrase>
             </Row>
@@ -48,7 +74,7 @@ const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => {
       <Label text={label} />
       <Column>
         {options.map(option => (
-          <Radio key={option} {...{name, option, rules}} />
+          <Radio hasError={!!error} key={option} {...{name, option, rules}} />
         ))}
         {!!error && <Phrase color="error">{error.message as string}</Phrase>}
       </Column>
