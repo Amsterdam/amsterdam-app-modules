@@ -1,6 +1,7 @@
 import {useCallback} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
-import {useLocation, useParams} from 'react-router-dom'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
+import {useCreateModuleMutation} from 'services/modules'
 import Button from '../components/ui/button/Button'
 import Input from '../components/ui/forms/Input'
 import RadioGroup from '../components/ui/forms/RadioGroup'
@@ -9,7 +10,7 @@ import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import {iconNames} from '../components/ui/media/iconPath'
 import Title from '../components/ui/text/Title'
-import {Module} from '../types/module'
+import {Module, ModuleSlug} from '../types/module'
 
 const createVersionSuggestions = (version: string) => {
   const [major, minor, patch] = version.split('.').map(Number)
@@ -22,18 +23,27 @@ const createVersionSuggestions = (version: string) => {
 }
 
 const CreateModuleVersionScreen = () => {
-  const {slug} = useParams()
+  const {slug}: {slug?: ModuleSlug} = useParams()
   const {state} = useLocation()
   const {title, version} = state.mostRecentVersion
   const form = useForm<Module>()
+  const [createModule] = useCreateModuleMutation()
+  const navigate = useNavigate()
 
   const {handleSubmit} = form
 
   const onSubmitForm: SubmitHandler<Module> = useCallback(
     data => {
-      console.log({...data, slug})
+      if (!slug) {
+        return
+      }
+      createModule({...data, slug}).then(response => {
+        if (Object.prototype.hasOwnProperty.call(response, 'data')) {
+          navigate(`/modules/${slug}`)
+        }
+      })
     },
-    [slug],
+    [createModule, navigate, slug],
   )
 
   return (
