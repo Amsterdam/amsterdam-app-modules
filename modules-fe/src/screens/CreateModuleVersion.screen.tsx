@@ -38,7 +38,7 @@ const CreateModuleVersionScreen = () => {
         return
       }
       createModule({...data, slug}).then(response => {
-        if (Object.prototype.hasOwnProperty.call(response, 'data')) {
+        if ('data' in response) {
           navigate(`/modules/${slug}`)
         }
       })
