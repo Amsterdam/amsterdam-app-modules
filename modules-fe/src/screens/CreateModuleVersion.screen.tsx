@@ -1,7 +1,8 @@
 import {useCallback} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
-import {useLocation, useNavigate, useParams} from 'react-router-dom'
-import {useCreateModuleMutation} from 'services/modules'
+import {useNavigate, useParams} from 'react-router-dom'
+import LoadingBox from 'components/ui/feedback/LoadingBox'
+import {useCreateModuleMutation, useGetModuleQuery} from 'services/modules'
 import Button from '../components/ui/button/Button'
 import Input from '../components/ui/forms/Input'
 import RadioGroup from '../components/ui/forms/RadioGroup'
@@ -24,8 +25,10 @@ const createVersionSuggestions = (version: string) => {
 
 const CreateModuleVersionScreen = () => {
   const {slug}: {slug?: ModuleSlug} = useParams()
-  const {state} = useLocation()
-  const {title, version} = state.mostRecentVersion
+  const {data: moduleVersions, isLoading} = useGetModuleQuery({
+    slug: slug as ModuleSlug,
+  })
+  const latestModuleVersion = moduleVersions?.[0]
   const form = useForm<Module>()
   const [createModule] = useCreateModuleMutation()
   const navigate = useNavigate()
@@ -46,16 +49,25 @@ const CreateModuleVersionScreen = () => {
     [createModule, navigate, slug],
   )
 
+  if (isLoading) {
+    return <LoadingBox />
+  }
+
+  if (!latestModuleVersion) {
+    return <LoadingBox message="Geen module versies." />
+  }
+
   return (
     <Screen>
       <Column>
         <Box>
-          <Title>Nieuwe versie module: {title}</Title>
+          <Title>Nieuwe versie module: {latestModuleVersion.title}</Title>
         </Box>
         <Box>
           <FormProvider {...form}>
             <Column gutter="md">
               <Input
+                defaultValue={latestModuleVersion.title}
                 label="Naam"
                 name="title"
                 rules={{
@@ -63,6 +75,7 @@ const CreateModuleVersionScreen = () => {
                 }}
               />
               <Input
+                defaultValue={latestModuleVersion.description}
                 label="Omschrijving"
                 name="description"
                 rules={{
@@ -70,6 +83,7 @@ const CreateModuleVersionScreen = () => {
                 }}
               />
               <Input
+                defaultValue={latestModuleVersion.icon}
                 label="Pictogram"
                 name="icon"
                 rules={{
@@ -82,7 +96,7 @@ const CreateModuleVersionScreen = () => {
               <RadioGroup
                 label="Versie"
                 name="version"
-                options={createVersionSuggestions(version)}
+                options={createVersionSuggestions(latestModuleVersion.version)}
                 rules={{required: 'Selecteer één van de mogelijke versies.'}}
               />
               <Button label="Toevoegen" onClick={handleSubmit(onSubmitForm)} />
