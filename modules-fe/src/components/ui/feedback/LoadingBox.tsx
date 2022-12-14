@@ -1,9 +1,13 @@
 import Box from '../layout/Box'
 import Phrase from '../text/Phrase'
 
-const LoadingBox = () => (
+type Props = {
+  message?: string
+}
+
+const LoadingBox = ({message = 'Laden...'}: Props) => (
   <Box>
-    <Phrase>Laden…</Phrase>
+    <Phrase>{message}</Phrase>
   </Box>
 )
 
