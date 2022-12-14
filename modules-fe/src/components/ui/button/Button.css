@@ -2,12 +2,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px;
+  padding: var(--size-spacing-sm) var(--size-spacing-md);
   background-color: var(--bg-color-button);
+  box-sizing: border-box;
+  border-style: solid;
+  border-width: var(--size-border-lg);
+  border-color: var(--border-color-button-emphasis)
+}
+
+.Button .Phrase {
   color: var(--text-color-inverse);
-  border: 0;
 }
 
 .Button:hover {
   background-color: var(--bg-color-button-hover);
+}
+
+.Button[data-variant="secondary"] {
+  background-color: var(--bg-color-cutout);
+  border-color: var(--border-color-button-emphasis);
+}
+
+.Button[data-variant="secondary"] .Phrase {
+  color: var(--text-color-button-secondary);
+}
+
+.Button[data-variant="secondary"]:hover {
+  background-color: var(--bg-color-cutout);
+  border-color: var(--border-color-button-secondary-hover);
+  border-width: var(--size-border-xl);
+  padding: calc(var(--size-spacing-sm) - 1px) calc(var(--size-spacing-md) - 1px);
+}
+
+.Button[data-variant="secondary"]:hover .Phrase {
+  color: var(--text-color-button-secondary-hover);
 }

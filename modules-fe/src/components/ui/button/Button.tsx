@@ -5,11 +5,16 @@ import Phrase from '../text/Phrase'
 type Props = {
   label: string
   onClick: MouseEventHandler<HTMLButtonElement>
+  variant?: 'secondary'
 }
 
-const Button = ({label, onClick}: Props) => (
-  <button onClick={onClick} className="Button" type="button">
-    <Phrase color="inverse">{label}</Phrase>
+const Button = ({label, onClick, variant}: Props) => (
+  <button
+    onClick={onClick}
+    className="Button"
+    data-variant={variant}
+    type="button">
+    <Phrase>{label}</Phrase>
   </button>
 )
 
