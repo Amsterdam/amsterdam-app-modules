@@ -6,15 +6,14 @@ import RadioIndicator from './RadioIndicator'
 import './Radio.css'
 
 type RadioProps = {
-  hasError: boolean
   option: string
 } & UseControllerProps
 
-const Radio = ({hasError, name, option, rules}: RadioProps) => (
+const Radio = ({name, option, rules}: RadioProps) => (
   <Controller
     key={option}
     name={name}
-    render={({field: {onChange, value}}) => {
+    render={({field: {onChange, value}, fieldState: {error}}) => {
       return (
         <Column gutter="sm" halign="start">
           <label className="Radio" htmlFor={`version-${option}`}>
@@ -28,7 +27,7 @@ const Radio = ({hasError, name, option, rules}: RadioProps) => (
                 value={option}
               />
               <RadioIndicator
-                hasError={hasError}
+                hasError={!!error}
                 isSelected={value === option}
               />
               <Phrase>{option}</Phrase>

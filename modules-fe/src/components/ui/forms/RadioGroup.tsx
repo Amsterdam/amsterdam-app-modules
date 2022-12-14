@@ -17,7 +17,7 @@ const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => {
       <Phrase>{label}</Phrase>
       <Column>
         {options.map(option => (
-          <Radio hasError={!!error} key={option} {...{name, option, rules}} />
+          <Radio key={option} {...{name, option, rules}} />
         ))}
         {!!error && <Phrase color="error">{error.message as string}</Phrase>}
       </Column>
