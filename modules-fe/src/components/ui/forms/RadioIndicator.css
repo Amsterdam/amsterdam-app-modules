@@ -7,17 +7,11 @@
 }
 
 .RadioIndicator > :nth-child(1) {
-  cx: 50%;
-  cy: 50%;
-  r: calc(11 / 24 * 100%);
   stroke: var(--color);
   stroke-width: var(--border-width-lg);
   fill: var(--bg-color-cutout);
 }
 
 .RadioIndicator > :nth-child(2) {
-  cx: 50%;
-  cy: 50%;
-  r: calc(8 / 24 * 100%);
   fill: var(--color);
 }
