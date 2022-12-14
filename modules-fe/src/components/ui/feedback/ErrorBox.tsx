@@ -7,7 +7,7 @@ type Props = {
 
 const ErrorBox = ({message}: Props) => (
   <Box>
-    <Phrase>{message}</Phrase>
+    <Phrase color="error">{message}</Phrase>
   </Box>
 )
 
