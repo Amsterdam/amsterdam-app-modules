@@ -1,6 +1,7 @@
 import {useCallback} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import ErrorBox from 'components/ui/feedback/ErrorBox'
 import LoadingBox from 'components/ui/feedback/LoadingBox'
 import {useCreateModuleMutation, useGetModuleQuery} from 'services/modules'
 import Button from '../components/ui/button/Button'
@@ -54,7 +55,7 @@ const CreateModuleVersionScreen = () => {
   }
 
   if (!latestModuleVersion) {
-    return <LoadingBox message="Geen module versies." />
+    return <ErrorBox message="Geen module versies gevonden" />
   }
 
   return (
