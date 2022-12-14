@@ -3,7 +3,7 @@ import Phrase from '../text/Phrase'
 
 const LoadingBox = () => (
   <Box>
-    <Phrase>Laden…</Phrase>
+    <Phrase>Laden...</Phrase>
   </Box>
 )
 
