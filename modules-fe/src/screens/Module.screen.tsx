@@ -42,9 +42,7 @@ const ModuleScreen = () => {
         <Button
           label="Voeg versie toe"
           onClick={() => {
-            navigate(`/modules/${slug}/create`, {
-              state: {mostRecentVersion},
-            })
+            navigate(`/modules/${slug}/create`)
           }}
         />
         <List>
