@@ -6,12 +6,12 @@
   --color: var(--border-color-warning);
 }
 
-.RadioIndicator > :nth-child(1) {
+.RadioIndicator > circle:nth-of-type(1) {
   stroke: var(--color);
   stroke-width: var(--border-width-lg);
   fill: var(--bg-color-cutout);
 }
 
-.RadioIndicator > :nth-child(2) {
+.RadioIndicator > circle:nth-of-type(2) {
   fill: var(--color);
 }
