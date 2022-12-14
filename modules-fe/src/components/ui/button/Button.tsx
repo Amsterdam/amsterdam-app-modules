@@ -7,12 +7,10 @@ type Props = {
   onClick: MouseEventHandler<HTMLButtonElement>
 }
 
-const Button = ({label, onClick}: Props) => {
-  return (
-    <button onClick={onClick} className="Button" type="button">
-      <Phrase color="inverse">{label}</Phrase>
-    </button>
-  )
-}
+const Button = ({label, onClick}: Props) => (
+  <button onClick={onClick} className="Button" type="button">
+    <Phrase color="inverse">{label}</Phrase>
+  </button>
+)
 
 export default Button

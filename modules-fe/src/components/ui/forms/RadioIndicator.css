@@ -1,0 +1,17 @@
+.RadioIndicator {
+  --color: var(--border-color-pressable);
+}
+
+.RadioIndicator[data-has-error="true"] {
+  --color: var(--border-color-warning);
+}
+
+.RadioIndicator > circle:nth-of-type(1) {
+  stroke: var(--color);
+  stroke-width: var(--border-width-lg);
+  fill: var(--bg-color-cutout);
+}
+
+.RadioIndicator > circle:nth-of-type(2) {
+  fill: var(--color);
+}

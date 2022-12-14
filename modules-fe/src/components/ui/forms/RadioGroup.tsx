@@ -1,38 +1,7 @@
-import {Controller, UseControllerProps, useFormState} from 'react-hook-form'
+import {UseControllerProps, useFormState} from 'react-hook-form'
 import Column from '../layout/Column'
-import Row from '../layout/Row'
 import Phrase from '../text/Phrase'
-import Label from './Label'
-
-type RadioProps = {
-  option: string
-} & UseControllerProps
-
-const Radio = ({name, option, rules}: RadioProps) => (
-  <Controller
-    key={option}
-    name={name}
-    render={({field: {onChange}}) => {
-      return (
-        <Column gutter="sm" halign="start">
-          <label htmlFor={`version-${option}`}>
-            <Row gutter="sm" valign="center">
-              <input
-                id={`version-${option}`}
-                name="version"
-                onChange={onChange}
-                type="radio"
-                value={option}
-              />
-              <Phrase>{option}</Phrase>
-            </Row>
-          </label>
-        </Column>
-      )
-    }}
-    rules={rules}
-  />
-)
+import Radio from './Radio'
 
 type RadioGroupProps = {
   label: string
@@ -45,7 +14,7 @@ const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => {
 
   return (
     <Column gutter="sm">
-      <Label text={label} />
+      <Phrase>{label}</Phrase>
       <Column>
         {options.map(option => (
           <Radio key={option} {...{name, option, rules}} />

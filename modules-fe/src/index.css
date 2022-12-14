@@ -42,6 +42,7 @@
   --bg-color-button-hover: var(--baseColor-functional-darkblue);
 
   --border-color-default: var(--baseColor-primary-black);
+  --border-color-pressable: var(--baseColor-primary-blue);
   --border-color-warning: var(--baseColor-support-invalid);
 
   --border-width-md: 1px;
