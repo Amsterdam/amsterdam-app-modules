@@ -10,16 +10,14 @@ type Props = {
   valign?: CrossAxisAlignment
 }
 
-const Row = ({align, children, gutter, valign}: Props) => {
-  return (
-    <div
-      className="Row"
-      data-gutter={gutter}
-      data-align={align}
-      data-valign={valign}>
-      {children}
-    </div>
-  )
-}
+const Row = ({align, children, gutter, valign}: Props) => (
+  <div
+    className="Row"
+    data-gutter={gutter}
+    data-align={align}
+    data-valign={valign}>
+    {children}
+  </div>
+)
 
 export default Row

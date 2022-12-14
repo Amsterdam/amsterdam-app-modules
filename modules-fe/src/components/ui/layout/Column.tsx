@@ -10,16 +10,14 @@ type Props = {
   halign?: CrossAxisAlignment
 }
 
-const Column = ({align, children, gutter, halign}: Props) => {
-  return (
-    <div
-      className="Column"
-      data-align={align}
-      data-gutter={gutter}
-      data-halign={halign}>
-      {children}
-    </div>
-  )
-}
+const Column = ({align, children, gutter, halign}: Props) => (
+  <div
+    className="Column"
+    data-align={align}
+    data-gutter={gutter}
+    data-halign={halign}>
+    {children}
+  </div>
+)
 
 export default Column
