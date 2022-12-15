@@ -13,7 +13,6 @@ const HomeScreen = () => {
           <Button
             label="Modules beheren"
             onClick={() => navigate('/modules')}
-            variant="secondary"
           />
           <Button
             label="Releases beheren"
