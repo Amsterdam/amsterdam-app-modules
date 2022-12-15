@@ -19,6 +19,7 @@ const Input = ({defaultValue = '', label, name, rules}: Props) => (
             <input
               className="Input"
               id={`Input-${name}`}
+              data-font="body"
               data-has-error={!!error}
               onChange={onChange}
               value={value}

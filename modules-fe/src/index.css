@@ -91,3 +91,23 @@
 body {
   margin: 0;
 }
+
+[data-ellipsize] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-font] {
+  font-family: 'Amsterdam Sans', serif;
+}
+
+[data-font="body"] {
+  font-size: var(--text-font-size-body);
+  line-height: var(--text-line-height-body);
+}
+
+[data-font="title"] {
+  font-size: var(--text-font-size-h1);
+  line-height: var(--text-line-height-h1);
+}

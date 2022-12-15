@@ -12,8 +12,5 @@
 }
 
 [data-list-marker="true"] > ::marker {
-  font-family: 'Amsterdam Sans', serif;
-  font-size: var(--text-font-size-body);
-  line-height: var(--text-line-height-body);
   content: '\2022';
 }

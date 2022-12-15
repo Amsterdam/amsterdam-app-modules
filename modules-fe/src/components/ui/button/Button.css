@@ -1,39 +1,58 @@
 .Button {
+  --background-color: transparent;
+  --border-color: transparent;
+  --border-width: var(--size-border-lg);
+  --padding-block: var(--size-spacing-sm);
+  --padding-inline: var(--size-spacing-md);
+  --height: 48px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--size-spacing-sm) var(--size-spacing-md);
-  background-color: var(--bg-color-button);
-  box-sizing: border-box;
+  height: var(--height);
+  background-color: var(--background-color);
+  padding-top: calc(var(--padding-block) - var(--border-width));
+  padding-right: calc(var(--padding-inline) - var(--border-width));
+  padding-bottom: calc(var(--padding-block) - var(--border-width));
+  padding-left: calc(var(--padding-inline) - var(--border-width));
+  border-color: var(--border-color);
   border-style: solid;
-  border-width: var(--size-border-lg);
-  border-color: var(--border-color-button-emphasis)
+  border-width: var(--border-width);
 }
 
-.Button .Phrase {
-  color: var(--text-color-inverse);
+.Button[data-variant="primary"] {
+  --background-color: var(--bg-color-button);
+  --border-color: var(--border-color-button-emphasis);
 }
 
-.Button:hover {
-  background-color: var(--bg-color-button-hover);
+.Button[data-variant="primary"]:hover {
+  --background-color: var(--bg-color-button-hover);
 }
 
 .Button[data-variant="secondary"] {
-  background-color: var(--bg-color-cutout);
-  border-color: var(--border-color-button-emphasis);
-}
-
-.Button[data-variant="secondary"] .Phrase {
-  color: var(--text-color-button-secondary);
+  --background-color: var(--bg-color-cutout);
+  --border-color: var(--border-color-button-emphasis);
 }
 
 .Button[data-variant="secondary"]:hover {
-  background-color: var(--bg-color-cutout);
-  border-color: var(--border-color-button-secondary-hover);
-  border-width: var(--size-border-xl);
-  padding: calc(var(--size-spacing-sm) - 1px) calc(var(--size-spacing-md) - 1px);
+  --background-color: var(--bg-color-cutout);
+  --border-color: var(--border-color-button-secondary-hover);
+  --border-width: var(--size-border-xl);
 }
 
-.Button[data-variant="secondary"]:hover .Phrase {
-  color: var(--text-color-button-secondary-hover);
+.ButtonLabel {
+  --color: currentColor;
+  color: var(--color);
+}
+
+[data-variant="primary"] > .ButtonLabel  {
+  --color: var(--text-color-inverse); 
+}
+
+[data-variant="secondary"] > .ButtonLabel  {
+  --color: var(--text-color-button-secondary);
+}
+
+[data-variant="secondary"]:hover > .ButtonLabel {
+  --color: var(--text-color-button-secondary-hover);
 }

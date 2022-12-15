@@ -7,7 +7,7 @@ type Props = {
 }
 
 const Phrase = ({children, color = 'default'}: Props) => (
-  <span className="Phrase" data-color={color}>
+  <span className="Phrase" data-color={color} data-font="body">
     {children}
   </span>
 )
