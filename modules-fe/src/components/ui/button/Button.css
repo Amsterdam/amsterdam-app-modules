@@ -11,10 +11,8 @@
   justify-content: center;
   height: var(--height);
   background-color: var(--background-color);
-  padding-top: calc(var(--padding-block) - var(--border-width));
-  padding-right: calc(var(--padding-inline) - var(--border-width));
-  padding-bottom: calc(var(--padding-block) - var(--border-width));
-  padding-left: calc(var(--padding-inline) - var(--border-width));
+  padding-block: calc(var(--padding-block) - var(--border-width));
+  padding-inline: calc(var(--padding-inline) - var(--border-width));
   border-color: var(--border-color);
   border-style: solid;
   border-width: var(--border-width);
