@@ -5,6 +5,10 @@ type Props = {
   children: ReactNode
 }
 
-const ListItem = ({children}: Props) => <li className="ListItem">{children}</li>
+const ListItem = ({children}: Props) => (
+  <li className="ListItem" data-font="body">
+    {children}
+  </li>
+)
 
 export default ListItem

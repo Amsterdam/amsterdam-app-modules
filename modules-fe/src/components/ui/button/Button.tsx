@@ -1,15 +1,26 @@
 import {MouseEventHandler} from 'react'
 import './Button.css'
-import Phrase from '../text/Phrase'
+
+export enum ButtonVariant {
+  primary = 'primary',
+  secondary = 'secondary',
+}
 
 type Props = {
   label: string
   onClick: MouseEventHandler<HTMLButtonElement>
+  variant?: keyof typeof ButtonVariant
 }
 
-const Button = ({label, onClick}: Props) => (
-  <button onClick={onClick} className="Button" type="button">
-    <Phrase color="inverse">{label}</Phrase>
+const Button = ({label, onClick, variant = 'primary'}: Props) => (
+  <button
+    onClick={onClick}
+    className="Button"
+    data-variant={variant}
+    type="button">
+    <span className="ButtonLabel" data-font="body" data-ellipsize>
+      {label}
+    </span>
   </button>
 )
 

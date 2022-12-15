@@ -5,6 +5,10 @@ type Props = {
   children: ReactNode
 }
 
-const Title = ({children}: Props) => <h1 className="Title">{children}</h1>
+const Title = ({children}: Props) => (
+  <h1 className="Title" data-font="title">
+    {children}
+  </h1>
+)
 
 export default Title

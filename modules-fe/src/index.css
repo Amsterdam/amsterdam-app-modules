@@ -41,14 +41,17 @@
   --bg-color-button: var(--baseColor-primary-blue);
   --bg-color-button-hover: var(--baseColor-functional-darkblue);
 
+  /* border colors */
+  --border-color-cutout: var(--baseColor-primary-white);
   --border-color-default: var(--baseColor-primary-black);
   --border-color-pressable: var(--baseColor-primary-blue);
+  --border-color-button-emphasis: var(--baseColor-primary-blue);
+  --border-color-button-secondary-hover: var(--baseColor-functional-darkblue);
   --border-color-warning: var(--baseColor-support-invalid);
 
-  --border-width-md: 1px;
-  --border-width-lg: 2px;
-
   /* text colors */
+  --text-color-button-secondary: var(--baseColor-primary-blue);
+  --text-color-button-secondary-hover: var(--baseColor-functional-darkblue);
   --text-color-default: var(--baseColor-primary-black);
   --text-color-inverse: var(--baseColor-primary-white);
   --text-color-link: var(--baseColor-primary-blue);
@@ -68,6 +71,11 @@
 
   --size-screen-width: 480px;
 
+  /* border sizes */
+  --size-border-md: 1px;
+  --size-border-lg: 2px;
+  --size-border-xl: 3px;
+
   /* font sizes */
   --text-font-size-h1: 32px;
   --text-font-size-body: 18px;
@@ -76,10 +84,30 @@
   --text-line-height-h1: 1.1;
   --text-line-height-body: 1.6;
 
-  --input-border-width: var(--border-width-md);
-  --input-focus-border-width: var(--border-width-lg);
+  --input-border-width: var(--size-border-md);
+  --input-focus-border-width: var(--size-border-lg);
 }
 
 body {
   margin: 0;
+}
+
+[data-ellipsize] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-font] {
+  font-family: 'Amsterdam Sans', serif;
+}
+
+[data-font="body"] {
+  font-size: var(--text-font-size-body);
+  line-height: var(--text-line-height-body);
+}
+
+[data-font="title"] {
+  font-size: var(--text-font-size-h1);
+  line-height: var(--text-line-height-h1);
 }

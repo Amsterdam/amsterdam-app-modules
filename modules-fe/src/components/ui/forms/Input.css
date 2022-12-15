@@ -6,9 +6,6 @@
   border-color: var(--border-color);
   border-style: solid;
   border-width: var(--border-width);
-  font-family: 'Amsterdam Sans', serif;
-  font-size: var(--text-font-size-body);
-  line-height: var(--text-line-height-body);
 }
 
 .Input:focus {
