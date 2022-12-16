@@ -14,10 +14,14 @@ import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
 import {Module, ModuleSlug} from '../types/module'
 
+type Params = {
+  slug: ModuleSlug
+}
+
 const CreateModuleScreen = () => {
   const navigate = useNavigate()
 
-  const {slug}: {slug?: ModuleSlug} = useParams()
+  const {slug}: Partial<Params> = useParams()
   const {data: modules, isLoading} = useGetModuleQuery({
     slug: slug as ModuleSlug,
   })

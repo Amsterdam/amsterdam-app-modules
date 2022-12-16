@@ -13,10 +13,14 @@ import Title from '../components/ui/text/Title'
 import {useGetModuleQuery} from '../services/modules'
 import {ModuleSlug} from '../types/module'
 
+type Params = {
+  slug: ModuleSlug
+}
+
 const ModuleScreen = () => {
   const navigate = useNavigate()
 
-  const {slug} = useParams()
+  const {slug}: Partial<Params> = useParams()
   const {data: modules, isLoading} = useGetModuleQuery({
     slug: slug as ModuleSlug,
   })
