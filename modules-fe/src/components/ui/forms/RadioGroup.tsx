@@ -8,7 +8,13 @@ type RadioGroupProps = {
   options: string[]
 } & UseControllerProps
 
-const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => {
+const RadioGroup = ({
+  defaultValue,
+  label,
+  name,
+  options,
+  rules,
+}: RadioGroupProps) => {
   const {errors} = useFormState({name})
   const error = errors[name]
 
@@ -17,7 +23,7 @@ const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => {
       <Phrase color="muted">{label}</Phrase>
       <Column>
         {options.map(option => (
-          <Radio key={option} {...{name, option, rules}} />
+          <Radio key={option} {...{defaultValue, name, option, rules}} />
         ))}
         {!!error && <Phrase color="error">{error.message as string}</Phrase>}
       </Column>

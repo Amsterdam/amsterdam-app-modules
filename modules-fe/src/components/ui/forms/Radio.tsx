@@ -10,11 +10,12 @@ type RadioProps = {
   option: string
 } & UseControllerProps
 
-const Radio = ({name, option, rules}: RadioProps) => {
+const Radio = ({defaultValue, name, option, rules}: RadioProps) => {
   const inputId = uniqueId('Radio-')
 
   return (
     <Controller
+      defaultValue={defaultValue}
       key={option}
       name={name}
       render={({field: {onChange, value}, fieldState: {error}}) => (
