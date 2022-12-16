@@ -7,7 +7,7 @@ type Props = {
   label: string
 } & UseControllerProps
 
-const Input = ({defaultValue = '', label, name, rules}: Props) => (
+const Input = ({defaultValue, label, name, rules}: Props) => (
   <Controller
     defaultValue={defaultValue as string}
     name={name}
