@@ -22,16 +22,12 @@ const ModuleScreen = () => {
   })
   const latestVersion = modules?.[0]
 
-  if (!slug) {
-    return <ErrorBox message="Geen slug." />
-  }
-
   if (isLoading) {
     return <LoadingBox />
   }
 
   if (!modules?.length) {
-    return <ErrorBox message="Geen versies." />
+    return <ErrorBox message={`Geen versies van module ‘${slug}’ gevonden.`} />
   }
 
   return (

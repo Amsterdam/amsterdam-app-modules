@@ -47,7 +47,7 @@ const CreateModuleScreen = () => {
   }
 
   if (!latestVersion) {
-    return <ErrorBox message="Geen module versies gevonden" />
+    return <ErrorBox message={`Geen versies gevonden van module ‘${slug}’.`} />
   }
 
   return (

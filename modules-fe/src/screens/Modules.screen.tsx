@@ -20,7 +20,7 @@ const ModulesScreen = () => {
   }
 
   if (!modules) {
-    return <ErrorBox message="Geen modules." />
+    return <ErrorBox message="Geen modules gevonden." />
   }
 
   const sortedModules = [...modules].sort((a, b) =>
