@@ -1,11 +1,11 @@
 import {RouteObject} from 'react-router-dom'
-import HomeScreen from 'screens/Home.screen'
-import ReleasesScreen from 'screens/Releases.screen'
 import CreateModuleScreen from './screens/CreateModule.screen'
 import EditModuleScreen from './screens/EditModule.screen'
 import ErrorScreen from './screens/Error.screen'
+import HomeScreen from './screens/Home.screen'
 import ModuleScreen from './screens/Module.screen'
 import ModulesScreen from './screens/Modules.screen'
+import ReleasesScreen from './screens/Releases.screen'
 
 export const routes: RouteObject[] = [
   {
