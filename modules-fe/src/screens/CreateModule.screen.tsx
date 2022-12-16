@@ -22,10 +22,10 @@ const CreateModuleScreen = () => {
   const navigate = useNavigate()
 
   const {slug}: Partial<Params> = useParams()
-  const {data: modules, isLoading} = useGetModuleQuery({
+  const {data: module, isLoading} = useGetModuleQuery({
     slug: slug as ModuleSlug,
   })
-  const latestVersion = modules?.[0]
+  const latestVersion = module?.[0]
 
   const form = useForm<Module>()
   const [createModule] = useCreateModuleMutation()
