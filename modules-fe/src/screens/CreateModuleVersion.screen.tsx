@@ -7,7 +7,6 @@ import {useCreateModuleMutation, useGetModuleQuery} from 'services/modules'
 import Button from '../components/ui/button/Button'
 import Input from '../components/ui/forms/Input'
 import RadioGroup from '../components/ui/forms/RadioGroup'
-import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import {iconNames} from '../components/ui/media/iconPath'
@@ -60,50 +59,46 @@ const CreateModuleVersionScreen = () => {
 
   return (
     <Screen>
-      <Column>
-        <Box>
-          <Title>Nieuwe versie module: {latestModuleVersion.title}</Title>
-        </Box>
-        <Box>
-          <FormProvider {...form}>
-            <Column gutter="md">
-              <Input
-                defaultValue={latestModuleVersion.title}
-                label="Naam"
-                name="title"
-                rules={{
-                  required: 'Geef de module een naam.',
-                }}
-              />
-              <Input
-                defaultValue={latestModuleVersion.description}
-                label="Omschrijving"
-                name="description"
-                rules={{
-                  required: 'Omschrijf de module in een paar woorden.',
-                }}
-              />
-              <Input
-                defaultValue={latestModuleVersion.icon}
-                label="Pictogram"
-                name="icon"
-                rules={{
-                  required: 'Geef aan welk pictogram de module illustreert.',
-                  validate: value =>
-                    iconNames.includes(value) ||
-                    'Geef de naam van een bestaand pictogram.',
-                }}
-              />
-              <RadioGroup
-                label="Versie"
-                name="version"
-                options={createVersionSuggestions(latestModuleVersion.version)}
-                rules={{required: 'Selecteer één van de mogelijke versies.'}}
-              />
-              <Button label="Toevoegen" onClick={handleSubmit(onSubmitForm)} />
-            </Column>
-          </FormProvider>
-        </Box>
+      <Column gutter="lg">
+        <Title>Nieuwe versie module: {latestModuleVersion.title}</Title>
+        <FormProvider {...form}>
+          <Column gutter="md">
+            <Input
+              defaultValue={latestModuleVersion.title}
+              label="Naam"
+              name="title"
+              rules={{
+                required: 'Geef de module een naam.',
+              }}
+            />
+            <Input
+              defaultValue={latestModuleVersion.description}
+              label="Omschrijving"
+              name="description"
+              rules={{
+                required: 'Omschrijf de module in een paar woorden.',
+              }}
+            />
+            <Input
+              defaultValue={latestModuleVersion.icon}
+              label="Pictogram"
+              name="icon"
+              rules={{
+                required: 'Geef aan welk pictogram de module illustreert.',
+                validate: value =>
+                  iconNames.includes(value) ||
+                  'Geef de naam van een bestaand pictogram.',
+              }}
+            />
+            <RadioGroup
+              label="Versie"
+              name="version"
+              options={createVersionSuggestions(latestModuleVersion.version)}
+              rules={{required: 'Selecteer één van de mogelijke versies.'}}
+            />
+            <Button label="Toevoegen" onClick={handleSubmit(onSubmitForm)} />
+          </Column>
+        </FormProvider>
       </Column>
     </Screen>
   )

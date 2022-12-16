@@ -1,6 +1,5 @@
 import {useParams} from 'react-router-dom'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
-import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Row from '../components/ui/layout/Row'
 import Screen from '../components/ui/layout/Screen'
@@ -19,21 +18,19 @@ const EditModuleScreen = () => {
 
   return (
     <Screen>
-      <Box>
-        <Column gutter="xl">
-          <Title>
-            Module bewerken: {moduleVersion.title} {moduleVersion.version}
-          </Title>
-          <div>
-            <Row>
-              <Phrase>Naam: {moduleVersion.title}</Phrase>
-            </Row>
-            <Row>
-              <Phrase>Versie: {moduleVersion.version}</Phrase>
-            </Row>
-          </div>
+      <Column gutter="xl">
+        <Title>
+          Module bewerken: {moduleVersion.title} {moduleVersion.version}
+        </Title>
+        <Column gutter="md">
+          <Row>
+            <Phrase>Naam: {moduleVersion.title}</Phrase>
+          </Row>
+          <Row>
+            <Phrase>Versie: {moduleVersion.version}</Phrase>
+          </Row>
         </Column>
-      </Box>
+      </Column>
     </Screen>
   )
 }

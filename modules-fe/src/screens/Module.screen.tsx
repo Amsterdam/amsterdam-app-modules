@@ -35,29 +35,29 @@ const ModuleScreen = () => {
 
   return (
     <Screen>
-      <Column>
-        <Box>
-          <Title>Module: {mostRecentVersion?.title}</Title>
-        </Box>
+      <Column gutter="lg">
+        <Title>Module: {mostRecentVersion?.title}</Title>
         <Button
           label="Voeg versie toe"
           onClick={() => {
             navigate(`/modules/${slug}/create`)
           }}
         />
-        <List>
-          {moduleVersions.map(({title, version}) => (
-            <ListItem key={version}>
-              <BlockLink to={`/modules/${slug}/${version}/edit`}>
-                <Box>
-                  <Phrase>
-                    {version} – {title}
-                  </Phrase>
-                </Box>
-              </BlockLink>
-            </ListItem>
-          ))}
-        </List>
+        <Box inset="no" negativeInsetHorizontal="md">
+          <List>
+            {moduleVersions.map(({title, version}) => (
+              <ListItem key={version}>
+                <BlockLink to={`/modules/${slug}/${version}/edit`}>
+                  <Box>
+                    <Phrase>
+                      {version} – {title}
+                    </Phrase>
+                  </Box>
+                </BlockLink>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
       </Column>
     </Screen>
   )
