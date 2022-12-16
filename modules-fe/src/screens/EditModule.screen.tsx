@@ -10,9 +10,9 @@ import {ModuleSlug} from '../types/module'
 
 const EditModuleScreen = () => {
   const {slug, version} = useParams()
-  const moduleVersion = getModuleVersion(slug as ModuleSlug, version)
+  const module = getModuleVersion(slug as ModuleSlug, version)
 
-  if (!moduleVersion) {
+  if (!module) {
     return <ErrorBox message="Geen moduleversie." />
   }
 
@@ -20,14 +20,14 @@ const EditModuleScreen = () => {
     <Screen>
       <Column gutter="xl">
         <Title>
-          Module bewerken: {moduleVersion.title} {moduleVersion.version}
+          Module bewerken: {module.title} {module.version}
         </Title>
         <Column gutter="md">
           <Row>
-            <Phrase>Naam: {moduleVersion.title}</Phrase>
+            <Phrase>Naam: {module.title}</Phrase>
           </Row>
           <Row>
-            <Phrase>Versie: {moduleVersion.version}</Phrase>
+            <Phrase>Versie: {module.version}</Phrase>
           </Row>
         </Column>
       </Column>

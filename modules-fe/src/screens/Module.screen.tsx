@@ -14,12 +14,13 @@ import {useGetModuleQuery} from '../services/modules'
 import {ModuleSlug} from '../types/module'
 
 const ModuleScreen = () => {
+  const navigate = useNavigate()
+
   const {slug} = useParams()
-  const {data: moduleVersions, isLoading} = useGetModuleQuery({
+  const {data: modules, isLoading} = useGetModuleQuery({
     slug: slug as ModuleSlug,
   })
-  const mostRecentVersion = moduleVersions?.[0]
-  const navigate = useNavigate()
+  const latestVersion = modules?.[0]
 
   if (!slug) {
     return <ErrorBox message="Geen slug." />
@@ -29,14 +30,14 @@ const ModuleScreen = () => {
     return <LoadingBox />
   }
 
-  if (!moduleVersions?.length) {
+  if (!modules?.length) {
     return <ErrorBox message="Geen versies." />
   }
 
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Module: {mostRecentVersion?.title}</Title>
+        <Title>Module: {latestVersion?.title}</Title>
         <Button
           label="Voeg versie toe"
           onClick={() => {
@@ -45,7 +46,7 @@ const ModuleScreen = () => {
         />
         <Box inset="no" negativeInsetHorizontal="md">
           <List>
-            {moduleVersions.map(({title, version}) => (
+            {modules.map(({title, version}) => (
               <ListItem key={version}>
                 <BlockLink to={`/modules/${slug}/${version}/edit`}>
                   <Box>

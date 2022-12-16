@@ -23,16 +23,17 @@ const createVersionSuggestions = (version: string) => {
   ]
 }
 
-const CreateModuleVersionScreen = () => {
-  const {slug}: {slug?: ModuleSlug} = useParams()
-  const {data: moduleVersions, isLoading} = useGetModuleQuery({
-    slug: slug as ModuleSlug,
-  })
-  const latestModuleVersion = moduleVersions?.[0]
-  const form = useForm<Module>()
-  const [createModule] = useCreateModuleMutation()
+const CreateModuleScreen = () => {
   const navigate = useNavigate()
 
+  const {slug}: {slug?: ModuleSlug} = useParams()
+  const {data: modules, isLoading} = useGetModuleQuery({
+    slug: slug as ModuleSlug,
+  })
+  const latestVersion = modules?.[0]
+
+  const form = useForm<Module>()
+  const [createModule] = useCreateModuleMutation()
   const {handleSubmit} = form
 
   const onSubmitForm: SubmitHandler<Module> = useCallback(
@@ -40,6 +41,7 @@ const CreateModuleVersionScreen = () => {
       if (!slug) {
         return
       }
+
       createModule({...data, slug}).then(response => {
         if ('data' in response) {
           navigate(`/modules/${slug}`)
@@ -53,18 +55,18 @@ const CreateModuleVersionScreen = () => {
     return <LoadingBox />
   }
 
-  if (!latestModuleVersion) {
+  if (!latestVersion) {
     return <ErrorBox message="Geen module versies gevonden" />
   }
 
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Nieuwe versie module: {latestModuleVersion.title}</Title>
+        <Title>Nieuwe versie module: {latestVersion.title}</Title>
         <FormProvider {...form}>
           <Column gutter="md">
             <Input
-              defaultValue={latestModuleVersion.title}
+              defaultValue={latestVersion.title}
               label="Naam"
               name="title"
               rules={{
@@ -72,7 +74,7 @@ const CreateModuleVersionScreen = () => {
               }}
             />
             <Input
-              defaultValue={latestModuleVersion.description}
+              defaultValue={latestVersion.description}
               label="Omschrijving"
               name="description"
               rules={{
@@ -80,7 +82,7 @@ const CreateModuleVersionScreen = () => {
               }}
             />
             <Input
-              defaultValue={latestModuleVersion.icon}
+              defaultValue={latestVersion.icon}
               label="Pictogram"
               name="icon"
               rules={{
@@ -93,7 +95,7 @@ const CreateModuleVersionScreen = () => {
             <RadioGroup
               label="Versie"
               name="version"
-              options={createVersionSuggestions(latestModuleVersion.version)}
+              options={createVersionSuggestions(latestVersion.version)}
               rules={{required: 'Selecteer één van de mogelijke versies.'}}
             />
             <Button label="Toevoegen" onClick={handleSubmit(onSubmitForm)} />
@@ -104,4 +106,4 @@ const CreateModuleVersionScreen = () => {
   )
 }
 
-export default CreateModuleVersionScreen
+export default CreateModuleScreen

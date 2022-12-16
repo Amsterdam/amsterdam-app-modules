@@ -1,7 +1,7 @@
 import {RouteObject} from 'react-router-dom'
 import HomeScreen from 'screens/Home.screen'
 import ReleasesScreen from 'screens/Releases.screen'
-import CreateModuleVersionScreen from './screens/CreateModuleVersion.screen'
+import CreateModuleScreen from './screens/CreateModule.screen'
 import EditModuleScreen from './screens/EditModule.screen'
 import ErrorScreen from './screens/Error.screen'
 import ModuleScreen from './screens/Module.screen'
@@ -23,7 +23,7 @@ export const routes: RouteObject[] = [
   },
   {
     path: '/modules/:slug/create',
-    element: <CreateModuleVersionScreen />,
+    element: <CreateModuleScreen />,
   },
   {
     path: '/modules/:slug/:version/edit',

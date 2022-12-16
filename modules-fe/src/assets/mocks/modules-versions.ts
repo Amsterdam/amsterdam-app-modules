@@ -1,6 +1,9 @@
-import {ModuleSlug, ModuleVersion} from '../../types/module'
+import {Module, ModuleSlug} from '../../types/module'
 
-export const modulesVersions: Record<ModuleSlug, ModuleVersion[]> = {
+export const modulesVersions: Record<
+  ModuleSlug,
+  Pick<Module, 'title' | 'version'>[]
+> = {
   about: [
     {
       version: '1.0.0',
