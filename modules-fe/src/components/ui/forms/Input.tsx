@@ -15,7 +15,7 @@ const Input = ({defaultValue = '', label, name, rules}: Props) => (
       <Column gutter="sm">
         <label htmlFor={`Input-${name}`}>
           <Column gutter="sm">
-            <Phrase>{label}</Phrase>
+            <Phrase color="muted">{label}</Phrase>
             <input
               className="Input"
               id={`Input-${name}`}

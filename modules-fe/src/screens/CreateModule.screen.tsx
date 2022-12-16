@@ -64,7 +64,7 @@ const CreateModuleScreen = () => {
       <Column gutter="lg">
         <Title>Nieuwe versie module: {latestVersion.title}</Title>
         <FormProvider {...form}>
-          <Column gutter="md">
+          <Column gutter="lg">
             <Input
               defaultValue={latestVersion.title}
               label="Naam"

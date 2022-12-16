@@ -14,7 +14,7 @@ const RadioGroup = ({label, name, options, rules}: RadioGroupProps) => {
 
   return (
     <Column gutter="sm">
-      <Phrase>{label}</Phrase>
+      <Phrase color="muted">{label}</Phrase>
       <Column>
         {options.map(option => (
           <Radio key={option} {...{name, option, rules}} />
