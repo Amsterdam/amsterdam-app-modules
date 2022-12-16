@@ -24,3 +24,12 @@
 [data-inset-vertical="xl"] {padding-block-start: var(--size-spacing-xl); padding-block-end: var(--size-spacing-xl);}
 [data-inset-vertical="xxl"] {padding-block-start: var(--size-spacing-xxl); padding-block-end: var(--size-spacing-xxl);}
 [data-inset-vertical="xxxl"] {padding-block-start: var(--size-spacing-xxxl); padding-block-end: var(--size-spacing-xxxl);}
+
+[data-negative-inset-horizontal="no"] {margin-inline-start: calc(var(--size-spacing-no) * -1); margin-inline-end: calc(var(--size-spacing-no) * -1);}
+[data-negative-inset-horizontal="xs"] {margin-inline-start: calc(var(--size-spacing-xs) * -1); margin-inline-end: calc(var(--size-spacing-xs) * -1);}
+[data-negative-inset-horizontal="sm"] {margin-inline-start: calc(var(--size-spacing-sm) * -1); margin-inline-end: calc(var(--size-spacing-sm) * -1);}
+[data-negative-inset-horizontal="md"] {margin-inline-start: calc(var(--size-spacing-md) * -1); margin-inline-end: calc(var(--size-spacing-md) * -1);}
+[data-negative-inset-horizontal="lg"] {margin-inline-start: calc(var(--size-spacing-lg) * -1); margin-inline-end: calc(var(--size-spacing-lg) * -1);}
+[data-negative-inset-horizontal="xl"] {margin-inline-start: calc(var(--size-spacing-xl) * -1); margin-inline-end: calc(var(--size-spacing-xl) * -1);}
+[data-negative-inset-horizontal="xxl"] {margin-inline-start: calc(var(--size-spacing-xxl) * -1); margin-inline-end: calc(var(--size-spacing-xxl) * -1);}
+[data-negative-inset-horizontal="xxxl"] {margin-inline-start: calc(var(--size-spacing-xxxl) * -1); margin-inline-end: calc(var(--size-spacing-xxxl) * -1);}
