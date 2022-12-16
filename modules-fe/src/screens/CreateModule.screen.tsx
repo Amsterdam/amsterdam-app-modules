@@ -46,6 +46,8 @@ const CreateModuleScreen = () => {
     [createModule, navigate, slug],
   )
 
+  const versionFieldValue = form.watch('version')
+
   if (isLoading) {
     return <LoadingBox />
   }
@@ -57,7 +59,9 @@ const CreateModuleScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Nieuwe versie module: {latestVersion.title}</Title>
+        <Title>
+          Toevoegen: {latestVersion.title} {versionFieldValue}
+        </Title>
         <FormProvider {...form}>
           <Column gutter="lg">
             <ModuleTitleField defaultValue={latestVersion.title} />
