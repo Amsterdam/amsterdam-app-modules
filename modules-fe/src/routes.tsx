@@ -11,11 +11,11 @@ export const routes: RouteObject[] = [
   {
     path: '/',
     element: <HomeScreen />,
+    errorElement: <ErrorScreen />,
   },
   {
     path: '/modules',
     element: <ModulesScreen />,
-    errorElement: <ErrorScreen />,
   },
   {
     path: '/modules/:slug',
