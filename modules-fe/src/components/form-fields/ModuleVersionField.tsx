@@ -1,24 +1,29 @@
 import RadioGroup from '../ui/forms/RadioGroup'
 
 type Props = {
-  latestVersion: string
+  baseVersion: string
+  defaultValue?: string
 }
 
-const createVersionSuggestions = (version: string) => {
-  const [major, minor, patch] = version.split('.').map(Number)
+const createVersionSuggestions = (
+  baseVersion: string,
+  defaultValue?: string,
+) => {
+  const [major, minor, patch] = baseVersion.split('.').map(Number)
 
   return [
-    `${major}.${minor}.${patch + 1}`,
+    defaultValue ?? `${major}.${minor}.${patch + 1}`,
     `${major}.${minor + 1}.0`,
     `${major + 1}.0.0`,
   ]
 }
 
-const ModuleVersionField = ({latestVersion}: Props) => (
+const ModuleVersionField = ({baseVersion, defaultValue}: Props) => (
   <RadioGroup
+    defaultValue={defaultValue}
     label="Versie"
     name="version"
-    options={createVersionSuggestions(latestVersion)}
+    options={createVersionSuggestions(baseVersion, defaultValue)}
     rules={{required: 'Selecteer één van de mogelijke versies.'}}
   />
 )

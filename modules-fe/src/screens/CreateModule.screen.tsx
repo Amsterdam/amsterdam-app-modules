@@ -67,7 +67,7 @@ const CreateModuleScreen = () => {
             <ModuleTitleField defaultValue={latestVersion.title} />
             <ModuleDescriptionField defaultValue={latestVersion.description} />
             <ModuleIconField defaultValue={latestVersion.icon} />
-            <ModuleVersionField latestVersion={latestVersion.version} />
+            <ModuleVersionField baseVersion={latestVersion.version} />
             <Button label="Toevoegen" onClick={handleSubmit(onSubmitForm)} />
           </Column>
         </FormProvider>
