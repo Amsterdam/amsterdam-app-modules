@@ -1,3 +1,4 @@
+import BlockLink from '../components/ui/button/BlockLink'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Box from '../components/ui/layout/Box'
@@ -28,9 +29,11 @@ const ReleasesScreen = () => {
           <List>
             {releases.map(version => (
               <ListItem key={version}>
-                <Box>
-                  <Phrase>Versie {version}</Phrase>
-                </Box>
+                <BlockLink to={`/releases/${version}`}>
+                  <Box>
+                    <Phrase>Versie {version}</Phrase>
+                  </Box>
+                </BlockLink>
               </ListItem>
             ))}
           </List>

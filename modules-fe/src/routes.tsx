@@ -5,6 +5,7 @@ import ErrorScreen from './screens/Error.screen'
 import HomeScreen from './screens/Home.screen'
 import ModuleScreen from './screens/Module.screen'
 import ModulesScreen from './screens/Modules.screen'
+import ReleaseScreen from './screens/Release.screen'
 import ReleasesScreen from './screens/Releases.screen'
 
 export const routes: RouteObject[] = [
@@ -32,5 +33,9 @@ export const routes: RouteObject[] = [
   {
     path: '/releases',
     element: <ReleasesScreen />,
+  },
+  {
+    path: '/releases/:version',
+    element: <ReleaseScreen />,
   },
 ]
