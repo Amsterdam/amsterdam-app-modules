@@ -1,4 +1,4 @@
-import Input from '../ui/forms/Input'
+import TextField from '../ui/forms/TextField'
 import {iconNames} from '../ui/media/iconPath'
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
 }
 
 const ModuleIconField = ({defaultValue}: Props) => (
-  <Input
+  <TextField
     defaultValue={defaultValue}
     label="Pictogram"
     name="icon"

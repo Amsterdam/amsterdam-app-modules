@@ -1,4 +1,4 @@
-import RadioGroup from '../ui/forms/RadioGroup'
+import RadioFieldSet from '../ui/forms/RadioFieldSet'
 
 type Props = {
   baseVersion: string
@@ -19,7 +19,7 @@ const createVersionSuggestions = (
 }
 
 const ModuleVersionField = ({baseVersion, defaultValue}: Props) => (
-  <RadioGroup
+  <RadioFieldSet
     defaultValue={defaultValue}
     label="Versie"
     name="version"

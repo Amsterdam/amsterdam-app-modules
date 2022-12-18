@@ -1,11 +1,11 @@
-import Input from '../ui/forms/Input'
+import TextField from '../ui/forms/TextField'
 
 type Props = {
   defaultValue: string | undefined
 }
 
 const ModuleTitleField = ({defaultValue}: Props) => (
-  <Input
+  <TextField
     defaultValue={defaultValue}
     label="Naam"
     name="title"

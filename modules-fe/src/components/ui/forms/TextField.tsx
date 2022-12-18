@@ -1,5 +1,5 @@
 import {Controller, UseControllerProps} from 'react-hook-form'
-import './Input.css'
+import './TextField.css'
 import Column from '../layout/Column'
 import Phrase from '../text/Phrase'
 
@@ -7,7 +7,7 @@ type Props = {
   label: string
 } & UseControllerProps
 
-const Input = ({defaultValue, label, name, rules}: Props) => (
+const TextField = ({defaultValue, label, name, rules}: Props) => (
   <Controller
     defaultValue={defaultValue as string}
     name={name}
@@ -33,4 +33,4 @@ const Input = ({defaultValue, label, name, rules}: Props) => (
   />
 )
 
-export default Input
+export default TextField

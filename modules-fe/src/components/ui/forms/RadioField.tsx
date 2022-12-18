@@ -4,14 +4,14 @@ import Column from '../layout/Column'
 import Row from '../layout/Row'
 import Phrase from '../text/Phrase'
 import RadioIndicator from './RadioIndicator'
-import './Radio.css'
+import './RadioField.css'
 
 type RadioProps = {
   option: string
 } & UseControllerProps
 
-const Radio = ({defaultValue, name, option, rules}: RadioProps) => {
-  const inputId = uniqueId('Radio-')
+const RadioField = ({defaultValue, name, option, rules}: RadioProps) => {
+  const inputId = uniqueId('RadioField-')
 
   return (
     <Controller
@@ -20,7 +20,7 @@ const Radio = ({defaultValue, name, option, rules}: RadioProps) => {
       name={name}
       render={({field: {onChange, value}, fieldState: {error}}) => (
         <Column gutter="sm" halign="start">
-          <label className="Radio" htmlFor={inputId}>
+          <label className="RadioField" htmlFor={inputId}>
             <Row gutter="sm" valign="center">
               <input
                 hidden
@@ -44,4 +44,4 @@ const Radio = ({defaultValue, name, option, rules}: RadioProps) => {
   )
 }
 
-export default Radio
+export default RadioField
