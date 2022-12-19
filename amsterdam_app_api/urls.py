@@ -42,5 +42,6 @@ urlpatterns = [
     path('modules', csrf_exempt(views_modules.modules)),
     path('modules_by_app', csrf_exempt(views_modules.modules_by_app)),
     path('modules_by_app/status', csrf_exempt(views_modules.modules_enable)),
-    path('modules_for_app', csrf_exempt(views_modules.modules_for_app_get))
+    path('modules_for_app', csrf_exempt(views_modules.modules_for_app_get)),
+    path('modules/latest', csrf_exempt(views_modules.modules_latest))
 ]

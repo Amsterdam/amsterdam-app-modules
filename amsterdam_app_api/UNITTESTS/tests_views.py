@@ -162,10 +162,10 @@ class Module(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
-    def test_modules_get_no_slug(self):
-        """ test modules get (slug = None) """
+    def test_modules_latest(self):
+        """ test modules/latest """
         c = Client()
-        response = c.get('/api/v1/modules', HTTP_appVersion='0.0.0')
+        response = c.get('/api/v1/modules/latest', HTTP_appVersion='0.0.0')
         expected_result = {
             'status': True,
             'result': [
@@ -178,23 +178,39 @@ class Module(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
-    def test_modules_get_slug(self):
-        """ test modules get (slug = slug0) """
-        c = Client()
-        response = c.get('/api/v1/modules',
-                         data={'slug': 'slug0'},
-                         HTTP_appVersion='0.0.0',
-                         content_type='application/json')
+#     def test_modules_get_no_slug(self):
+#         """ test modules get (slug = None) """
+#         c = Client()
+#         response = c.get('/api/v1/modules', HTTP_appVersion='0.0.0')
+#         expected_result = {
+#             'status': True,
+#             'result': [
+#                 {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+#                 {'slug': 'slug1', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+#                 {'slug': 'slug2', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+#                 {'slug': 'slug3', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'}
+#             ]
+#         }
+#         self.assertEqual(response.status_code, 200)
+#         self.assertDictEqual(response.data, expected_result)
 
-        expected_result = {
-            'status': True,
-            'result': [
-                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
-                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'}
-            ]
-        }
-        self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, expected_result)
+#     def test_modules_get_slug(self):
+#         """ test modules get (slug = slug0) """
+#         c = Client()
+#         response = c.get('/api/v1/modules',
+#                          data={'slug': 'slug0'},
+#                          HTTP_appVersion='0.0.0',
+#                          content_type='application/json')
+
+#         expected_result = {
+#             'status': True,
+#             'result': [
+#                 {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+#                 {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'}
+#             ]
+#         }
+#         self.assertEqual(response.status_code, 200)
+#         self.assertDictEqual(response.data, expected_result)
 
     def test_modules_post_200(self):
         """ Test create new module """

@@ -16,8 +16,9 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_delete
+from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_get
-from amsterdam_app_api.swagger.swagger_views_modules import as_modules_get
+# from amsterdam_app_api.swagger.swagger_views_modules import as_modules_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_delete
@@ -104,16 +105,37 @@ def module(request):
     return Response({'status': False, 'result': 'No such module'}, status=404)
 
 
-@swagger_auto_schema(**as_modules_get)
+@swagger_auto_schema(**as_modules_latest)
+@api_view(['GET'])
+def modules_latest(request):
+    """ Request a list of modules. If a slug has multiple entries in the db,
+        it only returns the latest version. E.g. if 1.6.2 and 2.0.0 is present
+        it only returns version 2.0.0. All available fields for a module are returned.
+        The result is ordered by title, ascending.
+    """
+    del_key = 'id'
+    modules_data = list(Modules.objects.all().order_by('version'))
+    data = {x['slug']: dict(x) for x in ModulesSerializer(modules_data, many=True).data}
+    data = [data[x] for x in data]
+
+    # Remove Key from Dictionary List
+    result = [{key: val for key, val in sub.items() if key != del_key} for sub in data]
+    sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
+
+    return Response({'status': True, 'result': sorted_result}, status=200)
+
+
+# @swagger_auto_schema(**as_modules_get)
 @swagger_auto_schema(**as_modules_post)
 @swagger_auto_schema(**as_modules_patch)
 @swagger_auto_schema(**as_modules_delete)
-@api_view(['GET', 'POST', 'PATCH', 'DELETE'])
+# @api_view(['GET', 'POST', 'PATCH', 'DELETE'])
+@api_view(['POST', 'PATCH', 'DELETE'])
 def modules(request):
     """ CRUD modules (POST, PATCH and DELETE needs authorization) """
     data = Response({'status': False, 'result': 'Unprocessable entity'}, status=422)
-    if request.method in ['GET']:
-        data = modules_get(request)
+#    if request.method in ['GET']:
+#        data = modules_get(request)
 
     if request.method in ['POST']:
         data = modules_post(request)
@@ -165,31 +187,31 @@ def modules_delete(request):
     return Response({'status': False, 'result': message.no_record_found}, status=404)
 
 
-def modules_get(request):
-    """ Get modules by slug (returns all for given slug) or if the slug is omitted
-        return a (distinct slugs) list with the latest (highest) version number
-    """
-    # initializing key
-    del_key = 'id'
-
-    slug = request.GET.get('slug', None)
-    if slug is None:
-        modules_data = list(Modules.objects.all().order_by('version'))
-        data = {x['slug']: dict(x) for x in ModulesSerializer(modules_data, many=True).data}
-        data = [data[x] for x in data]
-
-        # Remove Key from Dictionary List
-        result = [{key: val for key, val in sub.items() if key != del_key} for sub in data]
-        sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
-
-        return Response({'status': True, 'result': sorted_result}, status=200)
-
-    modules_data = list(Modules.objects.filter(slug=slug).all())
-    serializer = ModulesSerializer(modules_data, many=True)
-    # Remove Key from Dictionary List
-    result = [{key: val for key, val in sub.items() if key != del_key} for sub in serializer.data]
-    sorted_result = Sort().list_of_dicts(items=result, key='version', sort_order='desc')
-    return Response({'status': True, 'result': sorted_result}, status=200)
+# def modules_get(request):
+#     """ Get modules by slug (returns all for given slug) or if the slug is omitted
+#         return a (distinct slugs) list with the latest (highest) version number
+#     """
+#     # initializing key
+#     del_key = 'id'
+#
+#     slug = request.GET.get('slug', None)
+#     if slug is None:
+#         modules_data = list(Modules.objects.all().order_by('version'))
+#         data = {x['slug']: dict(x) for x in ModulesSerializer(modules_data, many=True).data}
+#         data = [data[x] for x in data]
+#
+#         # Remove Key from Dictionary List
+#         result = [{key: val for key, val in sub.items() if key != del_key} for sub in data]
+#         sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
+#
+#         return Response({'status': True, 'result': sorted_result}, status=200)
+#
+#     modules_data = list(Modules.objects.filter(slug=slug).all())
+#     serializer = ModulesSerializer(modules_data, many=True)
+#     # Remove Key from Dictionary List
+#     result = [{key: val for key, val in sub.items() if key != del_key} for sub in serializer.data]
+#     sorted_result = Sort().list_of_dicts(items=result, key='version', sort_order='desc')
+#     return Response({'status': True, 'result': sorted_result}, status=200)
 
 
 @swagger_auto_schema(**as_modules_enable)
