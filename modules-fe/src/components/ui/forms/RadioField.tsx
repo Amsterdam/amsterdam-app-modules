@@ -11,7 +11,7 @@ type RadioProps = {
 } & UseControllerProps
 
 const RadioField = ({defaultValue, name, option, rules}: RadioProps) => {
-  const inputId = uniqueId('RadioField-')
+  const id = uniqueId('RadioField-')
 
   return (
     <Controller
@@ -20,13 +20,11 @@ const RadioField = ({defaultValue, name, option, rules}: RadioProps) => {
       name={name}
       render={({field: {onChange, value}, fieldState: {error}}) => (
         <Column gutter="sm" halign="start">
-          <label className="RadioField" htmlFor={inputId}>
+          <label className="RadioField" htmlFor={id}>
             <Row gutter="sm" valign="center">
               <input
+                {...{id, name, onChange}}
                 hidden
-                id={inputId}
-                name={name}
-                onChange={onChange}
                 type="radio"
                 value={option}
               />
