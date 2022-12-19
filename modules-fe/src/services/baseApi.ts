@@ -16,5 +16,5 @@ export const baseApi = createApi({
     },
   }),
   endpoints: () => ({}),
-  tagTypes: ['Module'],
+  tagTypes: ['Module', 'Release'],
 })
