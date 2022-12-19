@@ -17,7 +17,7 @@ const ReleasesScreen = () => {
     return <LoadingBox />
   }
 
-  if (!releases) {
+  if (!releases || releases.length === 0) {
     return <ErrorBox message="Geen releases gevonden." />
   }
 
