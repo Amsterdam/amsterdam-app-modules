@@ -1,35 +1,22 @@
-import {Controller, UseControllerProps} from 'react-hook-form'
+import {FieldPath, FieldPathValue, FieldValues} from 'react-hook-form'
 import './Input.css'
-import Column from '../layout/Column'
-import Phrase from '../text/Phrase'
 
 type Props = {
-  label: string
-} & UseControllerProps
+  hasError: boolean
+  id: string
+  name: FieldPath<FieldValues>
+  onChange: (...event: any[]) => void
+  value: FieldPathValue<FieldValues, FieldPath<FieldValues>>
+}
 
-const Input = ({defaultValue = '', label, name, rules}: Props) => (
-  <Controller
-    defaultValue={defaultValue as string}
-    name={name}
-    render={({field: {onChange, value}, fieldState: {error}}) => (
-      <Column gutter="sm">
-        <label htmlFor={`Input-${name}`}>
-          <Column gutter="sm">
-            <Phrase>{label}</Phrase>
-            <input
-              className="Input"
-              id={`Input-${name}`}
-              data-font="body"
-              data-has-error={!!error}
-              onChange={onChange}
-              value={value}
-            />
-          </Column>
-        </label>
-        {!!error && <Phrase color="error">{error.message}</Phrase>}
-      </Column>
-    )}
-    rules={rules}
+const Input = ({hasError, id, name, onChange, value}: Props) => (
+  <input
+    className="Input"
+    data-font="body"
+    data-has-error={hasError}
+    id={id}
+    onChange={onChange}
+    value={value}
   />
 )
 

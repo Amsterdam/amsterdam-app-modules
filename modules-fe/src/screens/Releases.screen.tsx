@@ -1,12 +1,12 @@
-import Box from '../components/ui/layout/Box'
+import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
 
 const ReleasesScreen = () => (
   <Screen>
-    <Box>
+    <Column gutter="xl">
       <Title>Releases</Title>
-    </Box>
+    </Column>
   </Screen>
 )
 

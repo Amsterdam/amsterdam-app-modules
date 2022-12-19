@@ -16,6 +16,10 @@ type Props = {
    * The amount of vertical inner whitespace.
    */
   insetVertical?: keyof typeof SpacingToken
+  /**
+   * The amount of horizontal negative whitespace.
+   */
+  negativeInsetHorizontal?: keyof typeof SpacingToken
 }
 
 const Box = ({
@@ -23,12 +27,14 @@ const Box = ({
   inset = 'md',
   insetHorizontal,
   insetVertical,
+  negativeInsetHorizontal,
 }: Props) => (
   <div
     className="Box"
     data-inset={inset}
     data-inset-horizontal={insetHorizontal}
-    data-inset-vertical={insetVertical}>
+    data-inset-vertical={insetVertical}
+    data-negative-inset-horizontal={negativeInsetHorizontal}>
     {children}
   </div>
 )

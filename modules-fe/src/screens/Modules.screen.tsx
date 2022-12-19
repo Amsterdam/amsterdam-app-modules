@@ -20,7 +20,7 @@ const ModulesScreen = () => {
   }
 
   if (!modules) {
-    return <ErrorBox message="Geen modules." />
+    return <ErrorBox message="Geen modules gevonden." />
   }
 
   const sortedModules = [...modules].sort((a, b) =>
@@ -29,24 +29,24 @@ const ModulesScreen = () => {
 
   return (
     <Screen>
-      <Column>
-        <Box>
-          <Title>Modules</Title>
+      <Column gutter="lg">
+        <Title>Modules</Title>
+        <Box inset="no" negativeInsetHorizontal="md">
+          <List>
+            {sortedModules.map(({icon, slug, title}) => (
+              <ListItem key={slug}>
+                <BlockLink to={`/modules/${slug}`}>
+                  <Box>
+                    <Row gutter="md" valign="baseline">
+                      <Icon name={icon} />
+                      <Phrase>{title}</Phrase>
+                    </Row>
+                  </Box>
+                </BlockLink>
+              </ListItem>
+            ))}
+          </List>
         </Box>
-        <List>
-          {sortedModules.map(({icon, slug, title}) => (
-            <ListItem key={slug}>
-              <BlockLink to={`/modules/${slug}`}>
-                <Box>
-                  <Row gutter="md" valign="baseline">
-                    <Icon name={icon} />
-                    <Phrase>{title}</Phrase>
-                  </Row>
-                </Box>
-              </BlockLink>
-            </ListItem>
-          ))}
-        </List>
       </Column>
     </Screen>
   )

@@ -1,3 +1,4 @@
+import {skipToken} from '@reduxjs/toolkit/query'
 import {useNavigate, useParams} from 'react-router-dom'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
@@ -13,51 +14,50 @@ import Title from '../components/ui/text/Title'
 import {useGetModuleQuery} from '../services/modules'
 import {ModuleSlug} from '../types/module'
 
+type Params = {
+  slug: ModuleSlug
+}
+
 const ModuleScreen = () => {
-  const {slug} = useParams()
-  const {data: moduleVersions, isLoading} = useGetModuleQuery({
-    slug: slug as ModuleSlug,
-  })
-  const mostRecentVersion = moduleVersions?.[0]
   const navigate = useNavigate()
 
-  if (!slug) {
-    return <ErrorBox message="Geen slug." />
-  }
+  const {slug}: Partial<Params> = useParams()
+  const {data: modules, isLoading} = useGetModuleQuery(slug ?? skipToken)
+  const latestVersion = modules?.[0]
 
   if (isLoading) {
     return <LoadingBox />
   }
 
-  if (!moduleVersions?.length) {
-    return <ErrorBox message="Geen versies." />
+  if (!modules?.length) {
+    return <ErrorBox message={`Geen versies van module ‘${slug}’ gevonden.`} />
   }
 
   return (
     <Screen>
-      <Column>
-        <Box>
-          <Title>Module: {mostRecentVersion?.title}</Title>
-        </Box>
+      <Column gutter="lg">
+        <Title>Module: {latestVersion?.title}</Title>
         <Button
           label="Voeg versie toe"
           onClick={() => {
             navigate(`/modules/${slug}/create`)
           }}
         />
-        <List>
-          {moduleVersions.map(({title, version}) => (
-            <ListItem key={version}>
-              <BlockLink to={`/modules/${slug}/${version}/edit`}>
-                <Box>
-                  <Phrase>
-                    {version} – {title}
-                  </Phrase>
-                </Box>
-              </BlockLink>
-            </ListItem>
-          ))}
-        </List>
+        <Box inset="no" negativeInsetHorizontal="md">
+          <List>
+            {modules.map(({title, version}) => (
+              <ListItem key={version}>
+                <BlockLink to={`/modules/${slug}/${version}/edit`}>
+                  <Box>
+                    <Phrase>
+                      {version} – {title}
+                    </Phrase>
+                  </Box>
+                </BlockLink>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
       </Column>
     </Screen>
   )

@@ -1,25 +1,24 @@
 import {useNavigate} from 'react-router-dom'
-import Button from 'components/ui/button/Button'
-import Box from 'components/ui/layout/Box'
-import Column from 'components/ui/layout/Column'
-import Screen from 'components/ui/layout/Screen'
+import Button from '../components/ui/button/Button'
+import Column from '../components/ui/layout/Column'
+import Row from '../components/ui/layout/Row'
+import Screen from '../components/ui/layout/Screen'
+import Phrase from '../components/ui/text/Phrase'
+import Title from '../components/ui/text/Title'
 
 const HomeScreen = () => {
   const navigate = useNavigate()
+
   return (
     <Screen>
-      <Box>
-        <Column gutter="sm">
-          <Button
-            label="Modules beheren"
-            onClick={() => navigate('/modules')}
-          />
-          <Button
-            label="Releases beheren"
-            onClick={() => navigate('/releases')}
-          />
-        </Column>
-      </Box>
+      <Column gutter="lg">
+        <Title>Amsterdam App Modulebeheersysteem</Title>
+        <Phrase>Wat wil je beheren?</Phrase>
+        <Row gutter="md">
+          <Button flex label="Modules" onClick={() => navigate('/modules')} />
+          <Button flex label="Releases" onClick={() => navigate('/releases')} />
+        </Row>
+      </Column>
     </Screen>
   )
 }

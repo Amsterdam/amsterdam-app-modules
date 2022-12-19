@@ -20,8 +20,3 @@ export type Module = {
   title: string
   version: string
 }
-
-export type ModuleVersion = {
-  title: string
-  version: string
-}

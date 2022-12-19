@@ -18,6 +18,10 @@
   border-width: var(--border-width);
 }
 
+.Button[data-flex="true"] {
+  flex: auto;
+}
+
 .Button[data-variant="primary"] {
   --background-color: var(--bg-color-button);
   --border-color: var(--border-color-button-emphasis);
