@@ -1,3 +1,4 @@
+import {skipToken} from '@reduxjs/toolkit/query'
 import {useNavigate, useParams} from 'react-router-dom'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
@@ -21,9 +22,7 @@ const ModuleScreen = () => {
   const navigate = useNavigate()
 
   const {slug}: Partial<Params> = useParams()
-  const {data: modules, isLoading} = useGetModuleQuery({
-    slug: slug as ModuleSlug,
-  })
+  const {data: modules, isLoading} = useGetModuleQuery(slug ?? skipToken)
   const latestVersion = modules?.[0]
 
   if (isLoading) {

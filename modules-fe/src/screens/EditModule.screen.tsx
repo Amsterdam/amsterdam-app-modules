@@ -1,3 +1,4 @@
+import {skipToken} from '@reduxjs/toolkit/query'
 import {useCallback} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
@@ -23,9 +24,7 @@ const EditModuleScreen = () => {
   const navigate = useNavigate()
 
   const {slug, version}: Partial<Params> = useParams()
-  const {data: module, isLoading} = useGetModuleQuery({
-    slug: slug as ModuleSlug,
-  })
+  const {data: module, isLoading} = useGetModuleQuery(slug ?? skipToken)
   const moduleVersion = module?.find(m => m.version === version)
 
   const form = useForm<Module>()
