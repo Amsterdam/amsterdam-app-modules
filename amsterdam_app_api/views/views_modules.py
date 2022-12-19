@@ -113,9 +113,15 @@ def modules_latest(request):
         it only returns version 2.0.0. All available fields for a module are returned.
         The result is ordered by title, ascending.
     """
+    def version_key(module):
+        # Split the version string on the '.' character and convert the components to integers
+        return [int(x) for x in module['version'].split('.')]
+
     del_key = 'id'
-    modules_data = list(Modules.objects.all().order_by('version'))
-    data = {x['slug']: dict(x) for x in ModulesSerializer(modules_data, many=True).data}
+    module_objects = list(Modules.objects.all())
+    modules_data = ModulesSerializer(module_objects, many=True).data
+    sorted_modules_data = sorted(modules_data, key=version_key, reverse=False)
+    data = {x['slug']: dict(x) for x in sorted_modules_data}
     data = [data[x] for x in data]
 
     # Remove Key from Dictionary List
