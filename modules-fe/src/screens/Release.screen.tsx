@@ -14,13 +14,13 @@ import {ModuleInReleaseStatus} from '../types/module'
 import {Release} from '../types/release'
 
 type Params = {
-  version?: Release
+  version: Release
 }
 
 const ReleaseScreen = () => {
-  const {version}: Partial<Params> = useParams()
+  const {version} = useParams<Params>()
   const {data: modules, isLoading} = useGetModulesInReleaseQuery(
-    version ?? skipToken,
+    version ? {version} : skipToken,
   )
 
   if (isLoading) {
