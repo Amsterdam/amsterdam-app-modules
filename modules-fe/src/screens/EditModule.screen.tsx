@@ -13,18 +13,24 @@ import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
 import {useEditModuleMutation, useGetModuleQuery} from '../services/modules'
-import {Module, ModuleSlug} from '../types/module'
+import {Module} from '../types/module'
 
 type Params = {
-  slug: ModuleSlug
+  slug: string
   version: string
 }
 
 const EditModuleScreen = () => {
   const navigate = useNavigate()
 
-  const {slug, version}: Partial<Params> = useParams()
-  const {data: module, isLoading} = useGetModuleQuery(slug ?? skipToken)
+  const {slug, version} = useParams<Params>()
+  const {data: module, isLoading} = useGetModuleQuery(
+    slug
+      ? {
+          slug,
+        }
+      : skipToken,
+  )
   const moduleVersion = module?.find(m => m.version === version)
 
   const form = useForm<Module>()
