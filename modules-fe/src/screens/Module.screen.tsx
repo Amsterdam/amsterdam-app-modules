@@ -12,17 +12,22 @@ import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
 import Title from '../components/ui/text/Title'
 import {useGetModuleQuery} from '../services/modules'
-import {ModuleSlug} from '../types/module'
 
 type Params = {
-  slug: ModuleSlug
+  slug: string
 }
 
 const ModuleScreen = () => {
   const navigate = useNavigate()
 
-  const {slug}: Partial<Params> = useParams()
-  const {data: modules, isLoading} = useGetModuleQuery(slug ?? skipToken)
+  const {slug} = useParams<Params>()
+  const {data: modules, isLoading} = useGetModuleQuery(
+    slug
+      ? {
+          slug,
+        }
+      : skipToken,
+  )
   const latestVersion = modules?.[0]
 
   if (isLoading) {
