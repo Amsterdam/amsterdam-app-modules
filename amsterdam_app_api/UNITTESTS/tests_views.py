@@ -61,14 +61,14 @@ class Module(TestCase):
     def test_module_get_exist(self):
         """ get module by slug and version (exists) """
         c = Client()
-        response = c.get('/api/v1/module?slug=slug0&version=0.0.0')
+        response = c.get('/api/v1/module?slug=slug0&version=1.2.3')
         expected_result = {
             'status': True,
             'result': {
                 'slug': 'slug0',
                 'title': 'title',
                 'icon': 'icon',
-                'version': '0.0.0',
+                'version': '1.2.3',
                 'description': 'description'
             }
         }
@@ -87,7 +87,7 @@ class Module(TestCase):
         """ get all app versions """
         c = Client()
         response = c.get('/api/v1/modules_app_versions')
-        expected_result = {'status': True, 'result': ['0.0.1', '0.0.0']}
+        expected_result = {'status': True, 'result': ['0.1.1', '0.0.1', '0.0.0']}
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
@@ -105,13 +105,16 @@ class Module(TestCase):
         response = c.get('/api/v1/modules_for_app', HTTP_appVersion='0.0.0')
         expected_result = {
             'status': True,
-            'result': [{
-                'description': 'description',
-                'icon': 'icon',
-                'slug': 'slug0',
-                'status': 1,
-                'title': 'title',
-                'version': '0.0.0'}]
+            'result': [
+                {
+                    'description': 'description',
+                    'icon': 'icon',
+                    'slug': 'slug4',
+                    'status': 1,
+                    'title': 'title',
+                    'version': '10.3.2'
+                }
+            ]
         }
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
@@ -162,39 +165,56 @@ class Module(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
-    def test_modules_get_no_slug(self):
-        """ test modules get (slug = None) """
+    def test_modules_latest(self):
+        """ test modules/latest """
         c = Client()
-        response = c.get('/api/v1/modules', HTTP_appVersion='0.0.0')
+        response = c.get('/api/v1/modules/latest', HTTP_appVersion='0.0.0')
         expected_result = {
             'status': True,
             'result': [
-                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
-                {'slug': 'slug1', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
-                {'slug': 'slug2', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
-                {'slug': 'slug3', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'}
+                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '1.2.20', 'description': 'description'},
+                {'slug': 'slug1', 'title': 'title', 'icon': 'icon', 'version': '1.3.4', 'description': 'description'},
+                {'slug': 'slug2', 'title': 'title', 'icon': 'icon', 'version': '1.30.4', 'description': 'description'},
+                {'slug': 'slug3', 'title': 'title', 'icon': 'icon', 'version': '2.10.2', 'description': 'description'},
+                {'slug': 'slug4', 'title': 'title', 'icon': 'icon', 'version': '10.3.2', 'description': 'description'}
             ]
         }
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
-    def test_modules_get_slug(self):
-        """ test modules get (slug = slug0) """
-        c = Client()
-        response = c.get('/api/v1/modules',
-                         data={'slug': 'slug0'},
-                         HTTP_appVersion='0.0.0',
-                         content_type='application/json')
+#     def test_modules_get_no_slug(self):
+#         """ test modules get (slug = None) """
+#         c = Client()
+#         response = c.get('/api/v1/modules', HTTP_appVersion='0.0.0')
+#         expected_result = {
+#             'status': True,
+#             'result': [
+#                 {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+#                 {'slug': 'slug1', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+#                 {'slug': 'slug2', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+#                 {'slug': 'slug3', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'}
+#             ]
+#         }
+#         self.assertEqual(response.status_code, 200)
+#         self.assertDictEqual(response.data, expected_result)
 
-        expected_result = {
-            'status': True,
-            'result': [
-                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
-                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'}
-            ]
-        }
-        self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, expected_result)
+#     def test_modules_get_slug(self):
+#         """ test modules get (slug = slug0) """
+#         c = Client()
+#         response = c.get('/api/v1/modules',
+#                          data={'slug': 'slug0'},
+#                          HTTP_appVersion='0.0.0',
+#                          content_type='application/json')
+
+#         expected_result = {
+#             'status': True,
+#             'result': [
+#                 {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+#                 {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'}
+#             ]
+#         }
+#         self.assertEqual(response.status_code, 200)
+#         self.assertDictEqual(response.data, expected_result)
 
     def test_modules_post_200(self):
         """ Test create new module """
@@ -211,7 +231,7 @@ class Module(TestCase):
     def test_modules_post_422(self):
         """ Test create new module (constraint error) """
         c = Client()
-        data = {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'}
+        data = {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '1.2.3', 'description': 'description'}
         response = c.post('/api/v1/modules',
                           data=data,
                           HTTP_AUTHORIZATION=self.authorization_header,
@@ -226,7 +246,7 @@ class Module(TestCase):
     def test_modules_patch_200(self):
         """ Test patch module """
         c = Client()
-        data = {'slug': 'slug0', 'title': 'new title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'}
+        data = {'slug': 'slug0', 'title': 'new title', 'icon': 'icon', 'version': '1.2.3', 'description': 'description'}
         response = c.patch('/api/v1/modules',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
@@ -250,7 +270,7 @@ class Module(TestCase):
     def test_modules_delete_409(self):
         """ Test delete in use """
         c = Client()
-        data = {'slug': 'slug0', 'version': '0.0.0'}
+        data = {'slug': 'slug0', 'version': '1.2.3'}
         response = c.delete('/api/v1/modules',
                             data=data,
                             HTTP_AUTHORIZATION=self.authorization_header,
@@ -265,7 +285,16 @@ class Module(TestCase):
     def test_modules_delete_200(self):
         """ Test delete module """
         c = Client()
-        data = {'slug': 'slug3', 'version': '0.0.1'}
+        data = {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.5', 'description': 'description'}
+        response = c.post('/api/v1/modules',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {'status': True, 'result': 'Module created'}
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+        data = {'slug': 'slug0', 'version': '0.0.5'}
         response = c.delete('/api/v1/modules',
                             data=data,
                             HTTP_AUTHORIZATION=self.authorization_header,
@@ -299,7 +328,7 @@ class Module(TestCase):
         self.assertDictEqual(response.data, expected_result)
         modules = ModulesByApp.objects.filter(status=0).all()
         data = ModulesByAppSerializer(modules, many=True).data
-        self.assertEqual(len(data), 2)
+        self.assertEqual(len(data), 3)
 
     def test_modules_enable_slug_moduleversion(self):
         """ Test enable modules by slug and moduleVersion """
@@ -314,12 +343,12 @@ class Module(TestCase):
         self.assertDictEqual(response.data, expected_result)
         modules = ModulesByApp.objects.filter(status=0).all()
         data = ModulesByAppSerializer(modules, many=True).data
-        self.assertEqual(len(data), 2)
+        self.assertEqual(len(data), 1)
 
     def test_modules_enable_slug_moduleversion_appversion(self):
         """ Test enable modules by slug, moduleVersion and appVersion """
         c = Client()
-        data = {'slug': 'slug0', 'moduleVersion': '0.0.0', 'appVersion': '0.0.0', 'status': 0}
+        data = {'slug': 'slug1', 'moduleVersion': '1.3.4', 'appVersion': '0.0.1', 'status': 1}
         response = c.patch('/api/v1/modules_by_app/status',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
@@ -329,7 +358,7 @@ class Module(TestCase):
         self.assertDictEqual(response.data, expected_result)
         modules = ModulesByApp.objects.filter(status=0).all()
         data = ModulesByAppSerializer(modules, many=True).data
-        self.assertEqual(len(data), 1)
+        self.assertEqual(len(data), 0)
 
     def test_modules_enable_appversion(self):
         """ Test enable modules by appVersion """
@@ -344,7 +373,7 @@ class Module(TestCase):
         self.assertDictEqual(response.data, expected_result)
         modules = ModulesByApp.objects.filter(status=0).all()
         data = ModulesByAppSerializer(modules, many=True).data
-        self.assertEqual(len(data), 3)
+        self.assertEqual(len(data), 4)
 
     def test_modules_by_app_get(self):
         """ test get modules by app """
@@ -358,9 +387,10 @@ class Module(TestCase):
         expected_result = {
             'status': True,
             'result': [
-                {'appVersion': '0.0.1', 'moduleSlug': 'slug0', 'moduleVersion': '0.0.0', 'status': 1},
-                {'appVersion': '0.0.1', 'moduleSlug': 'slug1', 'moduleVersion': '0.0.0', 'status': 1},
-                {'appVersion': '0.0.1', 'moduleSlug': 'slug2', 'moduleVersion': '0.0.0', 'status': 1}
+                {'appVersion': '0.0.1', 'moduleSlug': 'slug0', 'moduleVersion': '1.2.3', 'status': 1},
+                {'appVersion': '0.0.1', 'moduleSlug': 'slug1', 'moduleVersion': '1.3.4', 'status': 0},
+                {'appVersion': '0.0.1', 'moduleSlug': 'slug2', 'moduleVersion': '1.30.4', 'status': 1},
+                {'appVersion': '0.0.1', 'moduleSlug': 'slug3', 'moduleVersion': '2.10.2', 'status': 1}
             ]
         }
         self.assertEqual(response.status_code, 200)
@@ -369,7 +399,7 @@ class Module(TestCase):
     def test_modules_by_app_post(self):
         """ test add new module by app """
         c = Client()
-        data = {'appVersion': '0.0.1', 'moduleSlug': 'slug3', 'moduleVersion': '0.0.1', 'status': 1}
+        data = {'appVersion': '0.0.1', 'moduleSlug': 'slug4', 'moduleVersion': '10.3.2', 'status': 1}
         response = c.post('/api/v1/modules_by_app',
                           data=data,
                           HTTP_AUTHORIZATION=self.authorization_header,

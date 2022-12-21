@@ -43,6 +43,11 @@ class ModulesByApp(models.Model):
     moduleVersion = models.CharField(max_length=100, blank=False)
     status = models.IntegerField(default=1, blank=False)
 
+    class Meta:
+        """ Constraints
+        """
+        unique_together = (('appVersion', 'moduleSlug'),)
+
     def save(self, *args, **kwargs):
         module_by_app = ModulesByApp.objects.filter(appVersion=self.appVersion, moduleSlug=self.moduleSlug).first()
         if module_by_app is not None:

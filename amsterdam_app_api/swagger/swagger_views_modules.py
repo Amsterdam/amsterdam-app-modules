@@ -98,12 +98,28 @@ as_module_get = {
 }
 
 
+as_modules_latest = {
+    'methods': ['get'],
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                  properties={
+                                      'status': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='result status'),
+                                      'result': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                                               items=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                                                    properties=modules))
+                                  }))
+    },
+    'tags': ['Modules']
+}
+
 as_modules_get = {
     'methods': ['get'],
     'manual_parameters': [openapi.Parameter('slug',
                                             openapi.IN_QUERY,
                                             description="Slug for requesting modules, if slug is omitted a distinct\n" +
-                                                        " set of modules is returned with highest version value",
+                                                        " set of modules is returned with most recent version value",
                                             type=openapi.TYPE_STRING)],
     'responses': {
         200: openapi.Response(
