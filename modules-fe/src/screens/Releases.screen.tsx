@@ -37,7 +37,7 @@ const ReleasesScreen = () => {
           <List>
             {releases.map(version => (
               <ListItem key={version}>
-                <BlockLink to={`/releases/${version}`}>
+                <BlockLink to={`/release/${version}`}>
                   <Box>
                     <Phrase>Versie {version}</Phrase>
                   </Box>

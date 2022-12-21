@@ -35,7 +35,7 @@ const ModulesScreen = () => {
           <List>
             {sortedModules.map(({icon, slug, title}) => (
               <ListItem key={slug}>
-                <BlockLink to={`/modules/${slug}`}>
+                <BlockLink to={`/module/${slug}`}>
                   <Box>
                     <Row gutter="md" valign="baseline">
                       <Icon name={icon} />
