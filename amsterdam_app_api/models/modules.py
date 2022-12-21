@@ -14,15 +14,10 @@ class Modules(models.Model):
     description = models.CharField(max_length=1000, blank=False)
 
     class Meta:
-        """ Constraints
+        """ Constraints (unique together is deprecated)
         """
-        unique_together = (('slug', 'version'),)
-
-    def save(self, *args, **kwargs):
-        module = Modules.objects.filter(slug=self.slug, version=self.version).first()
-        if module is not None:
-            raise Exception('Unique Constraint violation: (app_version, slug) pair must be unique')
-        super().save(*args, **kwargs)
+        constraints = [models.UniqueConstraint(fields=["slug", "version"],
+                                               name="unique_slug_version")]
 
     def partial_update(self, *args, **kwargs):
         """ Patch function
@@ -44,15 +39,10 @@ class ModulesByApp(models.Model):
     status = models.IntegerField(default=1, blank=False)
 
     class Meta:
-        """ Constraints
+        """ Constraints (unique together is deprecated)
         """
-        unique_together = (('appVersion', 'moduleSlug'),)
-
-    def save(self, *args, **kwargs):
-        module_by_app = ModulesByApp.objects.filter(appVersion=self.appVersion, moduleSlug=self.moduleSlug).first()
-        if module_by_app is not None:
-            raise Exception('Unique Constraint violation: (app_version, slug) pair must be unique')
-        super().save(*args, **kwargs)
+        constraints = [models.UniqueConstraint(fields=["appVersion", "moduleSlug"],
+                                               name="unique_appVersion_moduleSlug")]
 
     def delete(self, *args, **kwargs):
         modules_by_app = list(ModulesByApp.objects.filter(appVersion=self.appVersion, moduleSlug=self.moduleSlug).all())

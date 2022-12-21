@@ -238,7 +238,8 @@ class Module(TestCase):
                           content_type='application/json')
         expected_result = {
             'status': False,
-            'result': 'Unique Constraint violation: (app_version, slug) pair must be unique'
+            'result': 'duplicate key value violates unique constraint "unique_slug_version"\n'
+                      'DETAIL:  Key (slug, version)=(slug0, 1.2.3) already exists.\n'
         }
         self.assertEqual(response.status_code, 422)
         self.assertDictEqual(response.data, expected_result)

@@ -60,9 +60,8 @@ class AllModulesModels(TestCase):
         :return: void
         """
         Modules.objects.create(**self.modules[0])
-        self.assertRaises(Exception, Modules.objects.create, **self.modules[0])
-
         modules = list(Modules.objects.all())
+        self.assertRaises(Exception, Modules.objects.create, **self.modules[0])
         self.assertEqual(len(modules), 1)
 
     def test_modules_update_partial(self):
@@ -88,8 +87,8 @@ class AllModulesModels(TestCase):
         :return: void
         """
         ModulesByApp.objects.create(**self.modules_by_app[0])
-        self.assertRaises(Exception, ModulesByApp.objects.create, **self.modules_by_app[0])
         data = list(ModulesByApp.objects.all())
+        self.assertRaises(Exception, ModulesByApp.objects.create, **self.modules_by_app[0])
         self.assertEqual(len(data), 1)
 
     def test_modules_by_app_delete(self):
