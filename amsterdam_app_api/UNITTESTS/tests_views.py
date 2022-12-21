@@ -219,7 +219,7 @@ class Module(TestCase):
         expected_result = {
             'status': False,
             'result': 'duplicate key value violates unique constraint "unique_slug_version"\n'
-                      'DETAIL:  Key (slug, version)=(slug0, 0.0.0) already exists.\n'
+                      'DETAIL:  Key (slug, version)=(slug0, 1.2.3) already exists.\n'
         }
         self.assertEqual(response.status_code, 422)
         self.assertDictEqual(response.data, expected_result)
