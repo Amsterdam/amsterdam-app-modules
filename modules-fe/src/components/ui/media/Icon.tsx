@@ -21,7 +21,7 @@ const Icon = ({name, size = 'md'}: IconProps) => {
       className="Icon"
       fillRule="evenodd"
       height={svgSize}
-      viewBox="0 0 32 32"
+      viewBox={`0 0 32 ${name === 'minus' ? 5 : 32}`}
       width={svgSize}>
       <path d={IconPath[name]} />
     </svg>
