@@ -3,7 +3,7 @@ import {Release} from '../types/release'
 import {baseApi} from './baseApi'
 
 type ReleaseQueryArg = {
-  version: Release
+  version: Release['version']
 }
 
 export const modulesApi = baseApi.injectEndpoints({
@@ -14,9 +14,10 @@ export const modulesApi = baseApi.injectEndpoints({
         response.result,
       providesTags: ['Release'],
     }),
-    getReleases: builder.query<Release[], void>({
+    getReleases: builder.query<Release['version'][], void>({
       query: () => `/api/v1/modules_app_versions`,
-      transformResponse: (response: {result: Release[]}) => response.result,
+      transformResponse: (response: {result: Release['version'][]}) =>
+        response.result,
       providesTags: ['Release'],
     }),
   }),

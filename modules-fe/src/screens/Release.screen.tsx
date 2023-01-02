@@ -14,7 +14,7 @@ import {ModuleInReleaseStatus} from '../types/module'
 import {Release} from '../types/release'
 
 type Params = {
-  version: Release
+  version: Release['version']
 }
 
 const ReleaseScreen = () => {
