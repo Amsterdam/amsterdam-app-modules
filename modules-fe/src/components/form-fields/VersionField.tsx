@@ -18,7 +18,7 @@ const createVersionSuggestions = (
   ]
 }
 
-const ModuleVersionField = ({baseVersion, defaultValue}: Props) => (
+const VersionField = ({baseVersion, defaultValue}: Props) => (
   <RadioFieldSet
     defaultValue={defaultValue}
     label="Versie"
@@ -28,4 +28,4 @@ const ModuleVersionField = ({baseVersion, defaultValue}: Props) => (
   />
 )
 
-export default ModuleVersionField
+export default VersionField

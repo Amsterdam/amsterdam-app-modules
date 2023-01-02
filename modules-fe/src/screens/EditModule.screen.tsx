@@ -5,7 +5,7 @@ import {useNavigate, useParams} from 'react-router-dom'
 import ModuleDescriptionField from '../components/form-fields/ModuleDescriptionField'
 import ModuleIconField from '../components/form-fields/ModuleIconField'
 import ModuleTitleField from '../components/form-fields/ModuleTitleField'
-import ModuleVersionField from '../components/form-fields/ModuleVersionField'
+import VersionField from '../components/form-fields/VersionField'
 import Button from '../components/ui/button/Button'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
@@ -75,7 +75,7 @@ const EditModuleScreen = () => {
             <ModuleTitleField defaultValue={moduleVersion.title} />
             <ModuleDescriptionField defaultValue={moduleVersion.description} />
             <ModuleIconField defaultValue={moduleVersion.icon} />
-            <ModuleVersionField
+            <VersionField
               baseVersion={moduleVersion.version}
               defaultValue={moduleVersion.version}
             />
