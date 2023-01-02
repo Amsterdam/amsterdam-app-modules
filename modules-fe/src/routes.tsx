@@ -1,6 +1,6 @@
 import {RouteObject} from 'react-router-dom'
 import CreateModuleScreen from './screens/CreateModule.screen'
-import CreateReleaseScreen from './screens/CreateRelease'
+import CreateReleaseScreen from './screens/CreateRelease.screen'
 import EditModuleScreen from './screens/EditModule.screen'
 import ErrorScreen from './screens/Error.screen'
 import HomeScreen from './screens/Home.screen'
