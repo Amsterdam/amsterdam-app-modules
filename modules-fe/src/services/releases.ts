@@ -1,4 +1,5 @@
-import {ModuleInRelease} from '../types/module'
+import ReleaseMock from '../assets/mocks/release.json'
+import {Module} from '../types/module'
 import {Release} from '../types/release'
 import {baseApi} from './baseApi'
 
@@ -8,10 +9,10 @@ type ReleaseQueryArg = {
 
 export const modulesApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    getModulesInRelease: builder.query<ModuleInRelease[], ReleaseQueryArg>({
+    getModulesInRelease: builder.query<Module[], ReleaseQueryArg>({
       query: ({version}) => `/api/v1/modules_by_app?appVersion=${version}`,
-      transformResponse: (response: {result: ModuleInRelease[]}) =>
-        response.result,
+      transformResponse: (response: {result: Module[]}) =>
+        ReleaseMock.result as Module[],
       providesTags: ['Release'],
     }),
     getReleases: builder.query<Release['version'][], void>({
