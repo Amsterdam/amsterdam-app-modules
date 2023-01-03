@@ -39,12 +39,11 @@ const ReleaseScreen = () => {
         <Title>Release: {version}</Title>
         <Box inset="no" negativeInsetHorizontal="md">
           <List>
-            {modules.map(({moduleSlug, moduleVersion, status}) => (
-              <ListItem key={moduleSlug}>
+            {modules.map(({slug, version: moduleVersion, status}) => (
+              <ListItem key={slug}>
                 <Box>
                   <Phrase>
-                    {moduleSlug} – {moduleVersion} (
-                    {ModuleInReleaseStatus[status]})
+                    {slug} – {moduleVersion} ({ModuleInReleaseStatus[status]})
                   </Phrase>
                 </Box>
               </ListItem>
