@@ -1,5 +1,5 @@
-import ReleaseMock from '../assets/mocks/release.json'
-import {Module} from '../types/module'
+import LatestReleaseMock from '../assets/mocks/latestRelease.json'
+import {ModuleInRelease} from '../types/module'
 import {Release} from '../types/release'
 import {baseApi} from './baseApi'
 
@@ -9,14 +9,20 @@ type ReleaseQueryArg = {
 
 export const modulesApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    getModulesInRelease: builder.query<Module[], ReleaseQueryArg>({
+    getModulesInRelease: builder.query<ModuleInRelease[], ReleaseQueryArg>({
       query: ({version}) => `/api/v1/modules_by_app?appVersion=${version}`,
-      transformResponse: (response: {result: Module[]}) =>
-        ReleaseMock.result as Module[],
+      transformResponse: (response: {result: ModuleInRelease[]}) =>
+        response.result,
+      providesTags: ['Release'],
+    }),
+    getLatestRelease: builder.query<Release, void>({
+      query: () => '/api/v1/modules', // Needs to be changed when endpoint is ready
+      transformResponse: (response: {result: Release}) =>
+        LatestReleaseMock.result as Release,
       providesTags: ['Release'],
     }),
     getReleases: builder.query<Release['version'][], void>({
-      query: () => `/api/v1/modules_app_versions`,
+      query: () => '/api/v1/modules_app_versions',
       transformResponse: (response: {result: Release['version'][]}) =>
         response.result,
       providesTags: ['Release'],
@@ -25,4 +31,8 @@ export const modulesApi = baseApi.injectEndpoints({
   overrideExisting: true,
 })
 
-export const {useGetModulesInReleaseQuery, useGetReleasesQuery} = modulesApi
+export const {
+  useGetModulesInReleaseQuery,
+  useGetReleasesQuery,
+  useGetLatestReleaseQuery,
+} = modulesApi

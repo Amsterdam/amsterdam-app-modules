@@ -1,6 +1,8 @@
 {
   "status": true,
-  "result": [
+  "result": {
+    "version": "0.27.0",
+    "modules": [
     {
       "slug": "waste-guide",
       "title": "Afvalwijzer",
@@ -73,5 +75,4 @@
       "version": "1.0.0",
       "description": "Blijf op de hoogte van werkzaamheden in uw buurt."
     }
-  ]
-}
+  ]}}

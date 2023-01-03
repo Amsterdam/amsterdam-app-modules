@@ -10,7 +10,7 @@ import List from 'components/ui/text/List'
 import ListItem from 'components/ui/text/ListItem'
 import Phrase from 'components/ui/text/Phrase'
 import {useGetModulesQuery} from 'services/modules'
-import {useGetModulesInReleaseQuery} from 'services/releases'
+import {useGetLatestReleaseQuery} from 'services/releases'
 import {setModules, setReleaseVersion} from 'slices/release.slice'
 import {Release} from 'types/release'
 import Column from '../components/ui/layout/Column'
@@ -20,10 +20,8 @@ import Title from '../components/ui/text/Title'
 const CreateReleaseScreen = () => {
   const dispatch = useDispatch()
   const form = useForm<Release>()
-  const {data: modulesInRelease, isLoading: isLoadingModulesInRelease} =
-    useGetModulesInReleaseQuery({
-      version: '0.27.0',
-    })
+  const {data: latestRelease, isLoading: isLoadingLatestRelease} =
+    useGetLatestReleaseQuery()
   const {data: modules, isLoading: isLoadingModules} = useGetModulesQuery()
   const watchVersion = form.watch('version')
 
@@ -32,14 +30,14 @@ const CreateReleaseScreen = () => {
   }, [dispatch, watchVersion])
 
   useEffect(() => {
-    if (modulesInRelease) dispatch(setModules(modulesInRelease))
-  }, [dispatch, modulesInRelease])
+    if (latestRelease) dispatch(setModules(latestRelease.modules))
+  }, [dispatch, latestRelease])
 
-  if (isLoadingModulesInRelease || isLoadingModules) {
+  if (isLoadingLatestRelease || isLoadingModules) {
     return <LoadingBox />
   }
 
-  if (!modulesInRelease || !modules) {
+  if (!latestRelease || !modules) {
     return null
   }
 
@@ -48,20 +46,17 @@ const CreateReleaseScreen = () => {
       <FormProvider {...form}>
         <Column gutter="lg">
           <Title>Toevoegen: Release</Title>
-          <VersionField baseVersion="0.27.0" />
+          <VersionField baseVersion={latestRelease.version} />
           <Column gutter="sm">
             <Phrase color="muted">Modules</Phrase>
             <Box inset="no" negativeInsetHorizontal="md">
               <List>
-                {modulesInRelease.map(({slug, title, icon}) => (
+                {latestRelease.modules.map(({slug, title, icon}) => (
                   <ListItem key={slug}>
                     <Box>
-                      <Row align="between" gutter="md" valign="baseline">
-                        <Row gutter="sm" valign="baseline">
-                          <Icon name={icon} />
-                          <Phrase>{title}</Phrase>
-                        </Row>
-                        <Icon name="minus" />
+                      <Row gutter="sm" valign="baseline">
+                        <Icon name={icon} />
+                        <Phrase>{title}</Phrase>
                       </Row>
                     </Box>
                   </ListItem>
