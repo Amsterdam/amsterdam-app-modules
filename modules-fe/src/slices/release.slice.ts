@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {RootState} from 'store/store'
 import {Module} from 'types/module'
 import {Release} from 'types/release'
 
@@ -34,3 +35,5 @@ export const releaseSlice = createSlice({
 
 export const {addModule, deleteModule, setModules, setReleaseVersion} =
   releaseSlice.actions
+
+export const selectReleaseModules = (state: RootState) => state.release.modules
