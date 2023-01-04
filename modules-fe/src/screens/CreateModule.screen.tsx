@@ -1,7 +1,8 @@
 import {skipToken} from '@reduxjs/toolkit/query'
-import {useCallback} from 'react'
+import {useCallback, useEffect} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import ModuleSlugField from 'components/form-fields/ModuleSlugField'
 import ModuleDescriptionField from '../components/form-fields/ModuleDescriptionField'
 import ModuleIconField from '../components/form-fields/ModuleIconField'
 import ModuleTitleField from '../components/form-fields/ModuleTitleField'
@@ -16,13 +17,23 @@ import {useCreateModuleMutation, useGetModuleQuery} from '../services/modules'
 import {Module} from '../types/module'
 
 type Params = {
-  slug: string
+  slug?: string
+}
+
+const defaultModule: Omit<Module, 'icon'> & {icon: undefined} = {
+  description: '',
+  icon: undefined,
+  slug: '',
+  status: 1,
+  title: '',
+  version: '0.0.0',
 }
 
 const CreateModuleScreen = () => {
   const navigate = useNavigate()
 
   const {slug} = useParams<Params>()
+  const isNewModule = !slug
   const {data: module, isLoading} = useGetModuleQuery(
     slug
       ? {
@@ -30,30 +41,36 @@ const CreateModuleScreen = () => {
         }
       : skipToken,
   )
-  const latestVersion = module?.[0]
+  const latestVersion = !isNewModule && module ? module[0] : defaultModule
 
   const form = useForm<Module>()
-  const [createModule] = useCreateModuleMutation()
-  const {handleSubmit} = form
+  const [createModule, {isLoading: isMutateLoading}] = useCreateModuleMutation()
+  const {handleSubmit, setValue} = form
 
   const onSubmitForm: SubmitHandler<Module> = useCallback(
     data => {
-      if (!slug) {
+      if (!data.slug) {
         return
       }
 
-      createModule({...data, slug}).then(response => {
+      createModule({...data}).then(response => {
         if ('data' in response) {
-          navigate(`/module/${slug}`)
+          navigate(`/module/${data.slug}`)
         }
       })
     },
-    [createModule, navigate, slug],
+    [createModule, navigate],
   )
+  useEffect(() => {
+    if (latestVersion.slug) {
+      setValue('slug', latestVersion.slug)
+    }
+  }, [latestVersion.slug, setValue])
 
-  const versionFieldValue = form.watch('version')
+  const versionFieldValue = form.watch('version') ?? ''
+  const titleFieldValue = form.watch('title') ?? ''
 
-  if (isLoading) {
+  if (isLoading || isMutateLoading) {
     return <LoadingBox />
   }
 
@@ -65,10 +82,14 @@ const CreateModuleScreen = () => {
     <Screen>
       <Column gutter="lg">
         <Title>
-          Toevoegen moduleversie: {latestVersion.title} {versionFieldValue}
+          Toevoegen module{!isNewModule && 'versie'}: {titleFieldValue}{' '}
+          {versionFieldValue}
         </Title>
         <FormProvider {...form}>
           <Column gutter="lg">
+            {isNewModule && (
+              <ModuleSlugField defaultValue={latestVersion.slug} />
+            )}
             <ModuleTitleField defaultValue={latestVersion.title} />
             <ModuleDescriptionField defaultValue={latestVersion.description} />
             <ModuleIconField defaultValue={latestVersion.icon} />

@@ -1,5 +1,4 @@
 import {RouteObject} from 'react-router-dom'
-import CreateNewModuleScreen from 'screens/CreateNewModule.screen'
 import CreateModuleScreen from './screens/CreateModule.screen'
 import CreateReleaseScreen from './screens/CreateRelease.screen'
 import EditModuleScreen from './screens/EditModule.screen'
@@ -22,7 +21,7 @@ export const routes: RouteObject[] = [
   },
   {
     path: '/module/create',
-    element: <CreateNewModuleScreen />,
+    element: <CreateModuleScreen />,
   },
   {
     path: '/module/:slug',
