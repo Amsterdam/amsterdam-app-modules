@@ -49,7 +49,7 @@ const DraggableModules = ({
                       />
                       <PhraseComponent>{title}</PhraseComponent>
                       <PhraseComponent>-</PhraseComponent>
-                      <PhraseComponent>{`v.${version}`}</PhraseComponent>
+                      <PhraseComponent>{`v${version}`}</PhraseComponent>
                     </Row>
                   </Box>
                 </ListItem>
