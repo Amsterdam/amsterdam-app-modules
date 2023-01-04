@@ -64,7 +64,9 @@ const CreateReleaseScreen = () => {
         return
       }
 
+      // dropped inside the same list
       if (source.droppableId === destination.droppableId) {
+        // dropped inside the active modules list
         if (destination.droppableId === DroppableId.ActiveModules) {
           const items = reorderList(
             releaseModules,
@@ -73,9 +75,13 @@ const CreateReleaseScreen = () => {
           )
           dispatch(setModules(items))
         }
+
+        // dropped inside the inactive modules list
       } else if (destination.droppableId === DroppableId.InactiveModules) {
         const items = removeFromList(releaseModules, source.index)
         dispatch(setModules(items))
+
+        // dropped inside the active modules list
       } else if (destination.droppableId === DroppableId.ActiveModules) {
         const items = addToList(
           releaseModules,
