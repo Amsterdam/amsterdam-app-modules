@@ -6,6 +6,7 @@ import DragDropContext from 'components/drag-n-drop/DragDropContext'
 import Draggable from 'components/drag-n-drop/Draggable'
 import Droppable from 'components/drag-n-drop/Droppable'
 import VersionField from 'components/form-fields/VersionField'
+import Button from 'components/ui/button/Button'
 import LoadingBox from 'components/ui/feedback/LoadingBox'
 import Box from 'components/ui/layout/Box'
 import Row from 'components/ui/layout/Row'
@@ -23,6 +24,7 @@ import {
 import {Release} from 'types/release'
 import {addToList, removeFromList, reorderList} from 'utils/list'
 import Column from '../components/ui/layout/Column'
+import Grid from '../components/ui/layout/Grid'
 import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
 
@@ -104,46 +106,21 @@ const CreateReleaseScreen = () => {
 
   return (
     <Screen>
-      <FormProvider {...form}>
-        <Column gutter="lg">
-          <Title>Toevoegen: Release</Title>
+      <Column gutter="lg">
+        <Title>Toevoegen: Release</Title>
+        <FormProvider {...form}>
           <VersionField baseVersion={latestRelease.version} />
-          <Column gutter="sm">
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Row>
-                <div style={{flex: 1}}>
-                  <Phrase color="muted">Actieve Modules</Phrase>
-                  <Box inset="no" negativeInsetHorizontal="md">
-                    <Droppable droppableId={DroppableId.ActiveModules}>
-                      <List>
-                        {releaseModules.map(
-                          ({icon, slug, title, version}, index) => (
-                            <Draggable
-                              key={slug}
-                              draggableId={slug}
-                              index={index}>
-                              <ListItem>
-                                <Box>
-                                  <Row gutter="sm" valign="baseline">
-                                    <Icon name={icon} />
-                                    <Phrase>{title}</Phrase>
-                                    <Phrase>{`- v.${version}`}</Phrase>
-                                  </Row>
-                                </Box>
-                              </ListItem>
-                            </Draggable>
-                          ),
-                        )}
-                      </List>
-                    </Droppable>
-                  </Box>
-                </div>
-                <div style={{flex: 1}}>
-                  <Phrase color="muted">Inactieve Modules</Phrase>
-                  <Box inset="no" negativeInsetHorizontal="md">
-                    <Droppable droppableId={DroppableId.InactiveModules}>
-                      <List>
-                        {inactiveModules.map(({slug, title, icon}, index) => (
+        </FormProvider>
+        <Column gutter="sm">
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Grid numColumns={2}>
+              <div>
+                <Phrase color="muted">Actieve Modules</Phrase>
+                <Box inset="no" negativeInsetHorizontal="md">
+                  <Droppable droppableId={DroppableId.ActiveModules}>
+                    <List>
+                      {releaseModules.map(
+                        ({icon, slug, title, version}, index) => (
                           <Draggable
                             key={slug}
                             draggableId={slug}
@@ -151,22 +128,52 @@ const CreateReleaseScreen = () => {
                             <ListItem>
                               <Box>
                                 <Row gutter="sm" valign="baseline">
-                                  <Icon name={icon} fill="muted" />
-                                  <Phrase color="muted">{title}</Phrase>
+                                  <Icon name={icon} />
+                                  <Phrase>{title}</Phrase>
+                                  <Phrase>{`- v.${version}`}</Phrase>
                                 </Row>
                               </Box>
                             </ListItem>
                           </Draggable>
-                        ))}
-                      </List>
-                    </Droppable>
-                  </Box>
-                </div>
-              </Row>
-            </DragDropContext>
-          </Column>
+                        ),
+                      )}
+                    </List>
+                  </Droppable>
+                </Box>
+              </div>
+              <div>
+                <Phrase color="muted">Inactieve Modules</Phrase>
+                <Box inset="no" negativeInsetHorizontal="md">
+                  <Droppable droppableId={DroppableId.InactiveModules}>
+                    <List>
+                      {inactiveModules.map(({slug, title, icon}, index) => (
+                        <Draggable key={slug} draggableId={slug} index={index}>
+                          <ListItem>
+                            <Box>
+                              <Row gutter="sm" valign="baseline">
+                                <Icon name={icon} fill="muted" />
+                                <Phrase color="muted">{title}</Phrase>
+                              </Row>
+                            </Box>
+                          </ListItem>
+                        </Draggable>
+                      ))}
+                    </List>
+                  </Droppable>
+                </Box>
+              </div>
+            </Grid>
+          </DragDropContext>
         </Column>
-      </FormProvider>
+        <Row>
+          <Button
+            onClick={() => {
+              console.log('opslaan')
+            }}
+            label="Opslaan"
+          />
+        </Row>
+      </Column>
     </Screen>
   )
 }
