@@ -43,7 +43,10 @@ const DraggableModules = ({
                 <ListItem>
                   <Box>
                     <Row gutter="sm" valign="baseline">
-                      <Icon name={icon} />
+                      <Icon
+                        fill={variant === 'inactive' ? 'muted' : undefined}
+                        name={icon}
+                      />
                       <PhraseComponent>{title}</PhraseComponent>
                       <PhraseComponent>-</PhraseComponent>
                       <PhraseComponent>{`v.${version}`}</PhraseComponent>
