@@ -3,17 +3,11 @@ import {DropResult} from 'react-beautiful-dnd'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useDispatch, useSelector} from 'react-redux'
 import DragDropContext from 'components/drag-n-drop/DragDropContext'
-import Draggable from 'components/drag-n-drop/Draggable'
-import Droppable from 'components/drag-n-drop/Droppable'
+import DraggableModules from 'components/features/DraggableModules'
 import VersionField from 'components/form-fields/VersionField'
 import Button from 'components/ui/button/Button'
 import LoadingBox from 'components/ui/feedback/LoadingBox'
-import Box from 'components/ui/layout/Box'
 import Row from 'components/ui/layout/Row'
-import Icon from 'components/ui/media/Icon'
-import List from 'components/ui/text/List'
-import ListItem from 'components/ui/text/ListItem'
-import Phrase from 'components/ui/text/Phrase'
 import {useGetModulesQuery} from 'services/modules'
 import {useGetLatestReleaseQuery} from 'services/releases'
 import {
@@ -114,62 +108,15 @@ const CreateReleaseScreen = () => {
         <Column gutter="sm">
           <DragDropContext onDragEnd={onDragEnd}>
             <Grid numColumns={2}>
-              <div>
-                <Phrase color="muted">Actieve Modules</Phrase>
-                <Box inset="no" negativeInsetHorizontal="md">
-                  <Droppable droppableId={DroppableId.ActiveModules}>
-                    <List>
-                      {releaseModules.map(
-                        ({icon, slug, title, version}, index) => (
-                          <Draggable
-                            key={slug}
-                            draggableId={slug}
-                            index={index}>
-                            <ListItem>
-                              <Box>
-                                <Row gutter="sm" valign="baseline">
-                                  <Icon name={icon} />
-                                  <Phrase>{title}</Phrase>
-                                  <Phrase>-</Phrase>
-                                  <Phrase>{`v.${version}`}</Phrase>
-                                </Row>
-                              </Box>
-                            </ListItem>
-                          </Draggable>
-                        ),
-                      )}
-                    </List>
-                  </Droppable>
-                </Box>
-              </div>
-              <div>
-                <Phrase color="muted">Inactieve Modules</Phrase>
-                <Box inset="no" negativeInsetHorizontal="md">
-                  <Droppable droppableId={DroppableId.InactiveModules}>
-                    <List>
-                      {inactiveModules.map(
-                        ({icon, slug, title, version}, index) => (
-                          <Draggable
-                            key={slug}
-                            draggableId={slug}
-                            index={index}>
-                            <ListItem>
-                              <Box>
-                                <Row gutter="sm" valign="baseline">
-                                  <Icon name={icon} fill="muted" />
-                                  <Phrase color="muted">{title}</Phrase>
-                                  <Phrase color="muted">-</Phrase>
-                                  <Phrase color="muted">{`v.${version}`}</Phrase>
-                                </Row>
-                              </Box>
-                            </ListItem>
-                          </Draggable>
-                        ),
-                      )}
-                    </List>
-                  </Droppable>
-                </Box>
-              </div>
+              <DraggableModules
+                droppableId={DroppableId.ActiveModules}
+                modules={releaseModules}
+              />
+              <DraggableModules
+                droppableId={DroppableId.InactiveModules}
+                modules={inactiveModules}
+                variant="inactive"
+              />
             </Grid>
           </DragDropContext>
         </Column>
