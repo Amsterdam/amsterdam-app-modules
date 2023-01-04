@@ -122,6 +122,7 @@ const CreateReleaseScreen = () => {
         <Row>
           <Button
             onClick={() => {
+              // eslint-disable-next-line no-console
               console.log('opslaan') // TODO: POST content of releaseSlice to /releases once ready
             }}
             label="Opslaan"

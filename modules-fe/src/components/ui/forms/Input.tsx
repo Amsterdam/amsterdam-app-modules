@@ -5,7 +5,7 @@ type Props = {
   hasError: boolean
   id: string
   name: FieldPath<FieldValues>
-  onChange: (...event: any[]) => void
+  onChange: (...event: unknown[]) => void
   value: FieldPathValue<FieldValues, FieldPath<FieldValues>>
 }
 
