@@ -3,6 +3,7 @@ import {IconName, IconPath} from './iconPath'
 import {IconSize} from './types'
 
 export type IconProps = {
+  fill?: 'default' | 'error' | 'inverse' | 'muted'
   /**
    * The name of the icon to display.
    */
@@ -13,12 +14,13 @@ export type IconProps = {
   size?: keyof typeof IconSize
 }
 
-const Icon = ({name, size = 'md'}: IconProps) => {
+const Icon = ({fill, name, size = 'md'}: IconProps) => {
   const svgSize = IconSize[size]
 
   return (
     <svg
       className="Icon"
+      data-fill={fill}
       fillRule="evenodd"
       height={svgSize}
       viewBox={`0 0 32 ${name === 'minus' ? 5 : 32}`}
