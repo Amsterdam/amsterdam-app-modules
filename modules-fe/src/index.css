@@ -40,7 +40,6 @@
   --bg-color-blocklink-active: var(--baseColor-custom-grey1);
   --bg-color-button: var(--baseColor-primary-blue);
   --bg-color-button-hover: var(--baseColor-functional-darkblue);
-  --bg-color-dragging-over: var(--baseColor-custom-grey0);
 
   /* border colors */
   --border-color-cutout: var(--baseColor-primary-white);
@@ -70,7 +69,7 @@
   --size-spacing-xxl: 80px;
   --size-spacing-xxxl: 120px;
 
-  --size-screen-width: 480px;
+  --size-screen-width: 960px;
 
   /* border sizes */
   --size-border-md: 1px;

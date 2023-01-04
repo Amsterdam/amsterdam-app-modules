@@ -1,6 +1,5 @@
 import {ReactNode} from 'react'
 import {Droppable as DroppableDnD} from 'react-beautiful-dnd'
-import './Droppable.css'
 
 type Props = {
   children: ReactNode
@@ -10,10 +9,7 @@ type Props = {
 const Droppable = ({children, droppableId}: Props) => (
   <DroppableDnD droppableId={droppableId}>
     {(provided, snapshot) => (
-      <div
-        ref={provided.innerRef}
-        {...provided.droppableProps}
-        data-is-dragging-over={snapshot.isDraggingOver}>
+      <div ref={provided.innerRef} {...provided.droppableProps}>
         {children}
         {provided.placeholder}
       </div>
