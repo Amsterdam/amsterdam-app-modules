@@ -50,29 +50,5 @@
       "status": 1,
       "version": "1.0.0",
       "description": "Lees meer over deze app en help ons de app verbeteren."
-    },
-    {
-      "slug": "construction-work-editor",
-      "title": "Plaats berichten",
-      "icon": "announcement",
-      "status": 1,
-      "version": "1.0.0",
-      "description": "Hier kun je als omgevingsmanager berichten plaatsen bij werkzaamheden"
-    },
-    {
-      "slug": "welcome",
-      "title": "Welkomstscherm",
-      "icon": "facade",
-      "status": 1,
-      "version": "2.0.0",
-      "description": "Bekijk een mooi Amsterdams beeld bij het starten van de app"
-    },
-    {
-      "slug": "construction-work",
-      "title": "Werkzaamheden",
-      "icon": "projects",
-      "status": 1,
-      "version": "1.0.0",
-      "description": "Blijf op de hoogte van werkzaamheden in uw buurt."
     }
   ]}}
