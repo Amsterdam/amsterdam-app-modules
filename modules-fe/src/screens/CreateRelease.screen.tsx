@@ -130,7 +130,8 @@ const CreateReleaseScreen = () => {
                                 <Row gutter="sm" valign="baseline">
                                   <Icon name={icon} />
                                   <Phrase>{title}</Phrase>
-                                  <Phrase>{`- v.${version}`}</Phrase>
+                                  <Phrase>-</Phrase>
+                                  <Phrase>{`v.${version}`}</Phrase>
                                 </Row>
                               </Box>
                             </ListItem>
@@ -146,18 +147,25 @@ const CreateReleaseScreen = () => {
                 <Box inset="no" negativeInsetHorizontal="md">
                   <Droppable droppableId={DroppableId.InactiveModules}>
                     <List>
-                      {inactiveModules.map(({slug, title, icon}, index) => (
-                        <Draggable key={slug} draggableId={slug} index={index}>
-                          <ListItem>
-                            <Box>
-                              <Row gutter="sm" valign="baseline">
-                                <Icon name={icon} fill="muted" />
-                                <Phrase color="muted">{title}</Phrase>
-                              </Row>
-                            </Box>
-                          </ListItem>
-                        </Draggable>
-                      ))}
+                      {inactiveModules.map(
+                        ({icon, slug, title, version}, index) => (
+                          <Draggable
+                            key={slug}
+                            draggableId={slug}
+                            index={index}>
+                            <ListItem>
+                              <Box>
+                                <Row gutter="sm" valign="baseline">
+                                  <Icon name={icon} fill="muted" />
+                                  <Phrase color="muted">{title}</Phrase>
+                                  <Phrase color="muted">-</Phrase>
+                                  <Phrase color="muted">{`v.${version}`}</Phrase>
+                                </Row>
+                              </Box>
+                            </ListItem>
+                          </Draggable>
+                        ),
+                      )}
                     </List>
                   </Droppable>
                 </Box>
