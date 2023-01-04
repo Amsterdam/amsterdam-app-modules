@@ -40,10 +40,12 @@
   --bg-color-blocklink-active: var(--baseColor-custom-grey1);
   --bg-color-button: var(--baseColor-primary-blue);
   --bg-color-button-hover: var(--baseColor-functional-darkblue);
+  --bg-color-dragging-over: var(--baseColor-custom-grey0);
 
   /* border colors */
   --border-color-cutout: var(--baseColor-primary-white);
   --border-color-default: var(--baseColor-primary-black);
+  --border-color-dragging: var(--baseColor-neutral-grey4);
   --border-color-pressable: var(--baseColor-primary-blue);
   --border-color-button-emphasis: var(--baseColor-primary-blue);
   --border-color-button-secondary-hover: var(--baseColor-functional-darkblue);
