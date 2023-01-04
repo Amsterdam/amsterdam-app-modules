@@ -32,3 +32,4 @@ data
 data/db
 
 /static/build
+modules-fe/.eslintcache
