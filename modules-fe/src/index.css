@@ -44,6 +44,7 @@
   /* border colors */
   --border-color-cutout: var(--baseColor-primary-white);
   --border-color-default: var(--baseColor-primary-black);
+  --border-color-dragging: var(--baseColor-neutral-grey4);
   --border-color-pressable: var(--baseColor-primary-blue);
   --border-color-button-emphasis: var(--baseColor-primary-blue);
   --border-color-button-secondary-hover: var(--baseColor-functional-darkblue);
@@ -68,7 +69,7 @@
   --size-spacing-xxl: 80px;
   --size-spacing-xxxl: 120px;
 
-  --size-screen-width: 480px;
+  --size-screen-width: 960px;
 
   /* border sizes */
   --size-border-md: 1px;

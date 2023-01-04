@@ -45,14 +45,14 @@ const ModuleScreen = () => {
         <Button
           label="Voeg versie toe"
           onClick={() => {
-            navigate(`/modules/${slug}/create`)
+            navigate(`/module/${slug}/create`)
           }}
         />
         <Box inset="no" negativeInsetHorizontal="md">
           <List>
             {modules.map(({title, version}) => (
               <ListItem key={version}>
-                <BlockLink to={`/modules/${slug}/${version}/edit`}>
+                <BlockLink to={`/module/${slug}/${version}`}>
                   <Box>
                     <Phrase>
                       {version} – {title}

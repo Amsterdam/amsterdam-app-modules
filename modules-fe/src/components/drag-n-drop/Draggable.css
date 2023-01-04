@@ -1,0 +1,3 @@
+[data-is-dragging="true"] {
+  border: var(--size-border-md) dashed var(--border-color-dragging);
+}

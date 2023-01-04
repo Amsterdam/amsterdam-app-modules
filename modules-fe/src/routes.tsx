@@ -1,5 +1,6 @@
 import {RouteObject} from 'react-router-dom'
 import CreateModuleScreen from './screens/CreateModule.screen'
+import CreateReleaseScreen from './screens/CreateRelease.screen'
 import EditModuleScreen from './screens/EditModule.screen'
 import ErrorScreen from './screens/Error.screen'
 import HomeScreen from './screens/Home.screen'
@@ -19,15 +20,15 @@ export const routes: RouteObject[] = [
     element: <ModulesScreen />,
   },
   {
-    path: '/modules/:slug',
+    path: '/module/:slug',
     element: <ModuleScreen />,
   },
   {
-    path: '/modules/:slug/create',
+    path: '/module/:slug/create',
     element: <CreateModuleScreen />,
   },
   {
-    path: '/modules/:slug/:version/edit',
+    path: '/module/:slug/:version',
     element: <EditModuleScreen />,
   },
   {
@@ -35,7 +36,11 @@ export const routes: RouteObject[] = [
     element: <ReleasesScreen />,
   },
   {
-    path: '/releases/:version',
+    path: '/release/:version',
     element: <ReleaseScreen />,
+  },
+  {
+    path: '/release/create',
+    element: <CreateReleaseScreen />,
   },
 ]

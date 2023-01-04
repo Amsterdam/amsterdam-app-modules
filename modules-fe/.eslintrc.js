@@ -79,6 +79,13 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error'],
     'global-require': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'no-param-reassign': [
+      'error',
+      {
+        props: true,
+        ignorePropertyModificationsFor: ['state'],
+      },
+    ],
   },
   settings: {
     'import/ignore': [
