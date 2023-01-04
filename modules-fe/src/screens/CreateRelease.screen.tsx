@@ -168,7 +168,7 @@ const CreateReleaseScreen = () => {
         <Row>
           <Button
             onClick={() => {
-              console.log('opslaan')
+              console.log('opslaan') // TODO: POST content of releaseSlice to /releases once ready
             }}
             label="Opslaan"
           />
