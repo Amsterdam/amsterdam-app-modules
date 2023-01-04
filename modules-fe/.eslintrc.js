@@ -88,9 +88,6 @@ module.exports = {
     ],
   },
   settings: {
-    'import/ignore': [
-      'swiper/.*', // ignore swiper's screwed up imports (they will block build)
-    ],
     'import/resolver': {
       typescript: {},
     },
