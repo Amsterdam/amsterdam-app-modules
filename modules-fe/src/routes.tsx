@@ -20,6 +20,10 @@ export const routes: RouteObject[] = [
     element: <ModulesScreen />,
   },
   {
+    path: '/module/create',
+    element: <CreateModuleScreen />,
+  },
+  {
     path: '/module/:slug',
     element: <ModuleScreen />,
   },
@@ -36,11 +40,11 @@ export const routes: RouteObject[] = [
     element: <ReleasesScreen />,
   },
   {
-    path: '/release/:version',
-    element: <ReleaseScreen />,
-  },
-  {
     path: '/release/create',
     element: <CreateReleaseScreen />,
+  },
+  {
+    path: '/release/:version',
+    element: <ReleaseScreen />,
   },
 ]
