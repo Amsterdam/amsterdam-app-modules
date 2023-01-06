@@ -1,7 +1,8 @@
 import {skipToken} from '@reduxjs/toolkit/query'
-import {useCallback} from 'react'
+import {useCallback, useState} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import ModuleStatusField from 'components/form-fields/ModuleStatusField'
 import ModuleDescriptionField from '../components/form-fields/ModuleDescriptionField'
 import ModuleIconField from '../components/form-fields/ModuleIconField'
 import ModuleTitleField from '../components/form-fields/ModuleTitleField'
@@ -22,6 +23,7 @@ type Params = {
 
 const EditModuleScreen = () => {
   const navigate = useNavigate()
+  const [isEditStatusOpen, setIsEditStatusOpen] = useState(false)
 
   const {slug, version} = useParams<Params>()
   const {data: module, isLoading} = useGetModuleQuery(
@@ -79,6 +81,12 @@ const EditModuleScreen = () => {
               baseVersion={moduleVersion.version}
               defaultValue={moduleVersion.version}
             />
+            <Button
+              label="Zet aan/uit"
+              onClick={() => setIsEditStatusOpen(!isEditStatusOpen)}
+              variant="secondary"
+            />
+            {isEditStatusOpen && <ModuleStatusField />}
             <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
           </Column>
         </FormProvider>
