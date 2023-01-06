@@ -1,0 +1,24 @@
+.CheckboxField {
+  padding: var(--size-spacing-sm);
+  margin-inline: calc(var(--size-spacing-sm) * -1);
+}
+
+.Indicator {
+  --bg-color: var(--bg-color-cutout);
+  --color: var(--border-color-pressable);
+}
+
+.Indicator[data-is-selected="true"] {
+  --bg-color: var(--border-color-pressable);
+  --color: var(--bg-color-cutout);
+}
+
+.Indicator > rect {
+  fill: var(--bg-color);
+  stroke: var(--color);
+  stroke-width: var(--size-border-xl);
+}
+
+.Indicator > path {
+  fill: var(--text-color-inverse);
+}
