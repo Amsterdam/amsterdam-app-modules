@@ -1,4 +1,4 @@
-import {Module} from '../types/module'
+import {ModuleVersion} from '../types/module'
 import {baseApi} from './baseApi'
 
 type ModuleQueryArg = {
@@ -7,32 +7,34 @@ type ModuleQueryArg = {
 
 export const modulesApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    createModule: builder.mutation<Module, Module>({
+    createModule: builder.mutation<ModuleVersion, ModuleVersion>({
       query: module => ({
         url: `/api/v1/modules`,
         method: 'POST',
         body: {...module},
       }),
-      transformResponse: (response: {result: Module}) => response.result,
+      transformResponse: (response: {result: ModuleVersion}) => response.result,
       invalidatesTags: ['Module'],
     }),
-    editModule: builder.mutation<Module, Module>({
+    editModule: builder.mutation<ModuleVersion, ModuleVersion>({
       query: module => ({
         url: `/api/v1/modules`,
         method: 'PATCH',
         body: {...module},
       }),
-      transformResponse: (response: {result: Module}) => response.result,
+      transformResponse: (response: {result: ModuleVersion}) => response.result,
       invalidatesTags: ['Module'],
     }),
-    getModule: builder.query<Module[], ModuleQueryArg>({
+    getModule: builder.query<ModuleVersion[], ModuleQueryArg>({
       query: ({slug}) => `/api/v1/modules?slug=${slug}`,
-      transformResponse: (response: {result: Module[]}) => response.result,
+      transformResponse: (response: {result: ModuleVersion[]}) =>
+        response.result,
       providesTags: ['Module'],
     }),
-    getModules: builder.query<Module[], void>({
+    getModules: builder.query<ModuleVersion[], void>({
       query: () => `/api/v1/modules/latest`,
-      transformResponse: (response: {result: Module[]}) => response.result,
+      transformResponse: (response: {result: ModuleVersion[]}) =>
+        response.result,
       providesTags: ['Module'],
     }),
   }),

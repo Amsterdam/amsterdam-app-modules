@@ -14,13 +14,13 @@ import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
 import {useCreateModuleMutation, useGetModuleQuery} from '../services/modules'
-import {Module} from '../types/module'
+import {ModuleVersion} from '../types/module'
 
 type Params = {
   slug?: string
 }
 
-const defaultModule: Omit<Module, 'icon'> & {icon: undefined} = {
+const defaultModule: Omit<ModuleVersion, 'icon'> & {icon: undefined} = {
   description: '',
   icon: undefined,
   slug: '',
@@ -43,11 +43,11 @@ const CreateModuleScreen = () => {
   )
   const latestVersion = !isNewModule && module ? module[0] : defaultModule
 
-  const form = useForm<Module>()
+  const form = useForm<ModuleVersion>()
   const [createModule, {isLoading: isMutateLoading}] = useCreateModuleMutation()
   const {handleSubmit, setValue} = form
 
-  const onSubmitForm: SubmitHandler<Module> = useCallback(
+  const onSubmitForm: SubmitHandler<ModuleVersion> = useCallback(
     data => {
       if (!data.slug) {
         return

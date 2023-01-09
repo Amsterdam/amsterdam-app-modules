@@ -13,7 +13,7 @@ import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
 import {useEditModuleMutation, useGetModuleQuery} from '../services/modules'
-import {Module} from '../types/module'
+import {ModuleVersion} from '../types/module'
 
 type Params = {
   slug: string
@@ -33,11 +33,11 @@ const EditModuleScreen = () => {
   )
   const moduleVersion = module?.find(m => m.version === version)
 
-  const form = useForm<Module>()
+  const form = useForm<ModuleVersion>()
   const [editModule] = useEditModuleMutation()
   const {handleSubmit} = form
 
-  const onSubmitForm: SubmitHandler<Module> = useCallback(
+  const onSubmitForm: SubmitHandler<ModuleVersion> = useCallback(
     data => {
       if (!slug) {
         return

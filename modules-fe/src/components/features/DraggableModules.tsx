@@ -7,7 +7,7 @@ import Icon from 'components/ui/media/Icon'
 import List from 'components/ui/text/List'
 import ListItem from 'components/ui/text/ListItem'
 import Phrase from 'components/ui/text/Phrase'
-import {Module} from 'types/module'
+import {ModuleVersion} from 'types/module'
 
 type MutablePhraseProps = {
   children: ReactNode
@@ -19,7 +19,7 @@ const MutedPhrase = ({children}: MutablePhraseProps) => (
 
 type DraggableModulesProps = {
   droppableId: string
-  modules: Module[]
+  modules: ModuleVersion[]
   variant?: 'active' | 'inactive'
 }
 
