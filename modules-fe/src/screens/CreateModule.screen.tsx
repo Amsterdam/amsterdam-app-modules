@@ -23,8 +23,7 @@ type Params = {
 const defaultModule: Omit<ModuleVersion, 'icon'> & {icon: undefined} = {
   description: '',
   icon: undefined,
-  slug: '',
-  status: 1,
+  moduleSlug: '',
   title: '',
   version: '0.0.0',
 }
@@ -49,23 +48,23 @@ const CreateModuleScreen = () => {
 
   const onSubmitForm: SubmitHandler<ModuleVersion> = useCallback(
     data => {
-      if (!data.slug) {
+      if (!data.moduleSlug) {
         return
       }
 
       createModule({...data}).then(response => {
         if ('data' in response) {
-          navigate(`/module/${data.slug}`)
+          navigate(`/module/${data.moduleSlug}`)
         }
       })
     },
     [createModule, navigate],
   )
   useEffect(() => {
-    if (latestVersion.slug) {
-      setValue('slug', latestVersion.slug)
+    if (latestVersion.moduleSlug) {
+      setValue('moduleSlug', latestVersion.moduleSlug)
     }
-  }, [latestVersion.slug, setValue])
+  }, [latestVersion.moduleSlug, setValue])
 
   const versionFieldValue = form.watch('version') ?? ''
   const titleFieldValue = form.watch('title') ?? ''
@@ -88,7 +87,7 @@ const CreateModuleScreen = () => {
         <FormProvider {...form}>
           <Column gutter="lg">
             {isNewModule && (
-              <ModuleSlugField defaultValue={latestVersion.slug} />
+              <ModuleSlugField defaultValue={latestVersion.moduleSlug} />
             )}
             <ModuleTitleField defaultValue={latestVersion.title} />
             <ModuleDescriptionField defaultValue={latestVersion.description} />

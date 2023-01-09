@@ -28,7 +28,9 @@ export const releaseSlice = createSlice({
       state.modules.push(module)
     },
     deleteModule: (state, {payload: moduleSlug}: PayloadAction<string>) => {
-      state.modules = state.modules.filter(module => module.slug !== moduleSlug)
+      state.modules = state.modules.filter(
+        module => module.moduleSlug !== moduleSlug,
+      )
     },
   },
 })

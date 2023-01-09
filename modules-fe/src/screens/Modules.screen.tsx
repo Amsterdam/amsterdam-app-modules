@@ -42,9 +42,9 @@ const ModulesScreen = () => {
         />
         <Box inset="no" negativeInsetHorizontal="md">
           <List>
-            {sortedModules.map(({icon, slug, title}) => (
-              <ListItem key={slug}>
-                <BlockLink to={`/module/${slug}`}>
+            {sortedModules.map(({icon, moduleSlug, title}) => (
+              <ListItem key={moduleSlug}>
+                <BlockLink to={`/module/${moduleSlug}`}>
                   <Box>
                     <Row gutter="md" valign="baseline">
                       <Icon name={icon} />

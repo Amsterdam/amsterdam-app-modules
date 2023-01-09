@@ -43,7 +43,7 @@ const EditModuleScreen = () => {
         return
       }
 
-      editModule({...data, slug}).then(response => {
+      editModule({...data, moduleSlug: slug}).then(response => {
         if ('data' in response) {
           navigate(`/module/${slug}`)
         }

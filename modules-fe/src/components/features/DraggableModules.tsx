@@ -38,8 +38,11 @@ const DraggableModules = ({
       <Box inset="no" negativeInsetHorizontal="md">
         <Droppable droppableId={droppableId}>
           <List>
-            {modules.map(({icon, slug, title, version}, index) => (
-              <Draggable key={slug} draggableId={slug} index={index}>
+            {modules.map(({icon, moduleSlug, title, version}, index) => (
+              <Draggable
+                key={moduleSlug}
+                draggableId={moduleSlug}
+                index={index}>
                 <ListItem>
                   <Box>
                     <Row gutter="sm" valign="baseline">
