@@ -141,7 +141,7 @@ def module_slug(request, slug=None):
         "versions": [
             {
                 "title": x.title,
-                "moduleSlug": x.slug,
+                "moduleSlug": x.moduleSlug,
                 "description": x.description,
                 "version": x.version,
                 "icon": x.icon,
