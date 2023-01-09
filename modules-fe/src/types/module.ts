@@ -25,6 +25,11 @@ export type ModuleInRelease = {
   status: ModuleStatus
 }
 
+export type ModuleStatusInRelease = {
+  status: ModuleStatus
+  releases: string[]
+}
+
 export enum ModuleStatus {
   'uit',
   'aan',
