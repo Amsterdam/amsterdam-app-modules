@@ -31,7 +31,7 @@ export const modulesApi = baseApi.injectEndpoints({
       providesTags: ['Module'],
     }),
     getModules: builder.query<Module[], void>({
-      query: () => `/api/v1/modules`,
+      query: () => `/api/v1/modules/latest`,
       transformResponse: (response: {result: Module[]}) => response.result,
       providesTags: ['Module'],
     }),

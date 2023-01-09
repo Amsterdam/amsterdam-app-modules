@@ -10,8 +10,8 @@ import {reorderList, removeFromList, addToList} from 'utils/list'
 import DraggableModules from './DraggableModules'
 
 enum DroppableId {
-  ActiveModules = 'droppableActiveModules',
-  InactiveModules = 'droppableInactiveModules',
+  includedModules = 'includedModules',
+  excludedModules = 'excludedModules',
 }
 const DragDropModules = () => {
   const dispatch = useDispatch()
@@ -34,10 +34,10 @@ const DragDropModules = () => {
         return
       }
 
-      // dropped inside the same list
       if (source.droppableId === destination.droppableId) {
-        // dropped inside the active modules list
-        if (destination.droppableId === DroppableId.ActiveModules) {
+        // dropped inside the same list
+        if (destination.droppableId === DroppableId.includedModules) {
+          // dropped inside the active modules list
           const items = reorderList(
             releaseModules,
             source.index,
@@ -45,14 +45,12 @@ const DragDropModules = () => {
           )
           dispatch(setModules(items))
         }
-
+      } else if (destination.droppableId === DroppableId.excludedModules) {
         // dropped inside the inactive modules list
-      } else if (destination.droppableId === DroppableId.InactiveModules) {
         const items = removeFromList(releaseModules, source.index)
         dispatch(setModules(items))
-
+      } else if (destination.droppableId === DroppableId.includedModules) {
         // dropped inside the active modules list
-      } else if (destination.droppableId === DroppableId.ActiveModules) {
         const items = addToList(
           releaseModules,
           destination.index,
@@ -77,11 +75,11 @@ const DragDropModules = () => {
       <DragDropContext onDragEnd={onDragEnd}>
         <Grid numColumns={2}>
           <DraggableModules
-            droppableId={DroppableId.ActiveModules}
+            droppableId={DroppableId.includedModules}
             modules={releaseModules}
           />
           <DraggableModules
-            droppableId={DroppableId.InactiveModules}
+            droppableId={DroppableId.excludedModules}
             modules={inactiveModules}
             variant="inactive"
           />
