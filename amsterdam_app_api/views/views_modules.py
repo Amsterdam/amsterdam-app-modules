@@ -3,10 +3,11 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
-from amsterdam_app_api.models import Modules
+from amsterdam_app_api.models import Module
+from amsterdam_app_api.models import ModuleVersions
 from amsterdam_app_api.models import ModulesByApp
 from amsterdam_app_api.models import ModuleOrder
-from amsterdam_app_api.serializers import ModulesSerializer
+from amsterdam_app_api.serializers import ModuleVersionsSerializer
 from amsterdam_app_api.serializers import ModulesByAppSerializer
 from amsterdam_app_api.serializers import ModuleOrderSerializer
 from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
@@ -18,6 +19,7 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_patc
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_delete
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_get
+from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_get
 # from amsterdam_app_api.swagger.swagger_views_modules import as_modules_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_patch
@@ -93,16 +95,61 @@ def module_order_ppd(request):
 @api_view(['GET'])
 def module(request):
     """ Get a module by slug and version """
-    slug = request.GET.get('slug')
+    _module_slug = request.GET.get('slug')
     version = request.GET.get('version')
-    modules_data = Modules.objects.filter(slug=slug, version=version).first()
+    modules_data = ModuleVersions.objects.filter(moduleSlug=_module_slug, version=version).first()
     if modules_data is not None:
-        serializer = ModulesSerializer(modules_data, many=False)
+        serializer = ModuleVersionsSerializer(modules_data, many=False)
         data = serializer.data
         if 'id' in data:
             del data['id']
         return Response({'status': True, 'result': data}, status=200)
     return Response({'status': False, 'result': 'No such module'}, status=404)
+
+
+@swagger_auto_schema(**as_module_slug_get)
+@api_view(['GET'])
+def module_slug(request, slug=None):
+    """ Get details for a module by slug. It returns all the module versions for that slug
+        and the status of that module across all releases
+    """
+
+    # Get all modules for given slug
+    _module = Module.objects.filter(slug=slug).first()
+    module_versions = list(ModuleVersions.objects.filter(moduleSlug=slug).all())
+    if len(module_versions) == 0:
+        return Response({'status': False, 'result': 'No such slug'}, status=404)
+
+    # Get status in releases
+    slug_status_in_releases = {}
+    for module_version in module_versions:
+        releases = ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=module_version.version).all()
+        status_in_releases = {}
+        for release in releases:
+            if release.status in status_in_releases:
+                status_in_releases[release.status]['releases'].append(release.appVersion)
+            else:
+                status_in_releases[release.status] = {'releases': [release.appVersion]}
+        slug_status_in_releases[module_version.version] = [
+            {'status': k, 'releases': v['releases']} for k, v in status_in_releases.items()
+        ]
+
+    # Build result
+    result = {
+        "slug": slug,
+        "status": _module.status,
+        "versions": [
+            {
+                "title": x.title,
+                "moduleSlug": x.moduleSlug,
+                "description": x.description,
+                "version": x.version,
+                "icon": x.icon,
+                "statusInReleases": slug_status_in_releases[x.version]
+            } for x in module_versions]
+    }
+
+    return Response(result, status=200)
 
 
 @swagger_auto_schema(**as_modules_latest)
@@ -113,22 +160,22 @@ def modules_latest(request):
         it only returns version 2.0.0. All available fields for a module are returned.
         The result is ordered by title, ascending.
     """
-    def version_key(module):
+    def version_key(_module):
         # Split the version string on the '.' character and convert the components to integers
-        return [int(x) for x in module['version'].split('.')]
+        return [int(x) for x in _module['version'].split('.')]
 
     del_key = 'id'
-    module_objects = list(Modules.objects.all())
-    modules_data = ModulesSerializer(module_objects, many=True).data
+    module_objects = list(ModuleVersions.objects.all())
+    modules_data = ModuleVersionsSerializer(module_objects, many=True).data
     sorted_modules_data = sorted(modules_data, key=version_key, reverse=False)
-    data = {x['slug']: dict(x) for x in sorted_modules_data}
+    data = {x['moduleSlug']: dict(x) for x in sorted_modules_data}
     data = [data[x] for x in data]
 
     # Remove Key from Dictionary List
     result = [{key: val for key, val in sub.items() if key != del_key} for sub in data]
     sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
 
-    return Response({'status': True, 'result': sorted_result}, status=200)
+    return Response(sorted_result, status=200)
 
 
 # @swagger_auto_schema(**as_modules_get)
@@ -160,7 +207,7 @@ def modules_post(request):
     """ POST modules """
     try:
         data = dict(request.data)
-        Modules.objects.create(**data)
+        ModuleVersions.objects.create(**data)
         return Response({'status': True, 'result': 'Module created'}, status=200)
     except Exception as error:
         return Response({'status': False, 'result': str(error)}, status=422)
@@ -170,7 +217,7 @@ def modules_post(request):
 def modules_patch(request):
     """ PATCH modules """
     data = dict(request.data)
-    modules_data = Modules.objects.filter(slug=data.get('slug'), version=data.get('version')).first()
+    modules_data = ModuleVersions.objects.filter(moduleSlug=data.get('moduleSlug'), version=data.get('version')).first()
     if modules_data is not None:
         modules_data.partial_update(**data)
         return Response({'status': True, 'result': 'Module patched'}, status=200)
@@ -186,38 +233,11 @@ def modules_delete(request):
     if len(_modules_by_app) > 0:
         return Response({'status': False, 'result': message.in_use}, status=409)
 
-    modules_data = Modules.objects.filter(slug=data.get('slug'), version=data.get('version')).first()
+    modules_data = ModuleVersions.objects.filter(moduleSlug=data.get('moduleSlug'), version=data.get('version')).first()
     if modules_data is not None:
         modules_data.delete()
         return Response({'status': True, 'result': 'Module deleted'}, status=200)
     return Response({'status': False, 'result': message.no_record_found}, status=404)
-
-
-# def modules_get(request):
-#     """ Get modules by slug (returns all for given slug) or if the slug is omitted
-#         return a (distinct slugs) list with the latest (highest) version number
-#     """
-#     # initializing key
-#     del_key = 'id'
-#
-#     slug = request.GET.get('slug', None)
-#     if slug is None:
-#         modules_data = list(Modules.objects.all().order_by('version'))
-#         data = {x['slug']: dict(x) for x in ModulesSerializer(modules_data, many=True).data}
-#         data = [data[x] for x in data]
-#
-#         # Remove Key from Dictionary List
-#         result = [{key: val for key, val in sub.items() if key != del_key} for sub in data]
-#         sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
-#
-#         return Response({'status': True, 'result': sorted_result}, status=200)
-#
-#     modules_data = list(Modules.objects.filter(slug=slug).all())
-#     serializer = ModulesSerializer(modules_data, many=True)
-#     # Remove Key from Dictionary List
-#     result = [{key: val for key, val in sub.items() if key != del_key} for sub in serializer.data]
-#     sorted_result = Sort().list_of_dicts(items=result, key='version', sort_order='desc')
-#     return Response({'status': True, 'result': sorted_result}, status=200)
 
 
 @swagger_auto_schema(**as_modules_enable)
@@ -329,12 +349,13 @@ def modules_for_app_get(request):
 
     _modules = []
     for module_by_app in modules_by_app_data:
-        _module = Modules.objects.filter(slug=module_by_app.moduleSlug, version=module_by_app.moduleVersion).first()
+        _module = ModuleVersions.objects.filter(moduleSlug=module_by_app.moduleSlug,
+                                                version=module_by_app.moduleVersion).first()
         if _module is not None:
             _modules.append({
                 'description': _module.description,
                 'icon': _module.icon,
-                'slug': _module.slug,
+                'slug': _module.moduleSlug,
                 'status': module_by_app.status,
                 'title': _module.title,
                 'version': _module.version

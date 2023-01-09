@@ -40,6 +40,14 @@ modules = {
     "description": description
 }
 
+module_version = {
+    "moduleSlug": slug,
+    "title": title,
+    "icon": icon,
+    "version": version,
+    "description": description
+}
+
 modules_enable = {
     "slug": slug,
     "appVersion": version,
@@ -97,19 +105,79 @@ as_module_get = {
     'tags': ['Module']
 }
 
+# "result": {
+#         "slug": "waste-guide",
+#         "versions": [
+#             {
+#                 "title": "Title",
+#                 "description": "Lorem ipsum dolor sit amet",
+#                 "version": "1.0.4",
+#                 "icon": "trash-bin",
+#                 "statusInReleases": [
+#                     {
+#                         "status": 0,
+#                         "releases": ["0.14.1", "0.14.0"]
+#                     },
+#                     {
+#                         "status": 1,
+#                         "releases": ["0.15.1", "0.15.0"]
+#                     }
+#                 ]
+#             }
 
-as_modules_latest = {
+status_in_releases = {
+    'status': openapi.Schema(type=openapi.TYPE_NUMBER, description='status (enum: 0, 1, ...)'),
+    'releases': openapi.Schema(type=openapi.TYPE_ARRAY,
+                               items=openapi.Schema(type=openapi.TYPE_STRING,
+                                                    description='release version (x.y.z)'))
+}
+
+modules_versions = {
+    'title': openapi.Schema(type=openapi.TYPE_STRING, description='module title'),
+    'moduleSlug': openapi.Schema(type=openapi.TYPE_STRING, description='module slug'),
+    'description': openapi.Schema(type=openapi.TYPE_STRING, description='module description'),
+    'version': openapi.Schema(type=openapi.TYPE_STRING, description='module version (x.y.z)'),
+    'icon': openapi.Schema(type=openapi.TYPE_STRING, description='icon name'),
+    'statusInReleases': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                       items=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                            properties=status_in_releases))
+}
+
+as_module_slug_get = {
     'methods': ['get'],
     'responses': {
         200: openapi.Response(
             'application/json',
             schema=openapi.Schema(type=openapi.TYPE_OBJECT,
                                   properties={
-                                      'status': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='result status'),
-                                      'result': openapi.Schema(type=openapi.TYPE_ARRAY,
-                                                               items=openapi.Schema(type=openapi.TYPE_OBJECT,
-                                                                                    properties=modules))
-                                  }))
+                                      'slug': openapi.Schema(type=openapi.TYPE_STRING, description='slug'),
+                                      'status': openapi.Schema(type=openapi.TYPE_NUMBER,
+                                                               description='module status (global)'),
+                                      'versions': openapi.Schema(type=openapi.TYPE_ARRAY,
+                                                                 items=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                                                      properties=modules_versions))
+                                  })),
+        404: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'status': False,
+                                      'id': 'No such slug'
+                                  }
+                              }),
+
+    },
+    'tags': ['Module']
+}
+
+
+as_modules_latest = {
+    'methods': ['get'],
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_ARRAY,
+                                  items=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                       properties=module_version)))
     },
     'tags': ['Modules']
 }
