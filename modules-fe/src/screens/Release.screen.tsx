@@ -3,6 +3,7 @@ import {useEffect, useMemo} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useParams} from 'react-router-dom'
 import DragDropModules from 'components/features/DragDropModules'
+import Button from 'components/ui/button/Button'
 import {
   setReleaseVersion,
   setModules,
@@ -63,7 +64,8 @@ const ReleaseScreen = () => {
     <Screen>
       <Column gutter="lg">
         <Title>Release: {version}</Title>
-        <DragDropModules onSave={onSave} />
+        <DragDropModules />
+        <Button label="Opslaan" onClick={onSave} />
       </Column>
     </Screen>
   )

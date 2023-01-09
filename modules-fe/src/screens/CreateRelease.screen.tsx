@@ -3,6 +3,7 @@ import {FormProvider, useForm} from 'react-hook-form'
 import {useDispatch, useSelector} from 'react-redux'
 import DragDropModules from 'components/features/DragDropModules'
 import VersionField from 'components/form-fields/VersionField'
+import Button from 'components/ui/button/Button'
 import LoadingBox from 'components/ui/feedback/LoadingBox'
 import {useGetLatestReleaseQuery} from 'services/releases'
 import {
@@ -50,7 +51,8 @@ const CreateReleaseScreen = () => {
         <Title>Toevoegen: Release</Title>
         <FormProvider {...form}>
           <VersionField baseVersion={latestRelease.version} />
-          <DragDropModules onSave={handleSubmit(onSubmitForm)} />
+          <DragDropModules />
+          <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
         </FormProvider>
       </Column>
     </Screen>

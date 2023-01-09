@@ -1,11 +1,9 @@
 import {useCallback, useMemo} from 'react'
 import {DragDropContext, DropResult} from 'react-beautiful-dnd'
 import {useDispatch, useSelector} from 'react-redux'
-import Button from 'components/ui/button/Button'
 import LoadingBox from 'components/ui/feedback/LoadingBox'
 import Column from 'components/ui/layout/Column'
 import Grid from 'components/ui/layout/Grid'
-import Row from 'components/ui/layout/Row'
 import {useGetModulesQuery} from 'services/modules'
 import {selectReleaseModules, setModules} from 'slices/release.slice'
 import {reorderList, removeFromList, addToList} from 'utils/list'
@@ -15,12 +13,7 @@ enum DroppableId {
   ActiveModules = 'droppableActiveModules',
   InactiveModules = 'droppableInactiveModules',
 }
-
-type Props = {
-  onSave: () => void
-}
-
-const DragDropModules = ({onSave}: Props) => {
+const DragDropModules = () => {
   const dispatch = useDispatch()
   const releaseModules = useSelector(selectReleaseModules)
   const {data: modules, isLoading: isLoadingModules} = useGetModulesQuery()
@@ -94,9 +87,6 @@ const DragDropModules = ({onSave}: Props) => {
           />
         </Grid>
       </DragDropContext>
-      <Row>
-        <Button onClick={onSave} label="Opslaan" />
-      </Row>
     </Column>
   )
 }
