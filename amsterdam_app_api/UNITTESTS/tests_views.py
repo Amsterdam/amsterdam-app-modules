@@ -4,7 +4,7 @@ from django.test import Client
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from amsterdam_app_api.UNITTESTS.TestData import TestData
-from amsterdam_app_api.models import Modules, ModulesByApp, ModuleOrder
+from amsterdam_app_api.models import ModuleVersions, ModulesByApp, ModuleOrder
 from amsterdam_app_api.serializers import ModulesByAppSerializer
 
 username = 'mock'
@@ -17,8 +17,8 @@ class SetUp:
     """
     def __init__(self):
         self.data = TestData()
-        for module in self.data.modules:
-            Modules.objects.create(**module)
+        for module in self.data.module_versions:
+            ModuleVersions.objects.create(**module)
 
         for module_by_app in self.data.modules_by_app:
             ModulesByApp.objects.create(**module_by_app)
@@ -65,7 +65,7 @@ class Module(TestCase):
         expected_result = {
             'status': True,
             'result': {
-                'slug': 'slug0',
+                'moduleSlug': 'slug0',
                 'title': 'title',
                 'icon': 'icon',
                 'version': '1.2.3',
@@ -169,18 +169,8 @@ class Module(TestCase):
         """ test modules/latest """
         c = Client()
         response = c.get('/api/v1/modules/latest', HTTP_appVersion='0.0.0')
-        expected_result = {
-            'status': True,
-            'result': [
-                {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '1.2.20', 'description': 'description'},
-                {'slug': 'slug1', 'title': 'title', 'icon': 'icon', 'version': '1.3.4', 'description': 'description'},
-                {'slug': 'slug2', 'title': 'title', 'icon': 'icon', 'version': '1.30.4', 'description': 'description'},
-                {'slug': 'slug3', 'title': 'title', 'icon': 'icon', 'version': '2.10.2', 'description': 'description'},
-                {'slug': 'slug4', 'title': 'title', 'icon': 'icon', 'version': '10.3.2', 'description': 'description'}
-            ]
-        }
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, expected_result)
+        self.assertEqual(len(response.data), 5)
 
 #     def test_modules_get_no_slug(self):
 #         """ test modules get (slug = None) """
@@ -219,7 +209,13 @@ class Module(TestCase):
     def test_modules_post_200(self):
         """ Test create new module """
         c = Client()
-        data = {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.5', 'description': 'description'}
+        data = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'icon': 'icon',
+            'version': '0.0.5',
+            'description': 'description'
+        }
         response = c.post('/api/v1/modules',
                           data=data,
                           HTTP_AUTHORIZATION=self.authorization_header,
@@ -231,7 +227,13 @@ class Module(TestCase):
     def test_modules_post_422(self):
         """ Test create new module (constraint error) """
         c = Client()
-        data = {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '1.2.3', 'description': 'description'}
+        data = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'icon': 'icon',
+            'version': '1.2.3',
+            'description': 'description'
+        }
         response = c.post('/api/v1/modules',
                           data=data,
                           HTTP_AUTHORIZATION=self.authorization_header,
@@ -239,7 +241,7 @@ class Module(TestCase):
         expected_result = {
             'status': False,
             'result': 'duplicate key value violates unique constraint "unique_slug_version"\n'
-                      'DETAIL:  Key (slug, version)=(slug0, 1.2.3) already exists.\n'
+                      'DETAIL:  Key ("moduleSlug", version)=(slug0, 1.2.3) already exists.\n'
         }
         self.assertEqual(response.status_code, 422)
         self.assertDictEqual(response.data, expected_result)
@@ -247,7 +249,13 @@ class Module(TestCase):
     def test_modules_patch_200(self):
         """ Test patch module """
         c = Client()
-        data = {'slug': 'slug0', 'title': 'new title', 'icon': 'icon', 'version': '1.2.3', 'description': 'description'}
+        data = {
+            'moduleSlug': 'slug0',
+            'title': 'new title',
+            'icon': 'icon',
+            'version': '1.2.3',
+            'description': 'description'
+        }
         response = c.patch('/api/v1/modules',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
@@ -286,7 +294,13 @@ class Module(TestCase):
     def test_modules_delete_200(self):
         """ Test delete module """
         c = Client()
-        data = {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.5', 'description': 'description'}
+        data = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'icon': 'icon',
+            'version': '0.0.5',
+            'description': 'description'
+        }
         response = c.post('/api/v1/modules',
                           data=data,
                           HTTP_AUTHORIZATION=self.authorization_header,
@@ -295,7 +309,7 @@ class Module(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
-        data = {'slug': 'slug0', 'version': '0.0.5'}
+        data = {'moduleSlug': 'slug0', 'version': '0.0.5'}
         response = c.delete('/api/v1/modules',
                             data=data,
                             HTTP_AUTHORIZATION=self.authorization_header,

@@ -1,3 +1,3 @@
 """ python module
 """
-from .modules import Modules, ModuleOrder, ModulesByApp
+from .modules import Module, ModuleVersions, ModuleOrder, ModulesByApp

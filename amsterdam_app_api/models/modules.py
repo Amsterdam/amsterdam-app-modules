@@ -4,10 +4,17 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 
-class Modules(models.Model):
-    """ Modules definition
+class Module(models.Model):
+    """ Module definition
     """
-    slug = models.CharField(max_length=100, blank=False)
+    slug = models.CharField(max_length=100, blank=False, primary_key=True)
+    status = models.IntegerField(default=1, blank=False)
+
+
+class ModuleVersions(models.Model):
+    """ ModuleVersions definition
+    """
+    moduleSlug = models.CharField(max_length=100, blank=False)
     title = models.CharField(max_length=500, blank=False)
     icon = models.CharField(max_length=100, blank=False)
     version = models.CharField(max_length=100, blank=False)
@@ -16,7 +23,7 @@ class Modules(models.Model):
     class Meta:
         """ Constraints (unique together is deprecated)
         """
-        constraints = [models.UniqueConstraint(fields=["slug", "version"],
+        constraints = [models.UniqueConstraint(fields=["moduleSlug", "version"],
                                                name="unique_slug_version")]
 
     def partial_update(self, *args, **kwargs):

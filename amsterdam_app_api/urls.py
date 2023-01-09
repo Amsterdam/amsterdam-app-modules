@@ -39,6 +39,7 @@ urlpatterns = [
     path('modules_app_versions', csrf_exempt(views_modules.modules_app_versions)),
     path('modules_order', csrf_exempt(views_modules.module_order)),
     path('module', csrf_exempt(views_modules.module)),
+    path('module/<str:slug>', csrf_exempt(views_modules.module_slug)),
     path('modules', csrf_exempt(views_modules.modules)),
     path('modules_by_app', csrf_exempt(views_modules.modules_by_app)),
     path('modules_by_app/status', csrf_exempt(views_modules.modules_enable)),

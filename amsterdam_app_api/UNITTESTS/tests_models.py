@@ -2,7 +2,7 @@
 """
 from django.test import TestCase
 from amsterdam_app_api.serializers import ModuleOrderSerializer
-from amsterdam_app_api.models import Modules, ModuleOrder, ModulesByApp
+from amsterdam_app_api.models import ModuleVersions, ModuleOrder, ModulesByApp
 
 
 class AllModulesModels(TestCase):
@@ -11,11 +11,11 @@ class AllModulesModels(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # super(AllModulesModels, self).__init__(*args, **kwargs)
-        self.modules = [
-            {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'},
-            {'slug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
-            {'slug': 'slug1', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
-            {'slug': 'slug2', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'}
+        self.module_versions = [
+            {'moduleSlug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'},
+            {'moduleSlug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+            {'moduleSlug': 'slug1', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
+            {'moduleSlug': 'slug2', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'}
 
         ]
         self.modules_by_app = [
@@ -30,7 +30,7 @@ class AllModulesModels(TestCase):
         ]
 
     def setUp(self):
-        Modules.objects.all().delete()
+        ModuleVersions.objects.all().delete()
         ModuleOrder.objects.all().delete()
         ModulesByApp.objects.all().delete()
 
@@ -38,8 +38,8 @@ class AllModulesModels(TestCase):
         """ Test creating objects in database
         :return: void
         """
-        for module in self.modules:
-            Modules.objects.create(**module)
+        for module in self.module_versions:
+            ModuleVersions.objects.create(**module)
         for module_by_app in self.modules_by_app:
             ModulesByApp.objects.create(**module_by_app)
         for order in self.module_order:
@@ -49,29 +49,29 @@ class AllModulesModels(TestCase):
         """ Test saving module
         :return: void
         """
-        for module in self.modules:
-            Modules.objects.create(**module)
+        for module in self.module_versions:
+            ModuleVersions.objects.create(**module)
 
-        modules = list(Modules.objects.all())
+        modules = list(ModuleVersions.objects.all())
         self.assertEqual(len(modules), 4)
 
     def test_modules_constraint_violation(self):
         """ check if constraints are working on modules
         :return: void
         """
-        Modules.objects.create(**self.modules[0])
-        modules = list(Modules.objects.all())
-        self.assertRaises(Exception, Modules.objects.create, **self.modules[0])
+        ModuleVersions.objects.create(**self.module_versions[0])
+        modules = list(ModuleVersions.objects.all())
+        self.assertRaises(Exception, ModuleVersions.objects.create, **self.module_versions[0])
         self.assertEqual(len(modules), 1)
 
     def test_modules_update_partial(self):
         """ Test a partial update (patch)
         :return: void
         """
-        Modules.objects.create(**self.modules[0])
-        module = Modules.objects.filter(slug='slug0', version='0.0.0').first()
+        ModuleVersions.objects.create(**self.module_versions[0])
+        module = ModuleVersions.objects.filter(moduleSlug='slug0', version='0.0.0').first()
         module.partial_update(icon='test')
-        data = Modules.objects.filter(slug='slug0', version='0.0.0').first()
+        data = ModuleVersions.objects.filter(moduleSlug='slug0', version='0.0.0').first()
         self.assertEqual(data.icon, 'test')
 
     def test_modules_by_app_save(self):

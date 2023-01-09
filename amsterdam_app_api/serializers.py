@@ -1,15 +1,23 @@
 """ Models for modules
 """
 from rest_framework import serializers
-from amsterdam_app_api.models import Modules
+from amsterdam_app_api.models import Module
+from amsterdam_app_api.models import ModuleVersions
 from amsterdam_app_api.models import ModulesByApp
 from amsterdam_app_api.models import ModuleOrder
 
 
-class ModulesSerializer(serializers.ModelSerializer):
-    """ Modules """
+class ModuleSerializer(serializers.ModelSerializer):
+    """ ModuleVersions """
     class Meta:
-        model = Modules
+        model = Module
+        fields = '__all__'
+
+
+class ModuleVersionsSerializer(serializers.ModelSerializer):
+    """ ModuleVersions """
+    class Meta:
+        model = ModuleVersions
         fields = '__all__'
 
 
