@@ -16,7 +16,7 @@ export const modulesApi = baseApi.injectEndpoints({
       providesTags: ['Release'],
     }),
     getLatestRelease: builder.query<Release, void>({
-      query: () => '/api/v1/modules', // Needs to be changed when endpoint is ready
+      query: () => '/api/v1/modules/latest', // Needs to be changed when endpoint is ready
       transformResponse: (response: {result: Release}) =>
         LatestReleaseMock.result as Release,
       providesTags: ['Release'],
