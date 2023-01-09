@@ -22,7 +22,7 @@ const DragDropModules = () => {
       modules?.filter(
         module =>
           !releaseModules.find(
-            activeModule => activeModule.slug === module.slug,
+            activeModule => activeModule.moduleSlug === module.moduleSlug,
           ),
       ) ?? [],
     [modules, releaseModules],

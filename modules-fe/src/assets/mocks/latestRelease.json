@@ -4,7 +4,7 @@
     "version": "0.27.0",
     "modules": [
     {
-      "slug": "waste-guide",
+      "moduleSlug": "waste-guide",
       "title": "Afvalwijzer",
       "icon": "trash-bin",
       "status": 1,
@@ -12,7 +12,7 @@
       "description": "Bekijk waar afval naartoe kan en wat de ophaaldagen zijn."
     },
     {
-      "slug": "contact",
+      "moduleSlug": "contact",
       "title": "Contact",
       "icon": "chatting",
       "status": 1,
@@ -20,7 +20,7 @@
       "description": "Heeft u een vraag of wilt u iets weten?"
     },
     {
-      "slug": "redirects",
+      "moduleSlug": "redirects",
       "title": "Direct regelen",
       "icon": "checkmark",
       "status": 1,
@@ -28,7 +28,7 @@
       "description": "Op de website vindt u alle informatie die nog niet in de app zit."
     },
     {
-      "slug": "open-waste-container",
+      "moduleSlug": "open-waste-container",
       "title": "Gft-container openen",
       "icon": "organic-waste-container",
       "status": 1,
@@ -36,7 +36,7 @@
       "description": "Open een container met de app in plaats van een plastic pas."
     },
     {
-      "slug": "report-problem",
+      "moduleSlug": "report-problem",
       "title": "Melding doen",
       "icon": "alert",
       "status": 1,
@@ -44,7 +44,7 @@
       "description": "Ziet u iets wat stuk is of opgeruimd moet worden?"
     },
     {
-      "slug": "about",
+      "moduleSlug": "about",
       "title": "Over deze app",
       "icon": "info",
       "status": 1,

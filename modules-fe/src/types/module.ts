@@ -1,22 +1,31 @@
 import {IconName} from '../components/ui/media/iconPath'
 
 export type Module = {
+  slug: string
+  status: ModuleStatus
+  versions: ModuleVersionWithRelease[]
+}
+
+export type ModuleVersion = {
   description: string
   icon: IconName
-  slug: string
-  status: number
+  moduleSlug: string
   title: string
   version: string
+}
+
+export type ModuleVersionWithRelease = ModuleVersion & {
+  statusInReleases?: ModuleStatus[]
 }
 
 export type ModuleInRelease = {
   appVersion: string
   moduleSlug: string
   moduleVersion: string
-  status: ModuleInReleaseStatus
+  status: ModuleStatus
 }
 
-export enum ModuleInReleaseStatus {
+export enum ModuleStatus {
   'uit',
   'aan',
 }
