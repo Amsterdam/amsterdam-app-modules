@@ -1,0 +1,36 @@
+jobs:
+  - job: "Tests"
+    timeoutInMinutes: 15
+    pool:
+      vmImage: "macos-11"
+    steps:
+      - template: ./install-node.yml
+      - script: cd $(System.DefaultWorkingDirectory)/modules-fe && npm ci
+        displayName: Install Dependencies
+      - script: cd $(System.DefaultWorkingDirectory)/modules-fe && npm run typescript
+        displayName: Run Type Check
+      - script: cd $(System.DefaultWorkingDirectory)/modules-fe && CI=true npm run test-ci
+        displayName: Run Unit Tests
+        condition: succeededOrFailed()
+      - script: cd $(System.DefaultWorkingDirectory)/modules-fe && npm run lint
+        displayName: Run Linter
+        condition: succeededOrFailed()
+      - script: cd $(System.DefaultWorkingDirectory)/modules-fe && CI=true npm run build
+        displayName: Build project
+        condition: succeededOrFailed()
+      - task: PublishTestResults@2
+        displayName: "Publish Jest Unit Test Results"
+        inputs:
+          testResultsFiles: "$(System.DefaultWorkingDirectory)/modules-fe/test-results.trx"
+          testResultsFormat: VSTest
+          mergeTestResults: true
+          testRunTitle: "Jest Unit Tests - $(Build.SourceBranch)"
+          failTaskOnFailedTests: true
+        condition: succeededOrFailed()
+      - task: PublishCodeCoverageResults@1
+        displayName: "Publish code coverage from Jest tests"
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: "$(System.DefaultWorkingDirectory)/modules-fe/coverage/cobertura-coverage.xml"
+          failIfCoverageEmpty: true
+        condition: succeededOrFailed()
