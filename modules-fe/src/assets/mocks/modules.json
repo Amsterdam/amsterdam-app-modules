@@ -1,62 +1,62 @@
 [
     {
-      "slug": "waste-guide",
+      "moduleSlug": "waste-guide",
       "title": "Afvalwijzer",
       "icon": "trash-bin",
       "version": "2.1.0",
       "description": "Bekijk waar afval naartoe kan en wat de ophaaldagen zijn."
     },
     {
-      "slug": "contact",
+      "moduleSlug": "contact",
       "title": "Contact",
       "icon": "chatting",
       "version": "1.0.0",
       "description": "Heeft u een vraag of wilt u iets weten?"
     },
     {
-      "slug": "redirects",
+      "moduleSlug": "redirects",
       "title": "Direct regelen",
       "icon": "checkmark",
       "version": "1.0.0",
       "description": "Op de website vindt u alle informatie die nog niet in de app zit."
     },
     {
-      "slug": "open-waste-container",
+      "moduleSlug": "open-waste-container",
       "title": "Gft-container openen",
       "icon": "organic-waste-container",
       "version": "1.0.0",
       "description": "Open een container met de app in plaats van een plastic pas."
     },
     {
-      "slug": "report-problem",
+      "moduleSlug": "report-problem",
       "title": "Melding doen",
       "icon": "alert",
       "version": "1.0.0",
       "description": "Ziet u iets wat stuk is of opgeruimd moet worden?"
     },
     {
-      "slug": "about",
+      "moduleSlug": "about",
       "title": "Over deze app",
       "icon": "info",
       "version": "1.0.0",
       "description": "Lees meer over deze app en help ons de app verbeteren."
     },
     {
-      "slug": "construction-work-editor",
+      "moduleSlug": "construction-work-editor",
       "title": "Plaats berichten",
       "icon": "announcement",
       "version": "1.0.0",
       "description": "Hier kun je als omgevingsmanager berichten plaatsen bij werkzaamheden"
     },
     {
-      "slug": "welcome",
+      "moduleSlug": "welcome",
       "title": "Welkomstscherm",
       "icon": "facade",
       "version": "2.0.0",
       "description": "Bekijk een mooi Amsterdams beeld bij het starten van de app"
     },
     {
-      "slug": "construction-work",
+      "moduleSlug": "construction-work",
       "title": "Werkzaamheden",
       "icon": "projects",
       "version": "1.0.0",

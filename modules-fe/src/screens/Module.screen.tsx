@@ -21,20 +21,20 @@ const ModuleScreen = () => {
   const navigate = useNavigate()
 
   const {slug} = useParams<Params>()
-  const {data: modules, isLoading} = useGetModuleQuery(
+  const {data: module, isLoading} = useGetModuleQuery(
     slug
       ? {
           slug,
         }
       : skipToken,
   )
-  const latestVersion = modules?.[0]
+  const latestVersion = module?.versions[0]
 
   if (isLoading) {
     return <LoadingBox />
   }
 
-  if (!modules?.length) {
+  if (!module?.versions.length) {
     return <ErrorBox message={`Geen versies van module ‘${slug}’ gevonden.`} />
   }
 
@@ -50,7 +50,7 @@ const ModuleScreen = () => {
         />
         <Box inset="no" negativeInsetHorizontal="md">
           <List>
-            {modules.map(({title, version}) => (
+            {module.versions.map(({title, version}) => (
               <ListItem key={version}>
                 <BlockLink to={`/module/${slug}/${version}`}>
                   <Box>

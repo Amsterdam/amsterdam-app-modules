@@ -31,7 +31,7 @@ const EditModuleScreen = () => {
         }
       : skipToken,
   )
-  const moduleVersion = module?.find(m => m.version === version)
+  const moduleVersion = module?.versions.find(m => m.version === version)
 
   const form = useForm<ModuleVersion>()
   const [editModule] = useEditModuleMutation()

@@ -9,7 +9,7 @@ import {
   setModules,
   selectRelease,
 } from 'slices/release.slice'
-import {Module} from 'types/module'
+import {ModuleVersion} from 'types/module'
 import MockModules from '../assets/mocks/modules.json'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
@@ -33,7 +33,7 @@ const ReleaseScreen = () => {
   const modules = useMemo(() => {
     return modulesInRelease
       ? modulesInRelease.map(module =>
-          MockModules.find(m => m.slug === module.moduleSlug),
+          MockModules.find(m => m.moduleSlug === module.moduleSlug),
         )
       : []
   }, [modulesInRelease])
@@ -43,7 +43,7 @@ const ReleaseScreen = () => {
   }, [dispatch, version])
 
   useEffect(() => {
-    if (modules) dispatch(setModules(modules as Module[]))
+    if (modules) dispatch(setModules(modules as ModuleVersion[]))
   }, [dispatch, modules])
 
   const onSave = () => {

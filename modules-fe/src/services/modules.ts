@@ -1,4 +1,4 @@
-import {ModuleVersion} from '../types/module'
+import {Module, ModuleVersion} from '../types/module'
 import {baseApi} from './baseApi'
 
 type ModuleQueryArg = {
@@ -25,10 +25,8 @@ export const modulesApi = baseApi.injectEndpoints({
       transformResponse: (response: {result: ModuleVersion}) => response.result,
       invalidatesTags: ['Module'],
     }),
-    getModule: builder.query<ModuleVersion[], ModuleQueryArg>({
-      query: ({slug}) => `/api/v1/modules?slug=${slug}`,
-      transformResponse: (response: {result: ModuleVersion[]}) =>
-        response.result,
+    getModule: builder.query<Module, ModuleQueryArg>({
+      query: ({slug}) => `/api/v1/module/${slug}`,
       providesTags: ['Module'],
     }),
     getModules: builder.query<ModuleVersion[], void>({
