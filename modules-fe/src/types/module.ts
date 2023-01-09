@@ -3,7 +3,7 @@ import {IconName} from '../components/ui/media/iconPath'
 export type ModuleVersion = {
   description: string
   icon: IconName
-  slug: string
+  moduleSlug: string
   title: string
   version: string
 }
