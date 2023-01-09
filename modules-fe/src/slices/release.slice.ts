@@ -36,4 +36,6 @@ export const releaseSlice = createSlice({
 export const {addModule, deleteModule, setModules, setReleaseVersion} =
   releaseSlice.actions
 
+export const selectRelease = (state: RootState) => state.release
+export const selectReleaseVersion = (state: RootState) => state.release.version
 export const selectReleaseModules = (state: RootState) => state.release.modules
