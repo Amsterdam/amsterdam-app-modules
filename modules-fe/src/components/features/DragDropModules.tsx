@@ -34,10 +34,10 @@ const DragDropModules = () => {
         return
       }
 
-      // dropped inside the same list
       if (source.droppableId === destination.droppableId) {
-        // dropped inside the active modules list
+        // dropped inside the same list
         if (destination.droppableId === DroppableId.ActiveModules) {
+          // dropped inside the active modules list
           const items = reorderList(
             releaseModules,
             source.index,
@@ -45,14 +45,12 @@ const DragDropModules = () => {
           )
           dispatch(setModules(items))
         }
-
-        // dropped inside the inactive modules list
       } else if (destination.droppableId === DroppableId.InactiveModules) {
+        // dropped inside the inactive modules list
         const items = removeFromList(releaseModules, source.index)
         dispatch(setModules(items))
-
-        // dropped inside the active modules list
       } else if (destination.droppableId === DroppableId.ActiveModules) {
+        // dropped inside the active modules list
         const items = addToList(
           releaseModules,
           destination.index,
