@@ -8,6 +8,7 @@ import LoadingBox from 'components/ui/feedback/LoadingBox'
 import {useGetLatestReleaseQuery} from 'services/releases'
 import {
   selectRelease,
+  selectReleaseVersion,
   setModules,
   setReleaseVersion,
 } from 'slices/release.slice'
@@ -19,6 +20,7 @@ import Title from '../components/ui/text/Title'
 const CreateReleaseScreen = () => {
   const dispatch = useDispatch()
   const release = useSelector(selectRelease)
+  const releaseVersion = useSelector(selectReleaseVersion)
   const form = useForm<Pick<Release, 'version'>>()
   const {handleSubmit} = form
   const {data: latestRelease, isLoading: isLoadingLatestRelease} =
@@ -48,7 +50,7 @@ const CreateReleaseScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Toevoegen: Release</Title>
+        <Title>Toevoegen: Release {releaseVersion}</Title>
         <FormProvider {...form}>
           <VersionField baseVersion={latestRelease.version} />
           <DragDropModules />
