@@ -47,6 +47,7 @@ const ReleaseScreen = () => {
   }, [dispatch, modules])
 
   const onSave = () => {
+    // eslint-disable-next-line no-console
     console.log(release) // TODO: PATCH release to API
   }
 

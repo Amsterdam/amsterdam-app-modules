@@ -36,6 +36,7 @@ const CreateReleaseScreen = () => {
   }, [dispatch, latestRelease])
 
   const onSubmitForm = () => {
+    // eslint-disable-next-line no-console
     console.log(release) // TODO: POST release to API
   }
 
