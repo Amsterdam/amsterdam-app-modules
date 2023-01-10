@@ -23,6 +23,7 @@ schema_view = get_schema_view(
 """ Base path: /api/v1
 """
 
+
 urlpatterns = [
     # Swagger (drf-yasg framework)
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -38,11 +39,14 @@ urlpatterns = [
     # Modules
     path('modules_app_versions', csrf_exempt(views_modules.modules_app_versions)),
     path('modules_order', csrf_exempt(views_modules.module_order)),
-    path('module', csrf_exempt(views_modules.module)),
-    path('module/<str:slug>', csrf_exempt(views_modules.module_slug)),
+
     path('modules', csrf_exempt(views_modules.modules)),
     path('modules_by_app', csrf_exempt(views_modules.modules_by_app)),
     path('modules_by_app/status', csrf_exempt(views_modules.modules_enable)),
     path('modules_for_app', csrf_exempt(views_modules.modules_for_app_get)),
+
+    # End-points from https://amsterdam-app.stoplight.io/docs/amsterdam-app/
+    path('module-version/<str:slug>/<str:version>', csrf_exempt(views_modules.module_version)),
+    path('module/<str:slug>', csrf_exempt(views_modules.module_slug)),
     path('modules/latest', csrf_exempt(views_modules.modules_latest))
 ]

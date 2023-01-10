@@ -4,7 +4,7 @@ from django.test import Client
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from amsterdam_app_api.UNITTESTS.TestData import TestData
-from amsterdam_app_api.models import ModuleVersions, ModulesByApp, ModuleOrder
+from amsterdam_app_api.models import Module, ModuleVersions, ModulesByApp, ModuleOrder
 from amsterdam_app_api.serializers import ModulesByAppSerializer
 
 username = 'mock'
@@ -17,6 +17,9 @@ class SetUp:
     """
     def __init__(self):
         self.data = TestData()
+        for module in self.data.modules:
+            Module.objects.create(**module)
+
         for module in self.data.module_versions:
             ModuleVersions.objects.create(**module)
 
@@ -48,7 +51,7 @@ class GetToken(TestCase):
         self.assertEqual(len(response.data), 2)
 
 
-class Module(TestCase):
+class Views(TestCase):
     """ tests for /api/v1/module """
     def setUp(self):
         """ Setup mock data """
@@ -58,28 +61,64 @@ class Module(TestCase):
         self.assertEqual(len(response.data), 2)
         self.authorization_header = response.data['access']
 
-    def test_module_get_exist(self):
+    def test_module_slug(self):
         """ get module by slug and version (exists) """
         c = Client()
-        response = c.get('/api/v1/module?slug=slug0&version=1.2.3')
+        response = c.get('/api/v1/module/slug0')
         expected_result = {
-            'status': True,
-            'result': {
-                'moduleSlug': 'slug0',
-                'title': 'title',
-                'icon': 'icon',
-                'version': '1.2.3',
-                'description': 'description'
-            }
+            'slug': 'slug0',
+            'status': 1,
+            'versions': [
+                {
+                    'title': 'title',
+                    'moduleSlug': 'slug0',
+                    'description': 'description',
+                    'version': '1.2.20',
+                    'icon': 'icon',
+                    'statusInReleases': [{'status': 1, 'releases': ['0.1.1']}]},
+                {
+                    'title': 'title',
+                    'moduleSlug': 'slug0',
+                    'description': 'description',
+                    'version': '1.2.3',
+                    'icon': 'icon',
+                    'statusInReleases': [{'status': 1, 'releases': ['0.0.1', '0.0.2']}]
+                }
+            ]
         }
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
-    def test_module_get_does_not_exist(self):
+    def test_module_slug_bogus(self):
+        """ get module by slug and version (exists) """
+        c = Client()
+        response = c.get('/api/v1/module/bogus')
+        expected_result = {"message": "Module with slug ‘bogus’ not found."}
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_version_get_exist(self):
+        """ get module by slug and version (exists) """
+        c = Client()
+        response = c.get('/api/v1/module-version/slug0/1.2.3')
+        expected_result = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'icon': 'icon',
+            'version': '1.2.3',
+            'description': 'description',
+            'statusInReleases': [
+                {'status': 1, 'releases': ['0.0.1', '0.0.2']}
+            ]
+        }
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_version_get_does_not_exist(self):
         """ get module by slug and version (does not exist) """
         c = Client()
-        response = c.get('/api/v1/module?slug=bogus0&version=0.0.0')
-        expected_result = {'status': False, 'result': 'No such module'}
+        response = c.get('/api/v1/module-version/bogus0/0.0.0')
+        expected_result = {'message': 'Module with slug ‘bogus0’ and ‘0.0.0’ not found.'}
         self.assertEqual(response.status_code, 404)
         self.assertDictEqual(response.data, expected_result)
 
@@ -87,7 +126,7 @@ class Module(TestCase):
         """ get all app versions """
         c = Client()
         response = c.get('/api/v1/modules_app_versions')
-        expected_result = {'status': True, 'result': ['0.1.1', '0.0.1', '0.0.0']}
+        expected_result = {'status': True, 'result': ['0.1.1', '0.0.2', '0.0.1', '0.0.0']}
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
@@ -343,7 +382,7 @@ class Module(TestCase):
         self.assertDictEqual(response.data, expected_result)
         modules = ModulesByApp.objects.filter(status=0).all()
         data = ModulesByAppSerializer(modules, many=True).data
-        self.assertEqual(len(data), 3)
+        self.assertEqual(len(data), 4)
 
     def test_modules_enable_slug_moduleversion(self):
         """ Test enable modules by slug and moduleVersion """

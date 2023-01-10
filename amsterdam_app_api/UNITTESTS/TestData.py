@@ -5,6 +5,13 @@
 class TestData:
     """ Testdata used in unittests """
     def __init__(self):
+        self.modules = [
+            {'slug': 'slug0', 'status': 1},
+            {'slug': 'slug1', 'status': 1},
+            {'slug': 'slug2', 'status': 1},
+            {'slug': 'slug3', 'status': 0}
+        ]
+
         self.module_versions = [
             {
                 'moduleSlug': 'slug0',
@@ -47,6 +54,7 @@ class TestData:
 
         self.modules_by_app = [
             {'appVersion': '0.0.1', 'moduleSlug': 'slug0', 'moduleVersion': '1.2.3', 'status': 1},
+            {'appVersion': '0.0.2', 'moduleSlug': 'slug0', 'moduleVersion': '1.2.3', 'status': 1},
             {'appVersion': '0.1.1', 'moduleSlug': 'slug0', 'moduleVersion': '1.2.20', 'status': 1},
             {'appVersion': '0.0.1', 'moduleSlug': 'slug1', 'moduleVersion': '1.3.4', 'status': 0},
             {'appVersion': '0.0.1', 'moduleSlug': 'slug2', 'moduleVersion': '1.30.4', 'status': 1},
