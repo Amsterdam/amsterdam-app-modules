@@ -30,9 +30,9 @@ type Props = {
 
 const CheckboxField = ({label, name}: Props) => {
   const {register, watch} = useFormContext()
-  const watchReleases = watch(name)
+  const releases = watch(name)
+  const value = releases?.includes(label)
 
-  const value = watchReleases && watchReleases.includes(label)
   return (
     <Column gutter="sm" halign="start">
       <label className="CheckboxField" htmlFor={label}>
@@ -41,8 +41,8 @@ const CheckboxField = ({label, name}: Props) => {
             id={label}
             hidden
             {...register(name)}
-            value={label}
             type="checkbox"
+            value={label}
           />
           <Indicator isSelected={value} />
           <Phrase>{label}</Phrase>
