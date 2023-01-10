@@ -105,25 +105,6 @@ as_module_get = {
     'tags': ['Module']
 }
 
-# "result": {
-#         "slug": "waste-guide",
-#         "versions": [
-#             {
-#                 "title": "Title",
-#                 "description": "Lorem ipsum dolor sit amet",
-#                 "version": "1.0.4",
-#                 "icon": "trash-bin",
-#                 "statusInReleases": [
-#                     {
-#                         "status": 0,
-#                         "releases": ["0.14.1", "0.14.0"]
-#                     },
-#                     {
-#                         "status": 1,
-#                         "releases": ["0.15.1", "0.15.0"]
-#                     }
-#                 ]
-#             }
 
 status_in_releases = {
     'status': openapi.Schema(type=openapi.TYPE_NUMBER, description='status (enum: 0, 1, ...)'),
@@ -142,6 +123,20 @@ modules_versions = {
                                        items=openapi.Schema(type=openapi.TYPE_OBJECT,
                                                             properties=status_in_releases))
 }
+
+
+as_module_version_get = {
+    'methods': ['get'],
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                  properties=modules_versions))
+    },
+    'tags': ['Module']
+
+}
+
 
 as_module_slug_get = {
     'methods': ['get'],
