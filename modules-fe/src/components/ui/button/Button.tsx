@@ -1,4 +1,5 @@
-import {MouseEventHandler} from 'react'
+import {MouseEventHandler, ReactNode} from 'react'
+import Row from '../layout/Row'
 import './Button.css'
 
 export enum ButtonVariant {
@@ -8,6 +9,7 @@ export enum ButtonVariant {
 
 type Props = {
   flex?: boolean
+  icon?: ReactNode
   isDisabled?: boolean
   label: string
   onClick: MouseEventHandler<HTMLButtonElement>
@@ -16,6 +18,7 @@ type Props = {
 
 const Button = ({
   flex,
+  icon,
   isDisabled,
   label,
   onClick,
@@ -28,9 +31,12 @@ const Button = ({
     disabled={isDisabled}
     data-variant={variant}
     type="button">
-    <span className="ButtonLabel" data-font="body" data-ellipsize>
-      {label}
-    </span>
+    <Row gutter="sm" valign="center">
+      {icon && icon}
+      <span className="ButtonLabel" data-font="body" data-ellipsize>
+        {label}
+      </span>
+    </Row>
   </button>
 )
 

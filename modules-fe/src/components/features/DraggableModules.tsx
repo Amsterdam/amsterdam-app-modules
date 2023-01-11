@@ -1,4 +1,3 @@
-import {ReactNode} from 'react'
 import Draggable from 'components/drag-n-drop/Draggable'
 import Droppable from 'components/drag-n-drop/Droppable'
 import Box from 'components/ui/layout/Box'
@@ -8,14 +7,7 @@ import List from 'components/ui/text/List'
 import ListItem from 'components/ui/text/ListItem'
 import Phrase from 'components/ui/text/Phrase'
 import {ModuleVersion} from 'types/module'
-
-type MutablePhraseProps = {
-  children: ReactNode
-}
-
-const MutedPhrase = ({children}: MutablePhraseProps) => (
-  <Phrase color="muted">{children}</Phrase>
-)
+import './DraggableModules.css'
 
 type DraggableModulesProps = {
   droppableId: string
@@ -28,11 +20,9 @@ const DraggableModules = ({
   modules,
   variant = 'active',
 }: DraggableModulesProps) => {
-  const PhraseComponent = variant === 'active' ? Phrase : MutedPhrase
-
   return (
-    <div>
-      <Phrase color="muted">
+    <div className="DraggableModules" data-isActive={variant === 'active'}>
+      <Phrase>
         {variant === 'active' ? 'Actieve Modules' : 'Inactieve Modules'}
       </Phrase>
       <Box inset="no" negativeInsetHorizontal="md">
@@ -46,13 +36,10 @@ const DraggableModules = ({
                 <ListItem>
                   <Box>
                     <Row gutter="sm" valign="baseline">
-                      <Icon
-                        fill={variant === 'inactive' ? 'muted' : undefined}
-                        name={icon}
-                      />
-                      <PhraseComponent>{title}</PhraseComponent>
-                      <PhraseComponent>-</PhraseComponent>
-                      <PhraseComponent>{`v${version}`}</PhraseComponent>
+                      <Icon name={icon} />
+                      <Phrase>{title}</Phrase>
+                      <Phrase>-</Phrase>
+                      <Phrase>{`v${version}`}</Phrase>
                     </Row>
                   </Box>
                 </ListItem>

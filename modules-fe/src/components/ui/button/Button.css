@@ -55,23 +55,22 @@
   --border-color: var(--border-color-button-secondary-disabled);
 }
 
+[data-variant="primary"]  {
+  color: var(--text-color-inverse); 
+}
+
+[data-variant="secondary"]  {
+  color: var(--text-color-button-secondary);
+}
+
+[data-variant="secondary"]:hover{
+  color: var(--text-color-button-secondary-hover);
+}
+
+[data-variant="secondary"]:disabled {
+  color: var(--text-color-button-secondary-disabled);
+}
+
 .ButtonLabel {
-  --color: currentColor;
-  color: var(--color);
-}
-
-[data-variant="primary"] > .ButtonLabel  {
-  --color: var(--text-color-inverse); 
-}
-
-[data-variant="secondary"] > .ButtonLabel  {
-  --color: var(--text-color-button-secondary);
-}
-
-[data-variant="secondary"]:hover > .ButtonLabel {
-  --color: var(--text-color-button-secondary-hover);
-}
-
-[data-variant="secondary"]:disabled > .ButtonLabel {
-  --color: var(--text-color-button-secondary-disabled);
+  color: currentColor
 }
