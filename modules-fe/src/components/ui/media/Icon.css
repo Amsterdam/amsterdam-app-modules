@@ -13,3 +13,8 @@
   fill: none;
   animation: spinner 1s linear infinite;
 }
+
+.Icon[data-fill="default"] {fill: var(--text-color-default);}
+.Icon[data-fill="error"] {fill: var(--text-color-warning);}
+.Icon[data-fill="inverse"] {fill: var(--text-color-inverse);}
+.Icon[data-fill="muted"] {fill: var(--text-color-muted);}
