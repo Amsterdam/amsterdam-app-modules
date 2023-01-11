@@ -9,15 +9,6 @@ type Props = {
 export const selectAllLabel = 'Selecteer alle'
 
 const ModuleStatusField = ({releases}: Props) => {
-  // const [isAllSelected, setIsAllSelected] = useState(false)
-  // const handleAll = (value: boolean) => {
-  //   console.log(value)
-  //   if (value) {
-  //     reset({releases})
-  //   } else {
-  //     reset({releases: []})
-  //   }
-  // }
   return (
     <Column gutter="sm">
       <Phrase color="muted">Zet aan of uit voor de volgende releases:</Phrase>
