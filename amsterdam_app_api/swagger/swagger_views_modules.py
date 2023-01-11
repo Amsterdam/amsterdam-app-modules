@@ -112,6 +112,12 @@ status_in_releases = {
                                items=openapi.Schema(type=openapi.TYPE_STRING,
                                                     description='release version (x.y.z)'))
 }
+module = {
+    'slug': openapi.Schema(type=openapi.TYPE_STRING, description='module slug'),
+    'status': openapi.Schema(type=openapi.TYPE_NUMBER,
+                             description='The status of the module. This allows to deactivate all of its versions '
+                                         'in all releases at once.\n\nstatus (enum: 0, 1, ...)'),
+}
 
 modules_versions = {
     'title': openapi.Schema(type=openapi.TYPE_STRING, description='module title'),
@@ -196,6 +202,111 @@ as_modules_get = {
                                   }))
     },
     'tags': ['Modules']
+}
+
+
+as_module_post = {
+    'methods': ['POST'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=["slug", "status"],
+        properties=module,
+    ),
+    'responses': {
+        200: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'slug': 'string',
+                                      'status': 1
+                                  }
+                              }),
+        400: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "incorrect request body."
+                                  }
+                              }),
+        409: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'message': 'Module already exists.'
+                                  }
+                              }),
+    },
+    'tags': ['Module']
+}
+
+
+as_module_patch = {
+    'methods': ['PATCH'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=["slug", "status"],
+        properties=module,
+    ),
+    'responses': {
+        200: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'slug': 'string',
+                                      'status': 1
+                                  }
+                              }),
+        400: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "incorrect request body."
+                                  }
+                              }),
+        404: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "Module with slug ‘{slug}’ not found."
+                                  }
+                              }),
+    },
+    'tags': ['Module']
+}
+
+
+as_module_delete = {
+    'methods': ['DELETE'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=["slug"],
+        properties={'slug': slug},
+    ),
+    'responses': {
+        200: openapi.Response(''),
+        400: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "incorrect request body."
+                                  }
+                              }),
+        403: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "Module with slug ‘slug’ is being used in a release."
+                                  }
+                              }),
+    },
+    'tags': ['Module']
 }
 
 

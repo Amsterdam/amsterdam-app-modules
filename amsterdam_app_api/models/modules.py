@@ -8,7 +8,7 @@ class Module(models.Model):
     """ Module definition
     """
     slug = models.CharField(max_length=100, blank=False, primary_key=True)
-    status = models.IntegerField(default=1, blank=False)
+    status = models.IntegerField(blank=False)
 
 
 class ModuleVersions(models.Model):

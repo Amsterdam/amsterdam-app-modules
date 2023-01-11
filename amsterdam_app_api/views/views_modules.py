@@ -1,5 +1,6 @@
 """ All CRUD views for modules, modules order and modules for appversion
 """
+from django.db import IntegrityError
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
@@ -7,6 +8,7 @@ from amsterdam_app_api.models import Module
 from amsterdam_app_api.models import ModuleVersions
 from amsterdam_app_api.models import ModulesByApp
 from amsterdam_app_api.models import ModuleOrder
+from amsterdam_app_api.serializers import ModuleSerializer
 from amsterdam_app_api.serializers import ModuleVersionsSerializer
 from amsterdam_app_api.serializers import ModulesByAppSerializer
 from amsterdam_app_api.serializers import ModuleOrderSerializer
@@ -18,7 +20,9 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_delete
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
-from amsterdam_app_api.swagger.swagger_views_modules import as_module_get
+from amsterdam_app_api.swagger.swagger_views_modules import as_module_post
+from amsterdam_app_api.swagger.swagger_views_modules import as_module_patch
+from amsterdam_app_api.swagger.swagger_views_modules import as_module_delete
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_post
@@ -89,22 +93,6 @@ def module_order_ppd(request):
     data = dict(request.data)
     ModuleOrder.objects.filter(appVersion=data.get('appVersion')).delete()
     return Response({'status': True, 'result': 'Module order deleted'}, status=200)
-
-
-@swagger_auto_schema(**as_module_get)
-@api_view(['GET'])
-def module(request):
-    """ Get a module by slug and version """
-    _module_slug = request.GET.get('slug')
-    version = request.GET.get('version')
-    modules_data = ModuleVersions.objects.filter(moduleSlug=_module_slug, version=version).first()
-    if modules_data is not None:
-        serializer = ModuleVersionsSerializer(modules_data, many=False)
-        data = serializer.data
-        if 'id' in data:
-            del data['id']
-        return Response({'status': True, 'result': data}, status=200)
-    return Response({'status': False, 'result': 'No such module'}, status=404)
 
 
 # @swagger_auto_schema(**as_modules_get)
@@ -327,13 +315,60 @@ def slug_status_in_releases(slug):
     return _slug_status_in_releases
 
 
+@swagger_auto_schema(**as_module_post)
+@swagger_auto_schema(**as_module_patch)
+@swagger_auto_schema(**as_module_delete)
+@api_view(['POST', 'PATCH', 'DELETE'])
+def module(request):
+    """ Create, modify or delete a module slug.
+
+        slug: (string) The human-readable identifier for the module. Example: construction-work.
+        status (integer) The status of the module. This allows to deactivate all of its versions in all releases at
+        once.
+
+        Allowed status values: [0|1]
+    """
+    data = dict(request.data)
+    if request.method == 'POST':
+        try:
+            if not all(key in data for key in ['slug', 'status']):
+                return Response({"message": 'incorrect request body.'}, status=400)
+            _module = Module.objects.create(**data)
+            return Response(ModuleSerializer(_module, many=False).data, status=200)
+        except IntegrityError:
+            return Response({"message": 'module already exists.'}, status=409)
+
+    if request.method == 'PATCH':
+        if not all(key in data for key in ['slug', 'status']):
+            return Response({"message": 'incorrect request body.'}, status=400)
+
+        _module = Module.objects.filter(slug=data['slug']).first()
+        if _module is None:
+            return Response({"message": f"Module with slug ‘{data['slug']}’ not found."}, status=404)
+        _module.status = data['status']
+        _module.save()
+        return Response(ModuleSerializer(_module, many=False).data, status=200)
+
+    if request.method == 'DELETE':
+        if not all(key in data for key in ['slug']):
+            return Response({"message": 'incorrect request body.'}, status=400)
+
+        if list(ModulesByApp.objects.filter(moduleSlug=data['slug']).all()):
+            return Response({"message": f"Module with slug ‘{data['slug']}’ is being used in a release."}, status=403)
+
+        Module.objects.filter(slug=data['slug']).delete()
+        return Response(status=200)
+
+    return Response('method not allowed', status=500)
+
+
 @swagger_auto_schema(**as_module_version_get)
 @api_view(['GET'])
 def module_version(request, slug=None, version=None):
     """ Returns a specific version of a module, along with its status in all releases of the app. """
     _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
     if _module_version is None:
-        return Response({"message": f"Module with slug ‘{slug}’ and ‘{version}’ not found."}, status=404)
+        return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
     serializer = ModuleVersionsSerializer(_module_version, many=False)
     data = serializer.data
     if 'id' in data:

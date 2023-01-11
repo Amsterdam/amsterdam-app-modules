@@ -97,10 +97,121 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertDictEqual(response.data, expected_result)
 
+    def test_module_post_incorrect_request_body(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {}
+        response = c.post('/api/v1/module',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {"message": "incorrect request body."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_post_integrity_error(self):
+        """ test integrity error """
+        c = Client()
+        data = {'slug': 'slug0', 'status': 1}
+        response = c.post('/api/v1/module',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {"message": "module already exists."}
+        self.assertEqual(response.status_code, 409)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_post_ok(self):
+        """ test create new module """
+        c = Client()
+        data = {'slug': 'new', 'status': 1}
+        response = c.post('/api/v1/module',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {'slug': 'new', 'status': 1}
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_patch_incorrect_request_body(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {'slug': 'slug0'}
+        response = c.patch('/api/v1/module',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        expected_result = {"message": "incorrect request body."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_patch_module_not_found(self):
+        """ tet patch but module not found """
+        c = Client()
+        data = {'slug': 'bogus', 'status': 1}
+        response = c.patch('/api/v1/module',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        expected_result = {"message": "Module with slug ‘bogus’ not found."}
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_patch_ok(self):
+        """ test module patch ok """
+        c = Client()
+        data = {'slug': 'slug0', 'status': 0}
+        response = c.patch('/api/v1/module',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, data)
+
+    def test_module_delete_incorrect_request_body(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {}
+        response = c.delete('/api/v1/module',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "incorrect request body."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_delete_module_in_use(self):
+        """ test delete model in use"""
+        c = Client()
+        data = {'slug': 'slug0'}
+        response = c.delete('/api/v1/module',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "Module with slug ‘slug0’ is being used in a release."}
+        self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_delete_ok(self):
+        """ test module delete ok """
+        c = Client()
+        data = {'slug': 'new', 'status': 1}
+        c.post('/api/v1/module',
+               data=data,
+               HTTP_AUTHORIZATION=self.authorization_header,
+               content_type='application/json')
+        data = {'slug': 'new'}
+        response = c.delete('/api/v1/module',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, None)
+
     def test_module_version_get_exist(self):
         """ get module by slug and version (exists) """
         c = Client()
-        response = c.get('/api/v1/module-version/slug0/1.2.3')
+        response = c.get('/api/v1/module/slug0/version/1.2.3')
         expected_result = {
             'moduleSlug': 'slug0',
             'title': 'title',
@@ -117,8 +228,8 @@ class Views(TestCase):
     def test_module_version_get_does_not_exist(self):
         """ get module by slug and version (does not exist) """
         c = Client()
-        response = c.get('/api/v1/module-version/bogus0/0.0.0')
-        expected_result = {'message': 'Module with slug ‘bogus0’ and ‘0.0.0’ not found.'}
+        response = c.get('/api/v1/module/bogus0/version/0.0.0')
+        expected_result = {'message': 'Module with slug ‘bogus0’ and version ‘0.0.0’ not found.'}
         self.assertEqual(response.status_code, 404)
         self.assertDictEqual(response.data, expected_result)
 
