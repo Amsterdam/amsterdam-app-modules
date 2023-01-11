@@ -7,3 +7,4 @@ export const getCombinedStatusInReleases = (
     .map(r => r.releases)
     .reduce((acc, s) => [...acc, ...s], [])
     .sort()
+    .reverse()

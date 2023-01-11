@@ -12,7 +12,7 @@ describe('getAllReleases', () => {
         releases: ['Release 2', 'Release 4'],
       },
     ]
-    const expected = ['Release 1', 'Release 2', 'Release 3', 'Release 4']
+    const expected = ['Release 4', 'Release 3', 'Release 2', 'Release 1']
     expect(getCombinedStatusInReleases(releasesByStatus)).toEqual(expected)
   })
 
