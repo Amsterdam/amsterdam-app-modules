@@ -1,4 +1,4 @@
-import {ModuleStatusInRelease} from 'types/module'
+import {ModuleStatus, ModuleStatusInRelease} from 'types/module'
 
 export const getCombinedStatusInReleases = (
   releasesByStatus: ModuleStatusInRelease[],
@@ -8,3 +8,10 @@ export const getCombinedStatusInReleases = (
     .reduce((acc, s) => [...acc, ...s], [])
     .sort()
     .reverse()
+
+export const getActiveReleases = (
+  releasesByStatus: ModuleStatusInRelease[],
+): string[] =>
+  getCombinedStatusInReleases(
+    releasesByStatus.filter(r => r.status === ModuleStatus.on),
+  )

@@ -10,23 +10,29 @@ import Screen from 'components/ui/layout/Screen'
 import Title from 'components/ui/text/Title'
 import {useGetModuleVersionQuery} from 'services/modules'
 import {ModuleStatusInRelease} from 'types/module'
-import {getCombinedStatusInReleases} from 'utils/getCombinedStatusInReleases'
+import {
+  getActiveReleases,
+  getCombinedStatusInReleases,
+} from 'utils/getCombinedStatusInReleases'
 
 type Params = {
   slug: string
   version: string
 }
 
+export type SelectAllStatus = true | 'indeterminate' | false
+
 type FormData = {
   releases: string[]
-  all: boolean
+  allSelected: SelectAllStatus
 }
 
 const EditModuleStatusScreen = () => {
   const {slug, version} = useParams<Params>()
   const form = useForm<FormData>()
-  const {handleSubmit, watch} = form
-  const watchAll = watch('all')
+  const {handleSubmit, setValue, watch} = form
+  const watchAll = watch('allSelected')
+  const watchReleases = watch('releases')
 
   const {data: moduleVersion, isLoading} = useGetModuleVersionQuery(
     slug && version
@@ -53,14 +59,40 @@ const EditModuleStatusScreen = () => {
   )
 
   useEffect(() => {
-    const newFormData =
-      watchAll === false ? {releases: [], all: false} : {releases, all: true}
-    resetForm(newFormData)
+    if (watchAll !== 'indeterminate') {
+      const newFormData =
+        watchAll === false
+          ? {releases: [], allSelected: false}
+          : {releases, allSelected: true}
+      resetForm(newFormData)
+    }
   }, [releases, resetForm, watchAll])
 
   useEffect(() => {
-    resetForm({releases, all: false})
-  }, [resetForm, releases])
+    if (watchReleases?.length === releases.length) {
+      setValue('allSelected', true)
+    } else if (!watchReleases?.length) {
+      setValue('allSelected', false)
+    } else {
+      setValue('allSelected', 'indeterminate')
+    }
+  }, [releases, setValue, watchReleases])
+
+  useEffect(() => {
+    const activeReleases = moduleVersion?.statusInReleases
+      ? getActiveReleases(moduleVersion?.statusInReleases)
+      : []
+    resetForm({
+      releases: activeReleases,
+      allSelected:
+        // eslint-disable-next-line no-nested-ternary
+        activeReleases.length === releases.length
+          ? true
+          : !activeReleases.length
+          ? false
+          : 'indeterminate',
+    })
+  }, [resetForm, releases, moduleVersion?.statusInReleases])
 
   const onSubmit = (data: FormData) => {
     const activeReleases: ModuleStatusInRelease = {status: 1, releases: []}

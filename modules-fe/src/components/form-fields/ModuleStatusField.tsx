@@ -23,7 +23,11 @@ const ModuleStatusField = ({releases}: Props) => {
             />
           ))}
         </Column>
-        <CheckboxField key="all" label={selectAllLabel} name="all" />
+        <CheckboxField
+          key="allSelected"
+          label={selectAllLabel}
+          name="allSelected"
+        />
       </Column>
     </Column>
   )

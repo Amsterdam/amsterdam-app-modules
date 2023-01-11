@@ -1,4 +1,7 @@
 .CheckboxField {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: var(--size-spacing-sm);
   margin-inline: calc(var(--size-spacing-sm) * -1);
 }
@@ -21,4 +24,9 @@
 
 .Indicator > path {
   fill: var(--text-color-inverse);
+}
+
+.Indicator > line {
+  stroke: var(--border-color-pressable);
+  stroke-width: var(--size-border-lg);
 }
