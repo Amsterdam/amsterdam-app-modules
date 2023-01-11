@@ -79,11 +79,13 @@ const EditModuleScreen = () => {
               baseVersion={moduleVersion.version}
               defaultValue={moduleVersion.version}
             />
-            <Button
-              label="Zet aan/uit"
-              onClick={() => navigate(`/module/${slug}/${version}/status`)}
-              variant="secondary"
-            />
+            {!!moduleVersion.statusInReleases?.length && (
+              <Button
+                label="Zet aan/uit"
+                onClick={() => navigate(`/module/${slug}/${version}/status`)}
+                variant="secondary"
+              />
+            )}
             <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
           </Column>
         </FormProvider>
