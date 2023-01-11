@@ -6,14 +6,28 @@ type Props = {
   releases: string[]
 }
 
+export const selectAllLabel = 'Selecteer alle'
+
 const ModuleStatusField = ({releases}: Props) => {
+  // const [isAllSelected, setIsAllSelected] = useState(false)
+  // const handleAll = (value: boolean) => {
+  //   console.log(value)
+  //   if (value) {
+  //     reset({releases})
+  //   } else {
+  //     reset({releases: []})
+  //   }
+  // }
   return (
     <Column gutter="sm">
       <Phrase color="muted">Zet aan of uit voor de volgende releases:</Phrase>
-      <Column>
-        {releases.map(release => (
-          <CheckboxField key={release} label={release} name="releases" />
-        ))}
+      <Column gutter="sm">
+        <Column>
+          {releases.map(release => (
+            <CheckboxField key={release} label={release} name="releases" />
+          ))}
+        </Column>
+        <CheckboxField key="all" label={selectAllLabel} name="all" />
       </Column>
     </Column>
   )

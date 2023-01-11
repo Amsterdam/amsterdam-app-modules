@@ -1,5 +1,5 @@
 import {skipToken} from '@reduxjs/toolkit/dist/query'
-import {useEffect, useMemo} from 'react'
+import {useCallback, useEffect, useMemo} from 'react'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useParams} from 'react-router-dom'
 import ModuleStatusField from 'components/form-fields/ModuleStatusField'
@@ -19,12 +19,14 @@ type Params = {
 
 type FormData = {
   releases: string[]
+  all: boolean
 }
 
 const EditModuleStatusScreen = () => {
   const {slug, version} = useParams<Params>()
   const form = useForm<FormData>()
-  const {handleSubmit} = form
+  const {handleSubmit, watch} = form
+  const watchAll = watch('all')
 
   const {data: moduleVersion, isLoading} = useGetModuleVersionQuery(
     slug && version
@@ -43,11 +45,22 @@ const EditModuleStatusScreen = () => {
     [moduleVersion?.statusInReleases],
   )
 
+  const resetForm = useCallback(
+    (newFormData: FormData) => {
+      form.reset({...newFormData})
+    },
+    [form],
+  )
+
   useEffect(() => {
-    form.reset({
-      releases,
-    })
-  }, [form, releases])
+    const newFormData =
+      watchAll === false ? {releases: [], all: false} : {releases, all: true}
+    resetForm(newFormData)
+  }, [releases, resetForm, watchAll])
+
+  useEffect(() => {
+    resetForm({releases, all: false})
+  }, [resetForm, releases])
 
   const onSubmit = (data: FormData) => {
     const activeReleases: ModuleStatusInRelease = {status: 1, releases: []}
@@ -60,7 +73,7 @@ const EditModuleStatusScreen = () => {
       }
     })
     const result = [inActiveReleases, activeReleases]
-    return result // TODO send to API once ready
+    console.log(result) // TODO send to API once ready
   }
 
   if (isLoading) {
