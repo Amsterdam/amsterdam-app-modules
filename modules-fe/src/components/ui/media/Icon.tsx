@@ -20,7 +20,7 @@ const Icon = ({fill, name, size = 'md', stroke}: IconProps) => {
 
   return (
     <svg
-      className={`Icon${name === 'spinner' ? ' Spinner' : ''}`}
+      className="Icon"
       data-fill={fill}
       data-spinner={name === 'spinner'}
       fillRule="evenodd"
