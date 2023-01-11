@@ -25,12 +25,13 @@ const Indicator = ({isSelected}: IndicatorProps) => (
 )
 
 type Props = {
+  isGroupFormField?: boolean
   label: string
 } & UseControllerProps
 
-const CheckboxField = ({label, name}: Props) => {
+const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, watch} = useFormContext()
-  const value = name === 'all' ? watch('all') : watch(name)?.includes(label)
+  const value = isGroupFormField ? watch(name)?.includes(label) : watch(name)
 
   return (
     <Column gutter="sm" halign="start">

@@ -15,7 +15,12 @@ const ModuleStatusField = ({releases}: Props) => {
       <Column gutter="sm">
         <Column>
           {releases.map(release => (
-            <CheckboxField key={release} label={release} name="releases" />
+            <CheckboxField
+              key={release}
+              isGroupFormField
+              label={release}
+              name="releases"
+            />
           ))}
         </Column>
         <CheckboxField key="all" label={selectAllLabel} name="all" />
