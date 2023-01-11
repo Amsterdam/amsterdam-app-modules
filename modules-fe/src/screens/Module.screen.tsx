@@ -1,7 +1,6 @@
 import {skipToken} from '@reduxjs/toolkit/query'
 import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import Icon from 'components/ui/media/Icon'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
@@ -88,7 +87,6 @@ const ModuleScreen = () => {
           </List>
         </Box>
         <Button
-          icon={<Icon name="spinner" size="lg" />}
           variant="secondary"
           label={moduleStatus === 1 ? 'Uitzetten' : 'Aanzetten'}
           onClick={handleModuleStatusChange}
