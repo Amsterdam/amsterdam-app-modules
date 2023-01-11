@@ -1,6 +1,7 @@
 import {skipToken} from '@reduxjs/toolkit/query'
 import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
+import {ModuleStatus} from 'types/module'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
@@ -49,7 +50,7 @@ const ModuleScreen = () => {
         } wilt zetten?`,
       )
     ) {
-      setModuleStatus(moduleStatus ? 0 : 1)
+      setModuleStatus(moduleStatus ? ModuleStatus.off : ModuleStatus.on)
     }
   }
 
@@ -88,7 +89,7 @@ const ModuleScreen = () => {
         </Box>
         <Button
           variant="secondary"
-          label={moduleStatus === 1 ? 'Uitzetten' : 'Aanzetten'}
+          label={moduleStatus === ModuleStatus.on ? 'Uitzetten' : 'Aanzetten'}
           onClick={handleModuleStatusChange}
         />
       </Column>
