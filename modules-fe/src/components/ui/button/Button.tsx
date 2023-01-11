@@ -8,16 +8,24 @@ export enum ButtonVariant {
 
 type Props = {
   flex?: boolean
+  isDisabled?: boolean
   label: string
   onClick: MouseEventHandler<HTMLButtonElement>
   variant?: keyof typeof ButtonVariant
 }
 
-const Button = ({flex, label, onClick, variant = 'primary'}: Props) => (
+const Button = ({
+  flex,
+  isDisabled,
+  label,
+  onClick,
+  variant = 'primary',
+}: Props) => (
   <button
     onClick={onClick}
     className="Button"
     data-flex={flex}
+    disabled={isDisabled}
     data-variant={variant}
     type="button">
     <span className="ButtonLabel" data-font="body" data-ellipsize>
