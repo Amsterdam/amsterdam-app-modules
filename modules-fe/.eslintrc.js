@@ -8,7 +8,6 @@ module.exports = {
     'react-app',
     'react-app/jest',
     'airbnb',
-    'plugin:@typescript-eslint/recommended',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
@@ -22,7 +21,13 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'react-hooks'],
+  plugins: [
+    'react',
+    'react-hooks',
+    'import',
+    'jsx-expressions',
+    'prefer-arrow-functions',
+  ],
   rules: {
     'prettier/prettier': 'warn',
     'max-len': [
@@ -72,7 +77,7 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['error'],
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'error',
     '@typescript-eslint/explicit-function-return-type': 'off',
     'react/require-default-props': 'off',
     'no-unused-vars': 'off',
@@ -86,6 +91,7 @@ module.exports = {
         ignorePropertyModificationsFor: ['state'],
       },
     ],
+    'no-console': 'error',
   },
   settings: {
     'import/resolver': {
@@ -94,9 +100,45 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.js'],
+      files: ['index.ts'],
       rules: {
-        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              {
+                group: ['../*'],
+                message: "Barrelfile imports should stats with './' or '@/'",
+              },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
+      rules: {
+        'jsx-expressions/strict-logical-expressions': 'error',
+        '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-misused-promises': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-floating-promises': 'off',
+        '@typescript-eslint/restrict-template-expressions': 'off',
+      },
+      parserOptions: {
+        project: ['./tsconfig.json'],
+      },
+    },
+    {
+      files: ['*.test.ts', '*.test.tsx'],
+      rules: {
+        'no-restricted-imports': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
       },
     },
   ],
