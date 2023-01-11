@@ -1,4 +1,4 @@
-import {IconName} from '../components/ui/media/iconPath'
+import {ModuleIconName} from '../components/ui/media/iconPath'
 
 export type Module = {
   slug: string
@@ -8,7 +8,7 @@ export type Module = {
 
 export type ModuleVersion = {
   description: string
-  icon: IconName
+  icon: ModuleIconName
   moduleSlug: string
   title: string
   version: string
