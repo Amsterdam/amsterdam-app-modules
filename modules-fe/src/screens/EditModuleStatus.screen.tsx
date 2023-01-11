@@ -73,7 +73,7 @@ const EditModuleStatusScreen = () => {
       }
     })
     const result = [inActiveReleases, activeReleases]
-    console.log(result) // TODO send to API once ready
+    return result // TODO send to API once ready
   }
 
   if (isLoading) {
