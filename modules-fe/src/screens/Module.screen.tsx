@@ -1,4 +1,5 @@
 import {skipToken} from '@reduxjs/toolkit/query'
+import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
@@ -29,6 +30,28 @@ const ModuleScreen = () => {
       : skipToken,
   )
   const latestVersion = module?.versions[0]
+  const [moduleStatus, setModuleStatus] = useState(module?.status)
+
+  useEffect(() => {
+    if (moduleStatus === undefined) {
+      return
+    }
+    // eslint-disable-next-line no-console
+    console.log("API call to update module's status") // TODO: implement API call once ready
+  }, [moduleStatus])
+
+  const handleModuleStatusChange = () => {
+    if (
+      // eslint-disable-next-line no-alert
+      window.confirm(
+        `Weet je zeker dat je alle versies van de module ${
+          moduleStatus ? 'uit' : 'aan'
+        } wilt zetten?`,
+      )
+    ) {
+      setModuleStatus(moduleStatus ? 0 : 1)
+    }
+  }
 
   if (isLoading) {
     return <LoadingBox />
@@ -43,6 +66,7 @@ const ModuleScreen = () => {
       <Column gutter="lg">
         <Title>Module: {latestVersion?.title}</Title>
         <Button
+          isDisabled
           label="Voeg versie toe"
           onClick={() => {
             navigate(`/module/${slug}/create`)
@@ -63,6 +87,11 @@ const ModuleScreen = () => {
             ))}
           </List>
         </Box>
+        <Button
+          variant="secondary"
+          label={moduleStatus === 1 ? 'Uitzetten' : 'Aanzetten'}
+          onClick={handleModuleStatusChange}
+        />
       </Column>
     </Screen>
   )
