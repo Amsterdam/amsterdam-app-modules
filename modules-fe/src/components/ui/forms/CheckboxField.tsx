@@ -42,7 +42,7 @@ const CheckboxField = ({isGroupFormField, label, name}: Props) => {
             hidden
             {...register(name)}
             type="checkbox"
-            value={name === 'releases' ? label : undefined}
+            value={isGroupFormField ? label : undefined}
           />
           <Indicator isSelected={value} />
           <Phrase>{label}</Phrase>
