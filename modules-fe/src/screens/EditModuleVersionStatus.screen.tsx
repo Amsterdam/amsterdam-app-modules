@@ -5,6 +5,7 @@ import {useParams} from 'react-router-dom'
 import ModuleStatusField from 'components/form-fields/ModuleStatusField'
 import Button from 'components/ui/button/Button'
 import LoadingBox from 'components/ui/feedback/LoadingBox'
+import {CheckboxValue} from 'components/ui/forms/CheckboxField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
 import Title from 'components/ui/text/Title'
@@ -20,11 +21,9 @@ type Params = {
   version: string
 }
 
-export type SelectAllStatus = true | 'indeterminate' | false
-
 type FormData = {
   releases: string[]
-  allSelected: SelectAllStatus
+  allSelected: CheckboxValue
 }
 
 const EditModuleVersionStatusScreen = () => {
