@@ -36,7 +36,7 @@ const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, setValue, watch} = useFormContext()
   const value = isGroupFormField
     ? [...watch(name)].includes(label)
-    : watch<SelectAllStatus>(name)
+    : watch(name)
   const {onChange: onChangeRHF, ...rest} = register(name)
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
