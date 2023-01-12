@@ -96,15 +96,16 @@ const EditModuleStatusScreen = () => {
 
   const onSubmit = (data: FormData) => {
     const activeReleases: ModuleStatusInRelease = {status: 1, releases: []}
-    const inActiveReleases: ModuleStatusInRelease = {status: 0, releases: []}
+    const inactiveReleases: ModuleStatusInRelease = {status: 0, releases: []}
     releases.forEach(release => {
       if (data.releases.includes(release)) {
         activeReleases.releases.push(release)
       } else {
-        inActiveReleases.releases.push(release)
+        inactiveReleases.releases.push(release)
       }
     })
-    const result = [inActiveReleases, activeReleases]
+    const result = [inactiveReleases, activeReleases]
+
     return result // TODO send to API once ready
   }
 
