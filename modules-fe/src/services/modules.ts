@@ -1,4 +1,9 @@
-import {Module, ModuleVersion, ModuleVersionWithRelease} from '../types/module'
+import {
+  Module,
+  ModuleVersion,
+  ModuleVersionWithRelease,
+  ModuleWithVersions,
+} from '../types/module'
 import {baseApi} from './baseApi'
 
 type ModuleQueryArg = {
@@ -12,9 +17,17 @@ type ModuleVersionQueryArg = {
 
 export const modulesApi = baseApi.injectEndpoints({
   endpoints: builder => ({
-    createModule: builder.mutation<ModuleVersion, ModuleVersion>({
+    createModule: builder.mutation<Module, Module>({
       query: module => ({
-        url: `/api/v1/modules`,
+        url: `/api/v1/module`,
+        method: 'POST',
+        body: {...module},
+      }),
+      invalidatesTags: ['Module'],
+    }),
+    createModuleVersion: builder.mutation<ModuleVersion, ModuleVersion>({
+      query: module => ({
+        url: `/api/v1/module/${module.moduleSlug}/version}`,
         method: 'POST',
         body: {...module},
       }),
@@ -30,7 +43,7 @@ export const modulesApi = baseApi.injectEndpoints({
       transformResponse: (response: {result: ModuleVersion}) => response.result,
       invalidatesTags: ['Module'],
     }),
-    getModule: builder.query<Module, ModuleQueryArg>({
+    getModule: builder.query<ModuleWithVersions, ModuleQueryArg>({
       query: ({slug}) => `/api/v1/module/${slug}`,
       providesTags: ['Module'],
     }),
@@ -51,6 +64,7 @@ export const modulesApi = baseApi.injectEndpoints({
 
 export const {
   useCreateModuleMutation,
+  useCreateModuleVersionMutation,
   useEditModuleMutation,
   useGetModulesQuery,
   useGetModuleVersionQuery,

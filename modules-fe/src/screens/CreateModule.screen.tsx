@@ -13,16 +13,20 @@ import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
-import {useCreateModuleMutation, useGetModuleQuery} from '../services/modules'
+import {
+  useCreateModuleMutation,
+  useCreateModuleVersionMutation,
+  useGetModuleQuery,
+} from '../services/modules'
 import {ModuleVersion} from '../types/module'
 
 type Params = {
   slug?: string
 }
 
-const defaultModule: Omit<ModuleVersion, 'icon'> & {icon: undefined} = {
+const defaultModule: Omit<ModuleVersion, 'icon'> & {icon: ''} = {
   description: '',
-  icon: undefined,
+  icon: '',
   moduleSlug: '',
   title: '',
   version: '0.0.0',
@@ -33,7 +37,7 @@ const CreateModuleScreen = () => {
 
   const {slug} = useParams<Params>()
   const isNewModule = !slug
-  const {data: module, isLoading} = useGetModuleQuery(
+  const {data: module, isLoading: isGetModuleLoading} = useGetModuleQuery(
     slug
       ? {
           slug,
@@ -41,25 +45,44 @@ const CreateModuleScreen = () => {
       : skipToken,
   )
   const latestVersion =
-    !isNewModule && module ? module.versions[0] : defaultModule
+    !isNewModule && module
+      ? module.versions[module.versions.length - 1]
+      : defaultModule
 
   const form = useForm<ModuleVersion>()
-  const [createModule, {isLoading: isMutateLoading}] = useCreateModuleMutation()
+  const [createModule, {isLoading: isMutateModuleLoading}] =
+    useCreateModuleMutation()
+  const [createModuleVersion, {isLoading: isMutateModuleVersionLoading}] =
+    useCreateModuleVersionMutation()
   const {handleSubmit, setValue} = form
+
+  const createModuleVersionAndNavigate = useCallback(
+    (data: ModuleVersion) => {
+      createModuleVersion(data).then(response => {
+        if ('data' in response) {
+          navigate(`/module/${data.moduleSlug}`)
+        }
+      })
+    },
+    [createModuleVersion, navigate],
+  )
 
   const onSubmitForm: SubmitHandler<ModuleVersion> = useCallback(
     data => {
       if (!data.moduleSlug) {
         return
       }
-
-      createModule({...data}).then(response => {
-        if ('data' in response) {
-          navigate(`/module/${data.moduleSlug}`)
-        }
-      })
+      if (isNewModule) {
+        createModule({slug: data.moduleSlug, status: 1}).then(response => {
+          if ('data' in response) {
+            createModuleVersionAndNavigate({...data})
+          }
+        })
+      } else {
+        createModuleVersionAndNavigate({...data})
+      }
     },
-    [createModule, navigate],
+    [createModule, createModuleVersionAndNavigate, isNewModule],
   )
   useEffect(() => {
     if (latestVersion.moduleSlug) {
@@ -70,7 +93,11 @@ const CreateModuleScreen = () => {
   const versionFieldValue = form.watch('version') ?? ''
   const titleFieldValue = form.watch('title') ?? ''
 
-  if (isLoading || isMutateLoading) {
+  if (
+    isGetModuleLoading ||
+    isMutateModuleLoading ||
+    isMutateModuleVersionLoading
+  ) {
     return <LoadingBox />
   }
 

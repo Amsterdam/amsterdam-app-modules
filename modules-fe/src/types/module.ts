@@ -3,6 +3,9 @@ import {IconName} from '../components/ui/media/iconPath'
 export type Module = {
   slug: string
   status: ModuleStatus
+}
+
+export type ModuleWithVersions = Module & {
   versions: ModuleVersionWithRelease[]
 }
 
