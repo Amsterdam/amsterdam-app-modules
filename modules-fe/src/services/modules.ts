@@ -27,7 +27,7 @@ export const modulesApi = baseApi.injectEndpoints({
     }),
     createModuleVersion: builder.mutation<ModuleVersion, ModuleVersion>({
       query: module => ({
-        url: `/api/v1/module/${module.moduleSlug}/version}`,
+        url: `/api/v1/module/${module.moduleSlug}/version`,
         method: 'POST',
         body: {...module},
       }),

@@ -45,7 +45,7 @@ const CreateModuleScreen = () => {
       : skipToken,
   )
   const latestVersion =
-    !isNewModule && module
+    !isNewModule && module && module.versions
       ? module.versions[module.versions.length - 1]
       : defaultModule
 
@@ -85,7 +85,7 @@ const CreateModuleScreen = () => {
     [createModule, createModuleVersionAndNavigate, isNewModule],
   )
   useEffect(() => {
-    if (latestVersion.moduleSlug) {
+    if (latestVersion?.moduleSlug) {
       setValue('moduleSlug', latestVersion.moduleSlug)
     }
   }, [latestVersion.moduleSlug, setValue])
