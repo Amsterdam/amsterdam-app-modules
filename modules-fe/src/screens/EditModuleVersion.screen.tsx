@@ -2,6 +2,7 @@ import {skipToken} from '@reduxjs/toolkit/query'
 import {useCallback} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import {ModuleVersion} from 'types/module'
 import ModuleDescriptionField from '../components/form-fields/ModuleDescriptionField'
 import ModuleIconField from '../components/form-fields/ModuleIconField'
 import ModuleTitleField from '../components/form-fields/ModuleTitleField'
@@ -13,14 +14,13 @@ import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
 import {useEditModuleMutation, useGetModuleQuery} from '../services/modules'
-import {ModuleVersion} from '../types/module'
 
 type Params = {
   slug: string
   version: string
 }
 
-const EditModuleScreen = () => {
+const EditModuleVersionScreen = () => {
   const navigate = useNavigate()
 
   const {slug, version} = useParams<Params>()
@@ -79,6 +79,13 @@ const EditModuleScreen = () => {
               baseVersion={moduleVersion.version}
               defaultValue={moduleVersion.version}
             />
+            {!!moduleVersion.statusInReleases?.length && (
+              <Button
+                label="Zet aan/uit"
+                onClick={() => navigate(`/module/${slug}/${version}/status`)}
+                variant="secondary"
+              />
+            )}
             <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
           </Column>
         </FormProvider>
@@ -87,4 +94,4 @@ const EditModuleScreen = () => {
   )
 }
 
-export default EditModuleScreen
+export default EditModuleVersionScreen

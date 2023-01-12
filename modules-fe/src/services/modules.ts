@@ -1,8 +1,13 @@
-import {Module, ModuleVersion} from '../types/module'
+import {Module, ModuleVersion, ModuleVersionWithRelease} from '../types/module'
 import {baseApi} from './baseApi'
 
 type ModuleQueryArg = {
   slug: string
+}
+
+type ModuleVersionQueryArg = {
+  slug: string
+  version: string
 }
 
 export const modulesApi = baseApi.injectEndpoints({
@@ -29,6 +34,13 @@ export const modulesApi = baseApi.injectEndpoints({
       query: ({slug}) => `/api/v1/module/${slug}`,
       providesTags: ['Module'],
     }),
+    getModuleVersion: builder.query<
+      ModuleVersionWithRelease,
+      ModuleVersionQueryArg
+    >({
+      query: ({slug, version}) => `/api/v1/module/${slug}/version/${version}`,
+      providesTags: ['Module'],
+    }),
     getModules: builder.query<ModuleVersion[], void>({
       query: () => `/api/v1/modules/latest`,
       providesTags: ['Module'],
@@ -41,5 +53,6 @@ export const {
   useCreateModuleMutation,
   useEditModuleMutation,
   useGetModulesQuery,
+  useGetModuleVersionQuery,
   useGetModuleQuery,
 } = modulesApi

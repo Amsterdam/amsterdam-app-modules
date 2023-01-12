@@ -15,7 +15,7 @@ export type ModuleVersion = {
 }
 
 export type ModuleVersionWithRelease = ModuleVersion & {
-  statusInReleases?: ModuleStatus[]
+  statusInReleases?: ModuleStatusInRelease[]
 }
 
 export type ModuleInRelease = {
@@ -25,7 +25,12 @@ export type ModuleInRelease = {
   status: ModuleStatus
 }
 
+export type ModuleStatusInRelease = {
+  status: ModuleStatus
+  releases: string[]
+}
+
 export enum ModuleStatus {
-  'uit',
-  'aan',
+  'off' = 0,
+  'on' = 1,
 }
