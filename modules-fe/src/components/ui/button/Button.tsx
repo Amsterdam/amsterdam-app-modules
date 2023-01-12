@@ -32,7 +32,7 @@ const Button = ({
     data-variant={variant}
     type="button">
     <Row gutter="sm" valign="center">
-      {icon && icon}
+      {icon}
       <span className="ButtonLabel" data-font="body" data-ellipsize>
         {label}
       </span>
