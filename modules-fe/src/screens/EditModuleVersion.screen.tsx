@@ -1,6 +1,5 @@
 import {skipToken} from '@reduxjs/toolkit/query'
-import {useCallback} from 'react'
-import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
+import {FormProvider, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
 import {ModuleVersion} from 'types/module'
 import ModuleDescriptionField from '../components/form-fields/ModuleDescriptionField'
@@ -13,14 +12,17 @@ import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import Title from '../components/ui/text/Title'
-import {useEditModuleMutation, useGetModuleQuery} from '../services/modules'
+import {
+  useEditModuleVersionMutation,
+  useGetModuleQuery,
+} from '../services/modules'
 
 type Params = {
   slug: string
   version: string
 }
 
-const EditModuleVersionScreen = () => {
+const EditModuleScreen = () => {
   const navigate = useNavigate()
 
   const {slug, version} = useParams<Params>()
@@ -34,23 +36,38 @@ const EditModuleVersionScreen = () => {
   const moduleVersion = module?.versions.find(m => m.version === version)
 
   const form = useForm<ModuleVersion>()
-  const [editModule] = useEditModuleMutation()
-  const {handleSubmit} = form
+  const [editModuleVersion] = useEditModuleVersionMutation()
+  const {handleSubmit, formState} = form
+  const {dirtyFields} = formState
 
-  const onSubmitForm: SubmitHandler<ModuleVersion> = useCallback(
-    data => {
-      if (!slug) {
-        return
-      }
+  const onSubmitForm = (data: ModuleVersion) => {
+    const dirtyFieldsOnly: Partial<ModuleVersion> = {}
+    const dirtyFieldKeys = Object.keys(dirtyFields) as Array<
+      keyof ModuleVersion
+    >
 
-      editModule({...data, moduleSlug: slug}).then(response => {
+    if (!slug || !version) {
+      return
+    }
+
+    if (!dirtyFieldKeys.length) {
+      navigate(`/module/${slug}`)
+    } else {
+      dirtyFieldKeys.forEach(<K extends keyof ModuleVersion>(field: K) => {
+        dirtyFieldsOnly[field] = data[field]
+      })
+
+      editModuleVersion({
+        ...dirtyFieldsOnly,
+        moduleSlug: slug,
+        pathVersion: version,
+      }).then(response => {
         if ('data' in response) {
           navigate(`/module/${slug}`)
         }
       })
-    },
-    [editModule, navigate, slug],
-  )
+    }
+  }
 
   if (isLoading) {
     return <LoadingBox />
@@ -94,4 +111,4 @@ const EditModuleVersionScreen = () => {
   )
 }
 
-export default EditModuleVersionScreen
+export default EditModuleScreen

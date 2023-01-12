@@ -37,10 +37,21 @@ export const modulesApi = baseApi.injectEndpoints({
     editModule: builder.mutation<ModuleVersion, ModuleVersion>({
       query: module => ({
         url: `/api/v1/modules`,
-        method: 'PATCH',
+        method: 'POST',
         body: {...module},
       }),
       transformResponse: (response: {result: ModuleVersion}) => response.result,
+      invalidatesTags: ['Module'],
+    }),
+    editModuleVersion: builder.mutation<
+      ModuleVersion,
+      Partial<ModuleVersion> & {pathVersion: string}
+    >({
+      query: ({moduleSlug, pathVersion, ...rest}) => ({
+        url: `/api/v1/module/${moduleSlug}/version/${pathVersion}`,
+        method: 'PATCH',
+        body: {...rest},
+      }),
       invalidatesTags: ['Module'],
     }),
     getModule: builder.query<ModuleWithVersions, ModuleQueryArg>({
@@ -66,7 +77,8 @@ export const {
   useCreateModuleMutation,
   useCreateModuleVersionMutation,
   useEditModuleMutation,
-  useGetModulesQuery,
-  useGetModuleVersionQuery,
+  useEditModuleVersionMutation,
   useGetModuleQuery,
+  useGetModuleVersionQuery,
+  useGetModulesQuery,
 } = modulesApi
