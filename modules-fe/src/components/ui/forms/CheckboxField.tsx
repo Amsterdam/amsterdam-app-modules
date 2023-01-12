@@ -1,13 +1,14 @@
 import React from 'react'
 import {UseControllerProps, useFormContext} from 'react-hook-form'
-import {SelectAllStatus} from 'screens/EditModuleVersionStatus.screen'
 import Column from '../layout/Column'
 import Row from '../layout/Row'
 import Phrase from '../text/Phrase'
 import './CheckboxField.css'
 
+export type CheckboxValue = true | 'indeterminate' | false
+
 type IndicatorProps = {
-  isSelected: SelectAllStatus
+  isSelected: CheckboxValue
 }
 
 const Indicator = ({isSelected}: IndicatorProps) => (
@@ -33,7 +34,7 @@ type Props = {
 
 const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, setValue, watch} = useFormContext()
-  const value: SelectAllStatus | undefined = isGroupFormField
+  const value = isGroupFormField
     ? // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       watch(name)?.includes(label)
     : watch(name)
