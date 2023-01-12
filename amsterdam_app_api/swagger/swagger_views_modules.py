@@ -119,6 +119,13 @@ module = {
                                          'in all releases at once.\n\nstatus (enum: 0, 1, ...)'),
 }
 
+modules_version_post = {
+    'title': openapi.Schema(type=openapi.TYPE_STRING, description='module title'),
+    'description': openapi.Schema(type=openapi.TYPE_STRING, description='module description'),
+    'version': openapi.Schema(type=openapi.TYPE_STRING, description='module version (x.y.z)'),
+    'icon': openapi.Schema(type=openapi.TYPE_STRING, description='icon name')
+}
+
 modules_version = {
     'title': openapi.Schema(type=openapi.TYPE_STRING, description='module title'),
     'moduleSlug': openapi.Schema(type=openapi.TYPE_STRING, description='module slug'),
@@ -161,7 +168,7 @@ as_module_version_post = {
                                             required=True)],
     'request_body': openapi.Schema(
         type=openapi.TYPE_OBJECT,
-        properties=modules_version,
+        properties=modules_version_post
     ),
     'responses': {
         200: openapi.Response(
@@ -220,8 +227,7 @@ as_module_version_patch = {
                                             required=True)],
     'request_body': openapi.Schema(
         type=openapi.TYPE_OBJECT,
-        required=["moduleSlug", "version", "status", "title", "description", "icon"],
-        properties=modules_version,
+        properties=modules_version_post,
     ),
     'responses': {
         200: openapi.Response(
