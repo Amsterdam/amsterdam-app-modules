@@ -49,5 +49,6 @@ urlpatterns = [
     path('module/<str:slug>/version/<str:version>', csrf_exempt(views_modules.module_version)),
     path('module', csrf_exempt(views_modules.module)),
     path('module/<str:slug>', csrf_exempt(views_modules.module_slug)),
+    path('module/<str:slug>/version', csrf_exempt(views_modules.post_module_version)),
     path('modules/latest', csrf_exempt(views_modules.modules_latest))
 ]

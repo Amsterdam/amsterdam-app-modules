@@ -119,6 +119,14 @@ module = {
                                          'in all releases at once.\n\nstatus (enum: 0, 1, ...)'),
 }
 
+modules_version = {
+    'title': openapi.Schema(type=openapi.TYPE_STRING, description='module title'),
+    'moduleSlug': openapi.Schema(type=openapi.TYPE_STRING, description='module slug'),
+    'description': openapi.Schema(type=openapi.TYPE_STRING, description='module description'),
+    'version': openapi.Schema(type=openapi.TYPE_STRING, description='module version (x.y.z)'),
+    'icon': openapi.Schema(type=openapi.TYPE_STRING, description='icon name')
+}
+
 modules_versions = {
     'title': openapi.Schema(type=openapi.TYPE_STRING, description='module title'),
     'moduleSlug': openapi.Schema(type=openapi.TYPE_STRING, description='module slug'),
@@ -138,6 +146,41 @@ as_module_version_get = {
             'application/json',
             schema=openapi.Schema(type=openapi.TYPE_OBJECT,
                                   properties=modules_versions))
+    },
+    'tags': ['Module']
+
+}
+
+
+as_module_version_post = {
+    'methods': ['post'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=["moduleSlug", "version", "status", "title", "description", "icon"],
+        properties=modules_version,
+    ),
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                  properties=modules_version)),
+        400: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "incorrect request body."
+                                  }
+                              }),
+        409: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'message': 'Module already exists.'
+                                  }
+                              }),
     },
     'tags': ['Module']
 

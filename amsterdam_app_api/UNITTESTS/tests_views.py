@@ -208,6 +208,89 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, None)
 
+    def test_module_slug_version_post_incorrect_request_body_1(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {}
+        response = c.post('/api/v1/module/string/version',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "incorrect request body."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_post_incorrect_request_body_2(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {'moduleSlug': 'bogus', 'title': 'string', 'version': '1.0.0', 'description': 'string', 'icon': 'icon'}
+        response = c.post('/api/v1/module/string/version',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "incorrect request body."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_post_integrity_error_1(self):
+        """ test integrity error """
+        c = Client()
+        data = {'moduleSlug': 'slug0', 'title': 'string', 'version': '1.2.3', 'description': 'string', 'icon': 'icon'}
+        response = c.post('/api/v1/module/slug0/version',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {"message": "Module with slug ‘slug0’ and version ‘1.2.3’ already exists."}
+        self.assertEqual(response.status_code, 409)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_post_integrity_error_2(self):
+        """ test integrity error """
+        c = Client()
+        data = {'moduleSlug': 'bogus', 'title': 'string', 'version': '2.3.4', 'description': 'string', 'icon': 'icon'}
+        response = c.post('/api/v1/module/bogus/version',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {"message": "Module with slug ‘bogus’ not found."}
+        self.assertEqual(response.status_code, 409)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_post_incorrect_version_1(self):
+        """ test integrity error """
+        c = Client()
+        data = {'moduleSlug': 'slug0', 'title': 'string', 'version': '1.2.3a', 'description': 'string', 'icon': 'icon'}
+        response = c.post('/api/v1/module/slug0/version',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {"message": "incorrect request version formatting."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_post_incorrect_version_2(self):
+        """ test integrity error """
+        c = Client()
+        data = {'moduleSlug': 'slug0', 'title': 'string', 'version': '1.2.3.4', 'description': 'string', 'icon': 'icon'}
+        response = c.post('/api/v1/module/slug0/version',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {"message": "incorrect request version formatting."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_post_ok(self):
+        """ test integrity error """
+        c = Client()
+        data = {'moduleSlug': 'slug0', 'title': 'string', 'version': '2.3.4', 'description': 'string', 'icon': 'icon'}
+        response = c.post('/api/v1/module/slug0/version',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, data)
+
     def test_module_version_get_exist(self):
         """ get module by slug and version (exists) """
         c = Client()
