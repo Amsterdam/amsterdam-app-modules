@@ -387,6 +387,7 @@ def module(request):
 @api_view(['GET', 'PATCH', 'DELETE'])
 def module_version(request, slug=None, version=None):
     """ Query, Create or Patch a new version of an existing module.
+
         query: Returns a specific version of a module, along with its status in all releases of the app.
     """
     if request.method == 'GET':
