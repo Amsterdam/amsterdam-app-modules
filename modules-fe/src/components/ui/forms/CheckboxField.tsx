@@ -35,9 +35,8 @@ type Props = {
 const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, setValue, watch} = useFormContext()
   const value = isGroupFormField
-    ? // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-      watch(name)?.includes(label)
-    : watch(name)
+    ? [...watch(name)].includes(label)
+    : watch<SelectAllStatus>(name)
   const {onChange: onChangeRHF, ...rest} = register(name)
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +59,7 @@ const CheckboxField = ({isGroupFormField, label, name}: Props) => {
             type="checkbox"
             value={isGroupFormField ? label : undefined}
           />
-          <Indicator isSelected={!!value} />
+          <Indicator isSelected={value} />
           <Phrase>{label}</Phrase>
         </Row>
       </label>
