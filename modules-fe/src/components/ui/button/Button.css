@@ -29,21 +29,11 @@
 .Button[data-variant="primary"] {
   --background-color: var(--bg-color-button);
   --border-color: var(--border-color-button-emphasis);
+  color: var(--text-color-inverse);
 }
 
 .Button[data-variant="primary"]:hover {
   --background-color: var(--bg-color-button-hover);
-}
-
-.Button[data-variant="secondary"] {
-  --background-color: var(--bg-color-cutout);
-  --border-color: var(--border-color-button-emphasis);
-}
-
-.Button[data-variant="secondary"]:hover {
-  --background-color: var(--bg-color-cutout);
-  --border-color: var(--border-color-button-secondary-hover);
-  --border-width: var(--size-border-xl);
 }
 
 .Button[data-variant="primary"]:disabled {
@@ -51,23 +41,21 @@
   --border-color: var(--border-color-button-secondary-disabled);
 }
 
-.Button[data-variant="secondary"]:disabled {
-  --border-color: var(--border-color-button-secondary-disabled);
-}
-
-[data-variant="primary"]  {
-  color: var(--text-color-inverse); 
-}
-
-[data-variant="secondary"]  {
+.Button[data-variant="secondary"] {
+  --background-color: var(--bg-color-cutout);
+  --border-color: var(--border-color-button-emphasis);
   color: var(--text-color-button-secondary);
 }
 
-[data-variant="secondary"]:hover{
+.Button[data-variant="secondary"]:hover {
+  --background-color: var(--bg-color-cutout);
+  --border-color: var(--border-color-button-secondary-hover);
+  --border-width: var(--size-border-xl);
   color: var(--text-color-button-secondary-hover);
 }
 
-[data-variant="secondary"]:disabled {
+.Button[data-variant="secondary"]:disabled {
+  --border-color: var(--border-color-button-secondary-disabled);
   color: var(--text-color-button-secondary-disabled);
 }
 
