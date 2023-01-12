@@ -27,7 +27,7 @@ type FormData = {
   allSelected: SelectAllStatus
 }
 
-const EditModuleStatusScreen = () => {
+const EditModuleVersionStatusScreen = () => {
   const {slug, version} = useParams<Params>()
   const form = useForm<FormData>()
   const {handleSubmit, setValue, watch} = form
@@ -132,4 +132,4 @@ const EditModuleStatusScreen = () => {
   )
 }
 
-export default EditModuleStatusScreen
+export default EditModuleVersionStatusScreen

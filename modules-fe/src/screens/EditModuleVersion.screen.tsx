@@ -20,7 +20,7 @@ type Params = {
   version: string
 }
 
-const EditModuleScreen = () => {
+const EditModuleVersionScreen = () => {
   const navigate = useNavigate()
 
   const {slug, version} = useParams<Params>()
@@ -94,4 +94,4 @@ const EditModuleScreen = () => {
   )
 }
 
-export default EditModuleScreen
+export default EditModuleVersionScreen

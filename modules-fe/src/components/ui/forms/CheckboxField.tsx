@@ -1,6 +1,6 @@
 import React from 'react'
 import {UseControllerProps, useFormContext} from 'react-hook-form'
-import {SelectAllStatus} from 'screens/EditModuleStatus.screen'
+import {SelectAllStatus} from 'screens/EditModuleVersionStatus.screen'
 import Column from '../layout/Column'
 import Row from '../layout/Row'
 import Phrase from '../text/Phrase'
