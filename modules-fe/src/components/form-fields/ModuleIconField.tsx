@@ -12,7 +12,7 @@ const ModuleIconField = ({defaultValue}: Props) => (
     name="icon"
     rules={{
       required: 'Geef aan welk pictogram de module illustreert.',
-      validate: value =>
+      validate: (value: string) =>
         iconNames.includes(value) || 'Geef de naam van een bestaand pictogram.',
     }}
   />

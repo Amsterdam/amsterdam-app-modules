@@ -87,7 +87,7 @@ const CreateModuleScreen = () => {
         </Title>
         <FormProvider {...form}>
           <Column gutter="lg">
-            {isNewModule && (
+            {!!isNewModule && (
               <ModuleSlugField defaultValue={latestVersion.moduleSlug} />
             )}
             <ModuleTitleField defaultValue={latestVersion.title} />

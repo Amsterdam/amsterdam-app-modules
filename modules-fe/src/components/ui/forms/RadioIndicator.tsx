@@ -13,7 +13,7 @@ const RadioIndicator = ({hasError, isSelected}: RadioIndicatorProps) => (
     viewBox="0 0 24 24"
     width={24}>
     <circle cx={12} cy={12} r={11} />
-    {isSelected && <circle cx={12} cy={12} r={8} />}
+    {!!isSelected && <circle cx={12} cy={12} r={8} />}
   </svg>
 )
 
