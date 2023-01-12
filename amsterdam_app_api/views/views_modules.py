@@ -296,7 +296,10 @@ def modules_for_app_get(request):
 # End-points from https://amsterdam-app.stoplight.io/docs/amsterdam-app/
 #
 def correct_version_format(version):
-    # Split the version string on the '.' character and convert the components to integers
+    """ Check if a version is correctly formatted as int.int.int
+    :param version:
+    :return:
+    """
     pattern = re.compile("^(\d)+$")
     version_split = version.split('.')
     if len(version_split) != 3:
