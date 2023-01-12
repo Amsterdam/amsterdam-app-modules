@@ -34,7 +34,8 @@ type Props = {
 const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, setValue, watch} = useFormContext()
   const value: SelectAllStatus | undefined = isGroupFormField
-    ? watch(name)?.includes(label)
+    ? // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      watch(name)?.includes(label)
     : watch(name)
   const {onChange: onChangeRHF, ...rest} = register(name)
 
