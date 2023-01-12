@@ -220,18 +220,6 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertDictEqual(response.data, expected_result)
 
-    def test_module_slug_version_post_incorrect_request_body_2(self):
-        """ test incorrect request body """
-        c = Client()
-        data = {'moduleSlug': 'bogus', 'title': 'string', 'version': '1.0.0', 'description': 'string', 'icon': 'icon'}
-        response = c.post('/api/v1/module/string/version',
-                            data=data,
-                            HTTP_AUTHORIZATION=self.authorization_header,
-                            content_type='application/json')
-        expected_result = {"message": "incorrect request body."}
-        self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.data, expected_result)
-
     def test_module_slug_version_post_integrity_error_1(self):
         """ test integrity error """
         c = Client()
@@ -290,6 +278,106 @@ class Views(TestCase):
                           content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, data)
+
+    def test_module_slug_version_patch_incorrect_request_body_1(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {'moduleSlug': 'slug0', 'version': '3.4.5'}
+        response = c.patch('/api/v1/module/slug0/version/1.2.3',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "incorrect request body."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_patch_not_found(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {}
+        response = c.patch('/api/v1/module/slug0/version/3.4.5',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "Module with slug ‘slug0’ and version ‘3.4.5’ not found."}
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_patch_incorrect_version(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {'version': '3.4.5a'}
+        response = c.patch('/api/v1/module/slug0/version/1.2.3',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "incorrect request version formatting."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_patch_integrity_error(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {'version': '1.2.20'}
+        response = c.patch('/api/v1/module/slug0/version/1.2.3',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "Module with slug ‘slug0’ and version ‘1.2.20’ already exists."}
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_patch_ok(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {'version': '4.6.7'}
+        response = c.patch('/api/v1/module/slug0/version/1.2.3',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'version': '4.6.7',
+            'description': 'description',
+            'icon': 'icon'
+        }
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_delete_not_found(self):
+        """ test incorrect request body """
+        c = Client()
+        response = c.delete('/api/v1/module/slug0/version/4.5.6',
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "Module with slug ‘slug0’ and version ‘4.5.6’ not found."}
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_delete_in_use(self):
+        """ test incorrect request body """
+        c = Client()
+        response = c.delete('/api/v1/module/slug0/version/1.2.3',
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {"message": "Module with slug ‘slug0’ is being used in a release."}
+        self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_delete_ok(self):
+        """ Create new module and delete it """
+        c = Client()
+        data = {'moduleSlug': 'slug0', 'title': 'string', 'version': '2.3.4', 'description': 'string', 'icon': 'icon'}
+        c.post('/api/v1/module/slug0/version',
+               data=data,
+               HTTP_AUTHORIZATION=self.authorization_header,
+               content_type='application/json')
+
+        response = c.delete('/api/v1/module/slug0/version/2.3.4',
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
     def test_module_version_get_exist(self):
         """ get module by slug and version (exists) """

@@ -161,6 +161,65 @@ as_module_version_post = {
                                             required=True)],
     'request_body': openapi.Schema(
         type=openapi.TYPE_OBJECT,
+        properties=modules_version,
+    ),
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                  properties=modules_version)),
+        400: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "incorrect request body."
+                                  }
+                              }),
+        409: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'message': 'Module already exists.'
+                                  }
+                              }),
+    },
+    'tags': ['Module']
+}
+
+
+as_module_version_delete = {
+    'methods': ['delete'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'responses': {
+        200: openapi.Response(''),
+        403: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'message': 'Module with slug ‘{slug}’ is being used in a release.'
+                                  }
+                              }),
+        404: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "Module with slug ‘{slug}’ and version ‘{version}’ not found."
+                                  }
+                              }),
+    },
+    'tags': ['Module']
+}
+
+
+as_module_version_patch = {
+    'methods': ['patch'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
         required=["moduleSlug", "version", "status", "title", "description", "icon"],
         properties=modules_version,
     ),
