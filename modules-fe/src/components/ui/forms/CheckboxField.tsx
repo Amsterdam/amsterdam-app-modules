@@ -33,7 +33,7 @@ type Props = {
 
 const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, setValue, watch} = useFormContext()
-  const value: SelectAllStatus = isGroupFormField
+  const value: SelectAllStatus | undefined = isGroupFormField
     ? watch(name)?.includes(label)
     : watch(name)
   const {onChange: onChangeRHF, ...rest} = register(name)
@@ -58,7 +58,7 @@ const CheckboxField = ({isGroupFormField, label, name}: Props) => {
             type="checkbox"
             value={isGroupFormField ? label : undefined}
           />
-          <Indicator isSelected={value} />
+          <Indicator isSelected={!!value} />
           <Phrase>{label}</Phrase>
         </Row>
       </label>
