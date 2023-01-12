@@ -8,29 +8,27 @@ type Props = {
 
 export const selectAllLabel = 'Selecteer alle'
 
-const ModuleStatusField = ({releases}: Props) => {
-  return (
+const ModuleStatusField = ({releases}: Props) => (
+  <Column gutter="sm">
+    <Phrase color="muted">Zet aan of uit voor de volgende releases:</Phrase>
     <Column gutter="sm">
-      <Phrase color="muted">Zet aan of uit voor de volgende releases:</Phrase>
-      <Column gutter="sm">
-        <Column>
-          {releases.map(release => (
-            <CheckboxField
-              key={release}
-              isGroupFormField
-              label={release}
-              name="releases"
-            />
-          ))}
-        </Column>
-        <CheckboxField
-          key="allSelected"
-          label={selectAllLabel}
-          name="allSelected"
-        />
+      <Column>
+        {releases.map(release => (
+          <CheckboxField
+            key={release}
+            isGroupFormField
+            label={release}
+            name="releases"
+          />
+        ))}
       </Column>
+      <CheckboxField
+        key="allSelected"
+        label={selectAllLabel}
+        name="allSelected"
+      />
     </Column>
-  )
-}
+  </Column>
+)
 
 export default ModuleStatusField

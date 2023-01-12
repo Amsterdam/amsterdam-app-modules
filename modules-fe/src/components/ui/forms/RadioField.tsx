@@ -18,27 +18,25 @@ const RadioField = ({defaultValue, name, option, rules}: RadioProps) => {
       defaultValue={defaultValue}
       key={option}
       name={name}
-      render={({field: {onChange, value}, fieldState: {error}}) => {
-        return (
-          <Column gutter="sm" halign="start">
-            <label className="RadioField" htmlFor={id}>
-              <Row gutter="sm" valign="center">
-                <input
-                  {...{id, name, onChange}}
-                  hidden
-                  type="radio"
-                  value={option}
-                />
-                <RadioIndicator
-                  hasError={!!error}
-                  isSelected={value === option}
-                />
-                <Phrase>{option}</Phrase>
-              </Row>
-            </label>
-          </Column>
-        )
-      }}
+      render={({field: {onChange, value}, fieldState: {error}}) => (
+        <Column gutter="sm" halign="start">
+          <label className="RadioField" htmlFor={id}>
+            <Row gutter="sm" valign="center">
+              <input
+                {...{id, name, onChange}}
+                hidden
+                type="radio"
+                value={option}
+              />
+              <RadioIndicator
+                hasError={!!error}
+                isSelected={value === option}
+              />
+              <Phrase>{option}</Phrase>
+            </Row>
+          </label>
+        </Column>
+      )}
       rules={rules}
     />
   )
