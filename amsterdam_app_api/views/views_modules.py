@@ -370,7 +370,7 @@ def module(request):
         if not all(key in data for key in ['slug']):
             return Response({"message": 'incorrect request body.'}, status=400)
 
-        if list(ModulesByApp.objects.filter(moduleSlug=data['slug']).all()):
+        if list(ModuleVersions.objects.filter(moduleSlug=data['slug']).all()):
             return Response({"message": f"Module with slug ‘{data['slug']}’ is being used in a release."}, status=403)
 
         Module.objects.filter(slug=data['slug']).delete()
