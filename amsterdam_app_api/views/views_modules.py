@@ -1,5 +1,6 @@
 """ All CRUD views for modules, modules order and modules for appversion
 """
+import re
 from django.db import IntegrityError
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -24,6 +25,7 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_module_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_delete
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_get
+from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_patch
@@ -293,6 +295,18 @@ def modules_for_app_get(request):
 #
 # End-points from https://amsterdam-app.stoplight.io/docs/amsterdam-app/
 #
+def correct_version_format(version):
+    # Split the version string on the '.' character and convert the components to integers
+    pattern = re.compile("^(\d)+$")
+    version_split = version.split('.')
+    if len(version_split) != 3:
+        return False
+
+    for target_string in version_split:
+        if not pattern.match(target_string):
+            return False
+    return True
+
 
 def slug_status_in_releases(slug):
     """ Get status in releases
@@ -377,6 +391,32 @@ def module_version(request, slug=None, version=None):
     status_in_releases = slug_status_in_releases(slug)
     data['statusInReleases'] = status_in_releases[version] if version in status_in_releases else []
     return Response(data, status=200)
+
+
+@swagger_auto_schema(**as_module_version_post)
+@api_view(['POST'])
+def post_module_version(request, slug=None):
+    """ Create a new version of an existing module.. """
+    data = dict(request.data)
+    keys = ['moduleSlug', 'version', 'title', 'description', 'icon']
+    if not all(key in data for key in keys) or slug != data['moduleSlug']:
+        return Response({"message": 'incorrect request body.'}, status=400)
+
+    _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=data['version']).first()
+    if _module_version is not None:
+        return Response({"message": f"Module with slug ‘{slug}’ and version ‘{data['version']}’ already exists."},
+                        status=409)
+
+    _module = Module.objects.filter(slug=slug).first()
+    if _module is None:
+        return Response({"message": f"Module with slug ‘{slug}’ not found."}, status=409)
+
+    if not correct_version_format(data['version']):
+        return Response({"message": 'incorrect request version formatting.'}, status=400)
+
+    _new_module_version = ModuleVersions.objects.create(**data)
+    return Response(ModuleVersionsSerializer(_new_module_version, many=False).data, status=200)
+
 
 
 @swagger_auto_schema(**as_module_slug_get)

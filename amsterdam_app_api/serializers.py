@@ -18,7 +18,7 @@ class ModuleVersionsSerializer(serializers.ModelSerializer):
     """ ModuleVersions """
     class Meta:
         model = ModuleVersions
-        fields = '__all__'
+        fields = ('moduleSlug', 'title', 'version', 'description', 'icon')
 
 
 class ModulesByAppSerializer(serializers.ModelSerializer):
