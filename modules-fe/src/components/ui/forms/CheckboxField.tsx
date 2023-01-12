@@ -36,15 +36,13 @@ type Props = {
 const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, setValue, watch} = useFormContext()
   const value = isGroupFormField ? watch(name)?.includes(label) : watch(name)
-  const {onChange, ...rest} = register(name)
+  const {onChange: onChangeRHF, ...rest} = register(name)
 
-  const onIntermediateStateOnChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (value === 'indeterminate') {
       setValue(name, true)
     } else {
-      onChange(event)
+      onChangeRHF(event)
     }
   }
 
@@ -53,10 +51,10 @@ const CheckboxField = ({isGroupFormField, label, name}: Props) => {
       <label className="CheckboxField" htmlFor={label}>
         <Row gutter="sm" valign="center">
           <input
+            {...rest}
             id={label}
             hidden
-            onChange={onIntermediateStateOnChange}
-            {...rest}
+            onChange={onChange}
             type="checkbox"
             value={isGroupFormField ? label : undefined}
           />
