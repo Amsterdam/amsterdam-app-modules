@@ -31,7 +31,9 @@ const ModuleScreen = () => {
       : skipToken,
   )
   const latestVersion = module?.versions[0]
-  const [moduleStatus, setModuleStatus] = useState(module?.status)
+  const [moduleStatus, setModuleStatus] = useState<ModuleStatus | undefined>(
+    module?.status,
+  )
 
   useEffect(() => {
     if (moduleStatus === undefined) {
@@ -50,7 +52,11 @@ const ModuleScreen = () => {
         } wilt zetten?`,
       )
     ) {
-      setModuleStatus(moduleStatus ? ModuleStatus.off : ModuleStatus.on)
+      setModuleStatus(
+        moduleStatus === ModuleStatus.active
+          ? ModuleStatus.inactive
+          : ModuleStatus.active,
+      )
     }
   }
 
@@ -89,7 +95,9 @@ const ModuleScreen = () => {
         </Box>
         <Button
           variant="secondary"
-          label={moduleStatus === ModuleStatus.on ? 'Uitzetten' : 'Aanzetten'}
+          label={
+            moduleStatus === ModuleStatus.active ? 'Uitzetten' : 'Aanzetten'
+          }
           onClick={handleModuleStatusChange}
         />
       </Column>

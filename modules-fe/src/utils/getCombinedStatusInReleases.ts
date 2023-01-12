@@ -13,5 +13,5 @@ export const getActiveReleases = (
   releasesByStatus: ModuleStatusInRelease[],
 ): string[] =>
   getCombinedStatusInReleases(
-    releasesByStatus.filter(r => r.status === ModuleStatus.on),
+    releasesByStatus.filter(r => r.status === ModuleStatus.active),
   )

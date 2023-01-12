@@ -31,6 +31,6 @@ export type ModuleStatusInRelease = {
 }
 
 export enum ModuleStatus {
-  'off' = 0,
-  'on' = 1,
+  'active' = 1,
+  'inactive' = 0,
 }
