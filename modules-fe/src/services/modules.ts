@@ -38,7 +38,7 @@ export const modulesApi = baseApi.injectEndpoints({
       ModuleVersionWithRelease,
       ModuleVersionQueryArg
     >({
-      query: ({slug, version}) => `/api/v1/module-version/${slug}/${version}`,
+      query: ({slug, version}) => `/api/v1/module/${slug}/version/${version}`,
       providesTags: ['Module'],
     }),
     getModules: builder.query<ModuleVersion[], void>({
