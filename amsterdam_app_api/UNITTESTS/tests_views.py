@@ -351,7 +351,7 @@ class Views(TestCase):
         response = c.delete('/api/v1/module/slug0/version/4.5.6',
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
-        expected_result = {"message": f"Module with slug ‘slug0’ and version ‘4.5.6’ not found."}
+        expected_result = {"message": "Module with slug ‘slug0’ and version ‘4.5.6’ not found."}
         self.assertEqual(response.status_code, 404)
         self.assertDictEqual(response.data, expected_result)
 
@@ -361,7 +361,7 @@ class Views(TestCase):
         response = c.delete('/api/v1/module/slug0/version/1.2.3',
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
-        expected_result = {"message": f"Module with slug ‘slug0’ is being used in a release."}
+        expected_result = {"message": "Module with slug ‘slug0’ is being used in a release."}
         self.assertEqual(response.status_code, 403)
         self.assertDictEqual(response.data, expected_result)
 

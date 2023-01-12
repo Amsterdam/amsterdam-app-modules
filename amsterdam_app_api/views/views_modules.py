@@ -386,8 +386,10 @@ def module(request):
 @swagger_auto_schema(**as_module_version_delete)
 @api_view(['GET', 'PATCH', 'DELETE'])
 def module_version(request, slug=None, version=None):
+    """ Query, Create or Patch a new version of an existing module.
+        query: Returns a specific version of a module, along with its status in all releases of the app.
+    """
     if request.method == 'GET':
-        """ Returns a specific version of a module, along with its status in all releases of the app. """
         _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
         if _module_version is None:
             return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
@@ -430,7 +432,7 @@ def module_version(request, slug=None, version=None):
             return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
 
         _module_version_in_releases = list(ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).all())
-        if len(_module_version_in_releases):
+        if len(_module_version_in_releases) != 0:
             return Response({"message": f"Module with slug ‘{slug}’ is being used in a release."}, status=403)
 
         _module_version.delete()
