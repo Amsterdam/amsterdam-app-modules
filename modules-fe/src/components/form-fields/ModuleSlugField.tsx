@@ -8,7 +8,7 @@ const ModuleSlugField = ({defaultValue}: Props) => (
   <TextField
     defaultValue={defaultValue}
     label="Slug"
-    name="slug"
+    name="moduleSlug"
     rules={{
       required: 'Geef de module een slug.',
       validate: (value: string) =>
