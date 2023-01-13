@@ -2,13 +2,13 @@
   display: block;
   border: none;
   background: none;
-  color: currentColor;
-  text-decoration: initial;
+  text-decoration: none;
 }
 
 .BlockLink:hover {
   background-color: var(--bg-color-blocklink-hover);
   text-decoration: underline;
+  text-decoration-color: var(--text-color-default);
   cursor: pointer;
 }
 

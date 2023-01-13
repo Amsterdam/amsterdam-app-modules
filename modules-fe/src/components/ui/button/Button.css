@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: center;
   height: var(--height);
+  color: var(--color);
   background-color: var(--background-color);
   padding-block: calc(var(--padding-block) - var(--border-width));
   padding-inline: calc(var(--padding-inline) - var(--border-width));
@@ -18,18 +19,10 @@
   border-width: var(--border-width);
 }
 
-.Button:disabled {
-  cursor: not-allowed;
-}
-
-.Button[data-flex="true"] {
-  flex: auto;
-}
-
 .Button[data-variant="primary"] {
   --background-color: var(--bg-color-button);
   --border-color: var(--border-color-button-emphasis);
-  color: var(--text-color-inverse);
+  --color: var(--text-color-inverse);
 }
 
 .Button[data-variant="primary"]:hover {
@@ -44,21 +37,26 @@
 .Button[data-variant="secondary"] {
   --background-color: var(--bg-color-cutout);
   --border-color: var(--border-color-button-emphasis);
-  color: var(--text-color-button-secondary);
+  --color: var(--text-color-button-secondary);
 }
 
 .Button[data-variant="secondary"]:hover {
   --background-color: var(--bg-color-cutout);
   --border-color: var(--border-color-button-secondary-hover);
   --border-width: var(--size-border-xl);
-  color: var(--text-color-button-secondary-hover);
+  --color: var(--text-color-button-secondary-hover);
 }
 
 .Button[data-variant="secondary"]:disabled {
   --border-color: var(--border-color-button-secondary-disabled);
-  color: var(--text-color-button-secondary-disabled);
+  --color: var(--text-color-button-secondary-disabled);
 }
 
-.ButtonLabel {
-  color: currentColor
+
+.Button:disabled {
+  cursor: not-allowed;
+}
+
+.Button[data-flex="true"] {
+  flex: auto;
 }

@@ -4,17 +4,21 @@
 
 .Icon {
   flex: none;
-  fill: currentColor
+  fill: var(--text-color-default);
 }
 
+.Icon[data-color="error"] {fill: var(--text-color-warning);}
+.Icon[data-color="inverse"] {fill: var(--text-color-inverse);}
+.Icon[data-color="muted"] {fill: var(--text-color-muted);}
+
 .Icon[data-spinner="true"] {
-  stroke: currentColor;
-  stroke-width: 3;
   fill: none;
+  stroke: var(--text-color-default);
+  stroke-width: 3;
   animation: spinner 1s linear infinite;
 }
 
-.Icon[data-fill="default"] {fill: var(--text-color-default);}
-.Icon[data-fill="error"] {fill: var(--text-color-warning);}
-.Icon[data-fill="inverse"] {fill: var(--text-color-inverse);}
-.Icon[data-fill="muted"] {fill: var(--text-color-muted);}
+.Icon[data-spinner="true"][data-color="error"] {stroke: var(--text-color-warning);}
+.Icon[data-spinner="true"][data-color="inverse"] {stroke: var(--text-color-inverse);}
+.Icon[data-spinner="true"][data-color="muted"] {stroke: var(--text-color-muted);}
+
