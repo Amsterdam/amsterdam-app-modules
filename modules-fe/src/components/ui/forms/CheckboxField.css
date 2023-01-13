@@ -11,7 +11,7 @@
   --color: var(--border-color-pressable);
 }
 
-.Indicator[data-is-selected="true"] {
+.Indicator[data-checked="true"] {
   --bg-color: var(--border-color-pressable);
   --color: var(--bg-color-cutout);
 }

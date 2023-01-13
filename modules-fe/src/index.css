@@ -40,6 +40,7 @@
   --bg-color-blocklink-active: var(--baseColor-custom-grey1);
   --bg-color-button: var(--baseColor-primary-blue);
   --bg-color-button-hover: var(--baseColor-functional-darkblue);
+  --bg-color-button-disabled: var(--baseColor-neutral-grey3);
 
   /* border colors */
   --border-color-cutout: var(--baseColor-primary-white);
@@ -48,11 +49,13 @@
   --border-color-pressable: var(--baseColor-primary-blue);
   --border-color-button-emphasis: var(--baseColor-primary-blue);
   --border-color-button-secondary-hover: var(--baseColor-functional-darkblue);
+  --border-color-button-secondary-disabled: var(--baseColor-neutral-grey3);
   --border-color-warning: var(--baseColor-support-invalid);
 
   /* text colors */
   --text-color-button-secondary: var(--baseColor-primary-blue);
   --text-color-button-secondary-hover: var(--baseColor-functional-darkblue);
+  --text-color-button-secondary-disabled: var(--baseColor-neutral-grey3);
   --text-color-default: var(--baseColor-primary-black);
   --text-color-inverse: var(--baseColor-primary-white);
   --text-color-muted: var(--baseColor-neutral-grey4);

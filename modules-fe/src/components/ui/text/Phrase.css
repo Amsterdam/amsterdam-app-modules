@@ -1,4 +1,7 @@
-.Phrase[data-color="default"] {color: var(--text-color-default);}
+.Phrase {
+  color: var(--text-color-default);
+}
+
 .Phrase[data-color="error"] {color: var(--text-color-warning);}
 .Phrase[data-color="inverse"] {color: var(--text-color-inverse);}
 .Phrase[data-color="muted"] {color: var(--text-color-muted);}

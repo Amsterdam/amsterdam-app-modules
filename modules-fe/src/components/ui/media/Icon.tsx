@@ -3,7 +3,7 @@ import {IconName, IconPath} from './iconPath'
 import {IconSize} from './types'
 
 export type IconProps = {
-  fill?: 'default' | 'error' | 'inverse' | 'muted'
+  color?: 'error' | 'inverse' | 'muted'
   /**
    * The name of the icon to display.
    */
@@ -14,13 +14,14 @@ export type IconProps = {
   size?: keyof typeof IconSize
 }
 
-const Icon = ({fill, name, size = 'md'}: IconProps) => {
+const Icon = ({color, name, size = 'md'}: IconProps) => {
   const svgSize = IconSize[size]
 
   return (
     <svg
       className="Icon"
-      data-fill={fill}
+      data-color={color}
+      data-spinner={name === 'spinner'}
       fillRule="evenodd"
       height={svgSize}
       viewBox="0 0 32 32"

@@ -1,11 +1,11 @@
 import './RadioIndicator.css'
 
 type RadioIndicatorProps = {
+  checked: boolean
   hasError: boolean
-  isSelected: boolean
 }
 
-const RadioIndicator = ({hasError, isSelected}: RadioIndicatorProps) => (
+const RadioIndicator = ({checked, hasError}: RadioIndicatorProps) => (
   <svg
     className="RadioIndicator"
     data-has-error={hasError}
@@ -13,7 +13,7 @@ const RadioIndicator = ({hasError, isSelected}: RadioIndicatorProps) => (
     viewBox="0 0 24 24"
     width={24}>
     <circle cx={12} cy={12} r={11} />
-    {!!isSelected && <circle cx={12} cy={12} r={8} />}
+    {!!checked && <circle cx={12} cy={12} r={8} />}
   </svg>
 )
 

@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: center;
   height: var(--height);
+  color: var(--color);
   background-color: var(--background-color);
   padding-block: calc(var(--padding-block) - var(--border-width));
   padding-inline: calc(var(--padding-inline) - var(--border-width));
@@ -18,43 +19,44 @@
   border-width: var(--border-width);
 }
 
-.Button[data-flex="true"] {
-  flex: auto;
-}
-
 .Button[data-variant="primary"] {
   --background-color: var(--bg-color-button);
   --border-color: var(--border-color-button-emphasis);
+  --color: var(--text-color-inverse);
 }
 
 .Button[data-variant="primary"]:hover {
   --background-color: var(--bg-color-button-hover);
 }
 
+.Button[data-variant="primary"]:disabled {
+  --background-color: var(--bg-color-button-disabled);
+  --border-color: var(--border-color-button-secondary-disabled);
+}
+
 .Button[data-variant="secondary"] {
   --background-color: var(--bg-color-cutout);
   --border-color: var(--border-color-button-emphasis);
+  --color: var(--text-color-button-secondary);
 }
 
 .Button[data-variant="secondary"]:hover {
   --background-color: var(--bg-color-cutout);
   --border-color: var(--border-color-button-secondary-hover);
   --border-width: var(--size-border-xl);
-}
-
-.ButtonLabel {
-  --color: currentColor;
-  color: var(--color);
-}
-
-[data-variant="primary"] > .ButtonLabel  {
-  --color: var(--text-color-inverse); 
-}
-
-[data-variant="secondary"] > .ButtonLabel  {
-  --color: var(--text-color-button-secondary);
-}
-
-[data-variant="secondary"]:hover > .ButtonLabel {
   --color: var(--text-color-button-secondary-hover);
+}
+
+.Button[data-variant="secondary"]:disabled {
+  --border-color: var(--border-color-button-secondary-disabled);
+  --color: var(--text-color-button-secondary-disabled);
+}
+
+
+.Button:disabled {
+  cursor: not-allowed;
+}
+
+.Button[data-flex="true"] {
+  flex: auto;
 }

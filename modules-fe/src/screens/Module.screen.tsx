@@ -1,5 +1,7 @@
 import {skipToken} from '@reduxjs/toolkit/query'
+import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
+import {ModuleStatus} from 'types/module'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
@@ -29,6 +31,34 @@ const ModuleScreen = () => {
       : skipToken,
   )
   const latestVersion = module?.versions[0]
+  const [moduleStatus, setModuleStatus] = useState<ModuleStatus | undefined>(
+    module?.status,
+  )
+
+  useEffect(() => {
+    if (moduleStatus === undefined) {
+      return
+    }
+    // eslint-disable-next-line no-console
+    console.log("API call to update module's status") // TODO: implement API call once ready
+  }, [moduleStatus])
+
+  const handleModuleStatusChange = () => {
+    if (
+      // eslint-disable-next-line no-alert
+      window.confirm(
+        `Weet je zeker dat je alle versies van de module ${
+          moduleStatus ? 'uit' : 'aan'
+        } wilt zetten?`,
+      )
+    ) {
+      setModuleStatus(
+        moduleStatus === ModuleStatus.active
+          ? ModuleStatus.inactive
+          : ModuleStatus.active,
+      )
+    }
+  }
 
   if (isLoading) {
     return <LoadingBox />
@@ -63,6 +93,13 @@ const ModuleScreen = () => {
             ))}
           </List>
         </Box>
+        <Button
+          variant="secondary"
+          label={
+            moduleStatus === ModuleStatus.active ? 'Uitzetten' : 'Aanzetten'
+          }
+          onClick={handleModuleStatusChange}
+        />
       </Column>
     </Screen>
   )

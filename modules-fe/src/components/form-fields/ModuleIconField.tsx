@@ -1,5 +1,5 @@
 import TextField from '../ui/forms/TextField'
-import {iconNames} from '../ui/media/iconPath'
+import {moduleIconNames} from '../ui/media/iconPath'
 
 type Props = {
   defaultValue: string | undefined
@@ -12,8 +12,10 @@ const ModuleIconField = ({defaultValue}: Props) => (
     name="icon"
     rules={{
       required: 'Geef aan welk pictogram de module illustreert.',
-      validate: (value: string) =>
-        iconNames.includes(value) || 'Geef de naam van een bestaand pictogram.',
+      validate: value =>
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        moduleIconNames.includes(value) ||
+        'Geef de naam van een bestaand pictogram.',
     }}
   />
 )

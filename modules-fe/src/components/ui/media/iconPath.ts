@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
-export type IconName = keyof typeof IconPath
+export type ModuleIconName = keyof typeof ModuleIconPath
+export type IconName = keyof typeof VariousIconPath | ModuleIconName
 
-export enum IconPath {
+export enum ModuleIconPath {
   alert = 'm15.9 2.3-16 28.6h32l-16-28.6zm0 8.4 9 16.1h-18l9-16.1zm-1 5.9h2v5.1h-2v-5.1zm2 8.1v-2h-2v2h2z',
   announcement = 'M23 0v11.6c1.8.6 3 2.3 3 4.2s-1.2 3.6-3 4.2v11.6L12.6 26l-5.2 5.2-2.8-2.8 4.3-4.3-1.5-.8H0v-15h7.4L23 0zM4 12.3v7h4v-7H4zM19 25l-9-4.8v-8.7l9-4.8V25zM29.4 8.1l-3.1 3.1 1.4 1.4 3.1-3.1-1.4-1.4zm-1.7 11-1.4 1.4 3.1 2.9 1.4-1.4-3.1-2.9zm.3-4.3h4v2h-4v-2z',
   chatting = 'M23.4 7h-15V5.5h15V7zm-4 1.5h-11V10h11V8.5zm10-7v13h-9v5l-5-5h-13v-13h27zm-2 2h-23v9h23v-9zm-2.5 24h-3.7c-2.1 0-3.6.9-3.6 3.6v.9h11v-.9c0-2.7-1.6-3.6-3.7-3.6zm.9-3.7c.2-1.1-.3-2.2-1.2-2.9-.9-.6-2.2-.6-3.1 0s-1.4 1.8-1.2 2.9c.3 1.3 1.4 2.3 2.8 2.3s2.4-1 2.7-2.3zm-14.9 3.7H7.2c-2.1 0-3.6.9-3.6 3.6v.9h11v-.9c0-2.7-1.6-3.6-3.7-3.6zm.9-3.7c.2-1.1-.3-2.2-1.2-2.9s-2.2-.6-3.1 0-1.4 1.8-1.2 2.9c0 .7.3 1.4.8 1.9s1.2.8 2 .8c1.5 0 2.7-1.2 2.7-2.7z',
@@ -13,4 +14,10 @@ export enum IconPath {
   'trash-bin' = 'M21,4h8v4h-2v24H5V8H3V4h8V0h10V4z M19,2h-6v2h6V2z M23,28H9V8h14V28z M13,12h-2v12h2V12z M15,12h2v12h-2V12z M21,12h-2v12h2V12z',
 }
 
-export const iconNames = Object.keys(IconPath)
+export enum VariousIconPath {
+  spinner = 'M16.3 5c2.2 0 4.3.7 6.1 1.9 1.8 1.2 3.2 3 4 5 .8 2 1 4.2.6 6.4-.4 2.1-1.5 4.1-3.1 5.6s-3.5 2.6-5.7 3c-2.1.4-4.3.2-6.3-.7-2-.9-3.7-2.3-4.9-4.1-1.2-1.8-1.8-4-1.8-6.1',
+}
+
+export const IconPath = {...ModuleIconPath, ...VariousIconPath}
+
+export const moduleIconNames = Object.keys(ModuleIconPath)

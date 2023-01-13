@@ -15,6 +15,7 @@ import {
   getActiveReleases,
   getCombinedStatusInReleases,
 } from 'utils/getCombinedStatusInReleases'
+import Icon from '../components/ui/media/Icon'
 
 type Params = {
   slug: string
@@ -96,6 +97,7 @@ const EditModuleVersionStatusScreen = () => {
   const onSubmit = (data: FormData) => {
     const activeReleases: ModuleStatusInRelease = {status: 1, releases: []}
     const inactiveReleases: ModuleStatusInRelease = {status: 0, releases: []}
+
     releases.forEach(release => {
       if (data.releases.includes(release)) {
         activeReleases.releases.push(release)
@@ -112,6 +114,8 @@ const EditModuleVersionStatusScreen = () => {
     return <LoadingBox />
   }
 
+  const isSaving = false
+
   if (!moduleVersion?.statusInReleases) {
     return null
   }
@@ -125,7 +129,12 @@ const EditModuleVersionStatusScreen = () => {
         <FormProvider {...form}>
           <ModuleStatusField releases={releases} />
         </FormProvider>
-        <Button label="Opslaan" onClick={handleSubmit(onSubmit)} />
+        <Button
+          disabled={isSaving}
+          icon={isSaving ? <Icon color="inverse" name="spinner" /> : undefined}
+          label="Opslaan"
+          onClick={handleSubmit(onSubmit)}
+        />
       </Column>
     </Screen>
   )
