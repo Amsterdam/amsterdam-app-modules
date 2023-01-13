@@ -1,6 +1,7 @@
 import {ReactNode} from 'react'
 import './Screen.css'
-import Header from '../../features/Header'
+import Logo from '../media/Logo'
+import Column from './Column'
 
 type Props = {
   children: ReactNode
@@ -9,8 +10,10 @@ type Props = {
 const Screen = ({children}: Props) => (
   <div className="Screen">
     <div className="Container">
-      <Header />
-      {children}
+      <Column gutter="xl">
+        <Logo />
+        <div>{children}</div>
+      </Column>
     </div>
   </div>
 )

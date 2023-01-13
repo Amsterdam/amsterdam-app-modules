@@ -33,19 +33,17 @@ const ReleasesScreen = () => {
           label="Nieuwe release"
           onClick={() => navigate('/release/create')}
         />
-        <Box inset="no" negativeInsetHorizontal="md">
-          <List>
-            {releases.map(version => (
-              <ListItem key={version}>
-                <BlockLink to={`/release/${version}`}>
-                  <Box>
-                    <Phrase>Versie {version}</Phrase>
-                  </Box>
-                </BlockLink>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+        <List>
+          {releases.map(version => (
+            <ListItem key={version}>
+              <BlockLink to={`/release/${version}`}>
+                <Box>
+                  <Phrase>Versie {version}</Phrase>
+                </Box>
+              </BlockLink>
+            </ListItem>
+          ))}
+        </List>
       </Column>
     </Screen>
   )

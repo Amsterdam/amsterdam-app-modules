@@ -78,21 +78,19 @@ const ModuleScreen = () => {
             navigate(`/module/${slug}/create`)
           }}
         />
-        <Box inset="no" negativeInsetHorizontal="md">
-          <List>
-            {module.versions.map(({title, version}) => (
-              <ListItem key={version}>
-                <BlockLink to={`/module/${slug}/${version}`}>
-                  <Box>
-                    <Phrase>
-                      {version} – {title}
-                    </Phrase>
-                  </Box>
-                </BlockLink>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+        <List>
+          {module.versions.map(({title, version}) => (
+            <ListItem key={version}>
+              <BlockLink to={`/module/${slug}/${version}`}>
+                <Box>
+                  <Phrase>
+                    {version} – {title}
+                  </Phrase>
+                </Box>
+              </BlockLink>
+            </ListItem>
+          ))}
+        </List>
         <Button
           variant="secondary"
           label={

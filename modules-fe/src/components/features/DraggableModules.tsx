@@ -25,29 +25,24 @@ const DraggableModules = ({
       <Phrase>
         {variant === 'active' ? 'Actieve Modules' : 'Inactieve Modules'}
       </Phrase>
-      <Box inset="no" negativeInsetHorizontal="md">
-        <Droppable droppableId={droppableId}>
-          <List>
-            {modules.map(({icon, moduleSlug, title, version}, index) => (
-              <Draggable
-                key={moduleSlug}
-                draggableId={moduleSlug}
-                index={index}>
-                <ListItem>
-                  <Box>
-                    <Row gutter="sm" valign="baseline">
-                      <Icon name={icon} />
-                      <Phrase>{title}</Phrase>
-                      <Phrase>-</Phrase>
-                      <Phrase>{`v${version}`}</Phrase>
-                    </Row>
-                  </Box>
-                </ListItem>
-              </Draggable>
-            ))}
-          </List>
-        </Droppable>
-      </Box>
+      <Droppable droppableId={droppableId}>
+        <List>
+          {modules.map(({icon, moduleSlug, title, version}, index) => (
+            <Draggable key={moduleSlug} draggableId={moduleSlug} index={index}>
+              <ListItem>
+                <Box>
+                  <Row gutter="sm" valign="baseline">
+                    <Icon name={icon} />
+                    <Phrase>{title}</Phrase>
+                    <Phrase>-</Phrase>
+                    <Phrase>{`v${version}`}</Phrase>
+                  </Row>
+                </Box>
+              </ListItem>
+            </Draggable>
+          ))}
+        </List>
+      </Droppable>
     </div>
   )
 }

@@ -40,22 +40,20 @@ const ModulesScreen = () => {
             navigate(`/module/create`)
           }}
         />
-        <Box inset="no" negativeInsetHorizontal="md">
-          <List>
-            {sortedModules.map(({icon, moduleSlug, title}) => (
-              <ListItem key={moduleSlug}>
-                <BlockLink to={`/module/${moduleSlug}`}>
-                  <Box>
-                    <Row gutter="md" valign="baseline">
-                      <Icon name={icon} />
-                      <Phrase>{title}</Phrase>
-                    </Row>
-                  </Box>
-                </BlockLink>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+        <List>
+          {sortedModules.map(({icon, moduleSlug, title}) => (
+            <ListItem key={moduleSlug}>
+              <BlockLink to={`/module/${moduleSlug}`}>
+                <Box>
+                  <Row gutter="md" valign="baseline">
+                    <Icon name={icon} />
+                    <Phrase>{title}</Phrase>
+                  </Row>
+                </Box>
+              </BlockLink>
+            </ListItem>
+          ))}
+        </List>
       </Column>
     </Screen>
   )
