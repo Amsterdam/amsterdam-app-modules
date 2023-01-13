@@ -28,10 +28,7 @@ const RadioField = ({defaultValue, name, option, rules}: RadioProps) => {
                 type="radio"
                 value={option}
               />
-              <RadioIndicator
-                hasError={!!error}
-                isSelected={value === option}
-              />
+              <RadioIndicator hasError={!!error} checked={value === option} />
               <Phrase>{option}</Phrase>
             </Row>
           </label>

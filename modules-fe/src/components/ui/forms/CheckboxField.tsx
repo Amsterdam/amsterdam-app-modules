@@ -8,18 +8,18 @@ import './CheckboxField.css'
 export type CheckboxValue = true | 'indeterminate' | false
 
 type IndicatorProps = {
-  isSelected: CheckboxValue
+  checked: CheckboxValue
 }
 
-const Indicator = ({isSelected}: IndicatorProps) => (
+const Indicator = ({checked}: IndicatorProps) => (
   <svg
     className="Indicator"
-    data-is-selected={isSelected}
-    width="24"
+    data-checked={checked}
     height="24"
-    viewBox="0 0 24 24">
+    viewBox="0 0 24 24"
+    width="24">
     <rect width="24" height="24" />
-    {isSelected === 'indeterminate' ? (
+    {checked === 'indeterminate' ? (
       <line x1="5" y1="12" x2="19" y2="12" />
     ) : (
       <path d="M10.1079 17.5082L4 11.0841L5.45546 9.69887L10.128 14.6173L18.5646 6L20 7.40025L10.1079 17.5082Z" />
@@ -59,7 +59,7 @@ const CheckboxField = ({isGroupFormField, label, name}: Props) => {
             type="checkbox"
             value={isGroupFormField ? label : undefined}
           />
-          <Indicator isSelected={value} />
+          <Indicator checked={value} />
           <Phrase>{label}</Phrase>
         </Row>
       </label>

@@ -8,32 +8,32 @@ export enum ButtonVariant {
 }
 
 type Props = {
+  disabled?: boolean
   flex?: boolean
   icon?: ReactNode
-  isDisabled?: boolean
   label: string
   onClick: MouseEventHandler<HTMLButtonElement>
   variant?: keyof typeof ButtonVariant
 }
 
 const Button = ({
+  disabled,
   flex,
   icon,
-  isDisabled,
   label,
   onClick,
   variant = 'primary',
 }: Props) => (
   <button
-    onClick={onClick}
     className="Button"
     data-flex={flex}
-    disabled={isDisabled}
     data-variant={variant}
+    disabled={disabled}
+    onClick={onClick}
     type="button">
     <Row gutter="sm" valign="center">
       {icon}
-      <span className="ButtonLabel" data-font="body" data-ellipsize>
+      <span className="ButtonLabel" data-ellipsize data-font="body">
         {label}
       </span>
     </Row>
