@@ -35,7 +35,7 @@ type Props = {
 const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, setValue, watch} = useFormContext()
   const value = isGroupFormField
-    ? [...watch(name)].includes(label)
+    ? [...(watch(name) ?? [])].includes(label)
     : watch(name)
   const {onChange: onChangeRHF, ...rest} = register(name)
 
