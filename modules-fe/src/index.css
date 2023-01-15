@@ -81,10 +81,14 @@
 
   /* font sizes */
   --text-font-size-h1: 32px;
+  --text-font-size-h2: 28px;
+  --text-font-size-h3: 24px;
   --text-font-size-body: 18px;
 
   /* line heights */
   --text-line-height-h1: 1.1;
+  --text-line-height-h2: 1.2;
+  --text-line-height-h3: 1.3;
   --text-line-height-body: 1.6;
 
   --input-border-width: var(--size-border-md);
@@ -110,7 +114,3 @@ body {
   line-height: var(--text-line-height-body);
 }
 
-[data-font="title"] {
-  font-size: var(--text-font-size-h1);
-  line-height: var(--text-line-height-h1);
-}
