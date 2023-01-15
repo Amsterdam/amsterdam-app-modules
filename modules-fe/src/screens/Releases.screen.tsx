@@ -38,7 +38,7 @@ const ReleasesScreen = () => {
             <ListItem key={version}>
               <BlockLink to={`/release/${version}`}>
                 <Box>
-                  <Phrase>Versie {version}</Phrase>
+                  <Phrase>Release {version}</Phrase>
                 </Box>
               </BlockLink>
             </ListItem>

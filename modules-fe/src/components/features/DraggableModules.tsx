@@ -1,13 +1,13 @@
 import Draggable from 'components/drag-n-drop/Draggable'
 import Droppable from 'components/drag-n-drop/Droppable'
 import Box from 'components/ui/layout/Box'
+import Column from 'components/ui/layout/Column'
 import Row from 'components/ui/layout/Row'
 import Icon from 'components/ui/media/Icon'
 import List from 'components/ui/text/List'
 import ListItem from 'components/ui/text/ListItem'
 import Phrase from 'components/ui/text/Phrase'
 import {ModuleVersion} from 'types/module'
-import './DraggableModules.css'
 
 type DraggableModulesProps = {
   droppableId: string
@@ -20,10 +20,13 @@ const DraggableModules = ({
   modules,
   variant = 'active',
 }: DraggableModulesProps) => {
+  const isActive = variant === 'active'
+  const phraseColor = isActive ? undefined : 'muted'
+
   return (
-    <div className="DraggableModules" data-isActive={variant === 'active'}>
+    <Column gutter="md">
       <Phrase color="muted">
-        {variant === 'active' ? 'Modules in deze release' : 'Overige modules'}
+        Modules {variant !== 'active' ? 'niet' : undefined} in deze release
       </Phrase>
       <Droppable droppableId={droppableId}>
         <List>
@@ -33,9 +36,9 @@ const DraggableModules = ({
                 <Box>
                   <Row gutter="sm" valign="baseline">
                     <Icon name={icon} />
-                    <Phrase>{title}</Phrase>
-                    <Phrase>-</Phrase>
-                    <Phrase>{`v${version}`}</Phrase>
+                    <Phrase color={phraseColor}>
+                      {title} – {version}
+                    </Phrase>
                   </Row>
                 </Box>
               </ListItem>
@@ -43,7 +46,7 @@ const DraggableModules = ({
           ))}
         </List>
       </Droppable>
-    </div>
+    </Column>
   )
 }
 

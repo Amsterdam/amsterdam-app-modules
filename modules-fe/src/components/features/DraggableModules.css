@@ -1,7 +1,0 @@
-.DraggableModules {
-  color: var(--text-color-default);
-}
-
-.DraggableModules[data-isActive="false"] {
-  color: var(--text-color-muted);
-}

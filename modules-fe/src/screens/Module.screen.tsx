@@ -84,7 +84,7 @@ const ModuleScreen = () => {
               <BlockLink to={`/module/${slug}/${version}`}>
                 <Box>
                   <Phrase>
-                    {version} – {title}
+                    {title} – {version}
                   </Phrase>
                 </Box>
               </BlockLink>
