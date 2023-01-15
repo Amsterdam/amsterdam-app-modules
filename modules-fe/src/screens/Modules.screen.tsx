@@ -1,16 +1,14 @@
 import {useNavigate} from 'react-router-dom'
 import Button from 'components/ui/button/Button'
 import BlockLink from '../components/ui/button/BlockLink'
+import Module from '../components/ui/containers/Module'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
-import Row from '../components/ui/layout/Row'
 import Screen from '../components/ui/layout/Screen'
-import Icon from '../components/ui/media/Icon'
 import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
-import Phrase from '../components/ui/text/Phrase'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetModulesQuery} from '../services/modules'
 
@@ -45,10 +43,7 @@ const ModulesScreen = () => {
             <ListItem key={moduleSlug}>
               <BlockLink to={`/module/${moduleSlug}`}>
                 <Box>
-                  <Row gutter="md" valign="baseline">
-                    <Icon name={icon} />
-                    <Phrase>{title}</Phrase>
-                  </Row>
+                  <Module {...{icon, title}} />
                 </Box>
               </BlockLink>
             </ListItem>

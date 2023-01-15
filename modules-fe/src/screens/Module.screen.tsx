@@ -4,6 +4,7 @@ import {useNavigate, useParams} from 'react-router-dom'
 import {ModuleStatus} from 'types/module'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
+import Module from '../components/ui/containers/Module'
 import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Box from '../components/ui/layout/Box'
@@ -11,7 +12,6 @@ import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
-import Phrase from '../components/ui/text/Phrase'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetModuleQuery} from '../services/modules'
 
@@ -79,13 +79,11 @@ const ModuleScreen = () => {
           }}
         />
         <List>
-          {module.versions.map(({title, version}) => (
+          {module.versions.map(({icon, title, version}) => (
             <ListItem key={version}>
               <BlockLink to={`/module/${slug}/${version}`}>
                 <Box>
-                  <Phrase>
-                    {title} – {version}
-                  </Phrase>
+                  <Module {...{icon, title, version}} />
                 </Box>
               </BlockLink>
             </ListItem>

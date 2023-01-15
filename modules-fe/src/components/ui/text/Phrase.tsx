@@ -1,7 +1,7 @@
 import {ReactNode} from 'react'
 import './Phrase.css'
 
-type Props = {
+export type PhraseProps = {
   children: ReactNode
   color?: 'error' | 'inverse' | 'muted'
   emphasis?: 'strong'

@@ -2,12 +2,11 @@ import Draggable from 'components/drag-n-drop/Draggable'
 import Droppable from 'components/drag-n-drop/Droppable'
 import Box from 'components/ui/layout/Box'
 import Column from 'components/ui/layout/Column'
-import Row from 'components/ui/layout/Row'
-import Icon from 'components/ui/media/Icon'
 import List from 'components/ui/text/List'
 import ListItem from 'components/ui/text/ListItem'
 import Phrase from 'components/ui/text/Phrase'
 import {ModuleVersion} from 'types/module'
+import Module from '../ui/containers/Module'
 
 type DraggableModulesProps = {
   droppableId: string
@@ -34,12 +33,7 @@ const DraggableModules = ({
             <Draggable key={moduleSlug} draggableId={moduleSlug} index={index}>
               <ListItem>
                 <Box>
-                  <Row gutter="sm" valign="baseline">
-                    <Icon name={icon} />
-                    <Phrase color={phraseColor}>
-                      {title} – {version}
-                    </Phrase>
-                  </Row>
+                  <Module color={phraseColor} {...{icon, title, version}} />
                 </Box>
               </ListItem>
             </Draggable>
