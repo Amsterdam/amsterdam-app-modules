@@ -9,7 +9,7 @@ import Screen from '../components/ui/layout/Screen'
 import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetReleasesQuery} from '../services/releases'
 
 const ReleasesScreen = () => {
@@ -28,9 +28,9 @@ const ReleasesScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Releases</Title>
+        <ScreenTitle title="Releases" />
         <Button
-          label="Nieuwe release"
+          label="Release toevoegen"
           onClick={() => navigate('/release/create')}
         />
         <List>

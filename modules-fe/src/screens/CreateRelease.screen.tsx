@@ -15,7 +15,7 @@ import {
 import {Release} from 'types/release'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 
 const CreateReleaseScreen = () => {
   const dispatch = useDispatch()
@@ -51,7 +51,10 @@ const CreateReleaseScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Toevoegen: Release {releaseVersion}</Title>
+        <ScreenTitle
+          subtitle="Nieuwe release"
+          title={`Amsterdam App ${releaseVersion ?? ''}`}
+        />
         <FormProvider {...form}>
           <VersionField baseVersion={latestRelease.version} />
           <DragDropModules />

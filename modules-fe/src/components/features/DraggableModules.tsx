@@ -22,8 +22,8 @@ const DraggableModules = ({
 }: DraggableModulesProps) => {
   return (
     <div className="DraggableModules" data-isActive={variant === 'active'}>
-      <Phrase>
-        {variant === 'active' ? 'Actieve Modules' : 'Inactieve Modules'}
+      <Phrase color="muted">
+        {variant === 'active' ? 'Modules in deze release' : 'Overige modules'}
       </Phrase>
       <Droppable droppableId={droppableId}>
         <List>

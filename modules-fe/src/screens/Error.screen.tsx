@@ -1,9 +1,9 @@
 import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 
 const ErrorScreen = () => (
   <Screen>
-    <Title>404</Title>
+    <ScreenTitle subtitle="Pagina niet gevonden" title="404" />
   </Screen>
 )
 

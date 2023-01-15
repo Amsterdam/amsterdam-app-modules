@@ -11,7 +11,7 @@ import Icon from '../components/ui/media/Icon'
 import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetModulesQuery} from '../services/modules'
 
 const ModulesScreen = () => {
@@ -33,9 +33,9 @@ const ModulesScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Modules</Title>
+        <ScreenTitle title="Modules" />
         <Button
-          label="Voeg module toe"
+          label="Module toevoegen"
           onClick={() => {
             navigate(`/module/create`)
           }}

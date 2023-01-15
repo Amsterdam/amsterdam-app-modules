@@ -11,7 +11,7 @@ import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {
   useEditModuleVersionMutation,
   useGetModuleQuery,
@@ -84,9 +84,10 @@ const EditModuleScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>
-          Bewerken: {moduleVersion.title} {moduleVersion.version}
-        </Title>
+        <ScreenTitle
+          subtitle="Moduleversie"
+          title={`${moduleVersion.title} ${moduleVersion.version}`}
+        />
         <FormProvider {...form}>
           <Column gutter="lg">
             <ModuleTitleField defaultValue={moduleVersion.title} />
@@ -96,14 +97,14 @@ const EditModuleScreen = () => {
               baseVersion={moduleVersion.version}
               defaultValue={moduleVersion.version}
             />
+            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
             {!!moduleVersion.statusInReleases?.length && (
               <Button
-                label="Zet aan/uit"
+                label="Aan- of uitzetten"
                 onClick={() => navigate(`/module/${slug}/${version}/status`)}
                 variant="secondary"
               />
             )}
-            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
           </Column>
         </FormProvider>
       </Column>

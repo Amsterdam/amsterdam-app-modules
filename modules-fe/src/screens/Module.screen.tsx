@@ -12,7 +12,7 @@ import Screen from '../components/ui/layout/Screen'
 import List from '../components/ui/text/List'
 import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetModuleQuery} from '../services/modules'
 
 type Params = {
@@ -71,9 +71,9 @@ const ModuleScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Module: {latestVersion?.title}</Title>
+        <ScreenTitle subtitle="Module" title={latestVersion?.title} />
         <Button
-          label="Voeg versie toe"
+          label="Moduleversie toevoegen"
           onClick={() => {
             navigate(`/module/${slug}/create`)
           }}

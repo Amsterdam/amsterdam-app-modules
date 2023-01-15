@@ -5,9 +5,9 @@ import {useParams} from 'react-router-dom'
 import DragDropModules from 'components/features/DragDropModules'
 import Button from 'components/ui/button/Button'
 import {
-  setReleaseVersion,
-  setModules,
   selectRelease,
+  setModules,
+  setReleaseVersion,
 } from 'slices/release.slice'
 import {ModuleVersion} from 'types/module'
 import MockModules from '../assets/mocks/modules.json'
@@ -15,7 +15,7 @@ import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetModulesInReleaseQuery} from '../services/releases'
 import {Release} from '../types/release'
 
@@ -64,7 +64,7 @@ const ReleaseScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Release: {version}</Title>
+        <ScreenTitle title={`Release ${version}`} />
         <DragDropModules />
         <Button label="Opslaan" onClick={onSave} />
       </Column>

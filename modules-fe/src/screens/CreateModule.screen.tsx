@@ -12,7 +12,7 @@ import ErrorBox from '../components/ui/feedback/ErrorBox'
 import LoadingBox from '../components/ui/feedback/LoadingBox'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {
   useCreateModuleMutation,
   useCreateModuleVersionMutation,
@@ -105,13 +105,20 @@ const CreateModuleScreen = () => {
     return <ErrorBox message={`Geen versies gevonden van module ‘${slug}’.`} />
   }
 
+  const titleIsEmpty = titleFieldValue === ''
+  const addModuleText = `${isNewModule ? 'Module' : 'Moduleversie'} toevoegen`
+
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>
-          Toevoegen module{!isNewModule && 'versie'}: {titleFieldValue}{' '}
-          {versionFieldValue}
-        </Title>
+        <ScreenTitle
+          subtitle={titleIsEmpty ? undefined : addModuleText}
+          title={
+            titleIsEmpty
+              ? addModuleText
+              : `${titleFieldValue || 'Naam module'} ${versionFieldValue}`
+          }
+        />
         <FormProvider {...form}>
           <Column gutter="lg">
             {!!isNewModule && (
@@ -121,7 +128,7 @@ const CreateModuleScreen = () => {
             <ModuleDescriptionField defaultValue={latestVersion.description} />
             <ModuleIconField defaultValue={latestVersion.icon} />
             <VersionField baseVersion={latestVersion.version} />
-            <Button label="Toevoegen" onClick={handleSubmit(onSubmitForm)} />
+            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
           </Column>
         </FormProvider>
       </Column>

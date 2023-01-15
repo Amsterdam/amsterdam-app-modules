@@ -4,7 +4,7 @@ import Column from '../components/ui/layout/Column'
 import Row from '../components/ui/layout/Row'
 import Screen from '../components/ui/layout/Screen'
 import Phrase from '../components/ui/text/Phrase'
-import Title from '../components/ui/text/Title'
+import ScreenTitle from '../components/ui/text/ScreenTitle'
 
 const HomeScreen = () => {
   const navigate = useNavigate()
@@ -12,7 +12,7 @@ const HomeScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Amsterdam App Modulebeheersysteem</Title>
+        <ScreenTitle subtitle="Amsterdam App" title="Modulebeheersysteem" />
         <Phrase>Wat wil je beheren?</Phrase>
         <Row gutter="md">
           <Button flex label="Modules" onClick={() => navigate('/modules')} />
