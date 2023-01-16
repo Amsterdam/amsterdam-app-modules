@@ -29,6 +29,7 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_po
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_delete
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_get
+from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_status
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_delete
@@ -297,6 +298,8 @@ def modules_for_app_get(request):
 #
 # End-points from https://amsterdam-app.stoplight.io/docs/amsterdam-app/
 #
+
+
 def correct_version_format(version):
     """ Check if a version is correctly formatted as int.int.int
     :param version:
@@ -528,3 +531,45 @@ def modules_latest(request):
     sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
 
     return Response(sorted_result, status=200)
+
+
+@swagger_auto_schema(**as_module_slug_status)
+@api_view(['PATCH'])
+def module_version_status(request, slug, version):
+    """ Disable or enable a version of a module in one or more releases. """
+    data = dict(request.data)
+
+    # Check if the moduleVersion exists (guard)
+    _module = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
+    if _module is None:
+        return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
+
+    # Check if all appVersions in the body have a given moduleSlug and moduleVersion (guard)
+    _app_versions = data['releases']
+    for _app_version in _app_versions:
+        module_by_app = ModulesByApp.objects.filter(moduleSlug=slug,
+                                                    moduleVersion=version,
+                                                    appVersion=_app_version).first()
+        if module_by_app is None:
+            response = {"message": "specified a release that doesn’t contain the module version or doesn’t even exist."}
+            return Response(response, status=400)
+
+    # Update the status of each module
+    for _app_version in _app_versions:
+        module_by_app = ModulesByApp.objects.filter(moduleSlug=slug,
+                                                    moduleVersion=version,
+                                                    appVersion=_app_version).first()
+        module_by_app.status = data['status']
+        module_by_app.save()
+
+    # Retrieve (modified) modules from database
+    _releases = {}
+    _modules_by_app = list(ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).all())
+    for _module in _modules_by_app:
+        if str(_module.status) not in _releases:
+            _releases[str(_module.status)] = [_module.appVersion]
+        else:
+            _releases[str(_module.status)].append(_module.appVersion)
+
+    # Send response
+    return Response([{'status': int(k), 'releases': v} for k, v in _releases.items()], status=200)

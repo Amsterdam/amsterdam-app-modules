@@ -62,6 +62,11 @@ module_order = {
 }
 
 
+module_slug_status = {
+    "status": status,
+    "releases": openapi.Schema(type=openapi.TYPE_ARRAY, items=version)
+}
+
 as_module_app_versions ={
     'methods': ['get'],
     'responses': {
@@ -290,6 +295,43 @@ as_modules_latest = {
     },
     'tags': ['Modules']
 }
+
+as_module_slug_status = {
+    'methods': ['PATCH'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "status": status,
+            "releases": openapi.Schema(type=openapi.TYPE_ARRAY, items=version)
+        }
+    ),
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_ARRAY,
+                                  items=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                       properties=module_slug_status))),
+        400: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "incorrect request body."
+                                  }
+                              }),
+        404: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "Module with slug ‘{slug}’ and version ‘{version}’ not found."
+                                  }
+                              }),
+    },
+    'tags': ['Module']
+}
+
 
 as_modules_get = {
     'methods': ['get'],

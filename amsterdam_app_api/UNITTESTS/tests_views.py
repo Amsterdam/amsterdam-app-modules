@@ -796,3 +796,42 @@ class Views(TestCase):
         expected_result = {'status': False, 'result': 'No record found'}
         self.assertEqual(response.status_code, 404)
         self.assertDictEqual(response.data, expected_result)
+
+    def test_module_version_status_path_404(self):
+        c = Client()
+        data = {}
+        response = c.patch('/api/v1/module/bogus/version/0.0.0/status',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json',
+                           accept='application/json')
+        expected_result = {"message": f"Module with slug ‘bogus’ and version ‘0.0.0’ not found."}
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_version_status_path_400(self):
+        c = Client()
+        data = {'status': 1, 'releases': ['0.0.0']}
+        response = c.patch('/api/v1/module/slug0/version/1.2.3/status',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json',
+                           accept='application/json')
+        expected_result = {
+            "message": "specified a release that doesn’t contain the module version or doesn’t even exist."
+        }
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_version_status_path_200(self):
+        c = Client()
+        data = {'status': 1, 'releases': ['0.0.1']}
+        response = c.patch('/api/v1/module/slug0/version/1.2.3/status',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json',
+                           accept='application/json')
+        expected_result = [{'status': 1, 'releases': ['0.0.2', '0.0.1']}]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertDictEqual(response.data[0], expected_result[0])
