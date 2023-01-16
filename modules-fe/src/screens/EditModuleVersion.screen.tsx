@@ -7,8 +7,6 @@ import ModuleIconField from '../components/form-fields/ModuleIconField'
 import ModuleTitleField from '../components/form-fields/ModuleTitleField'
 import VersionField from '../components/form-fields/VersionField'
 import Button from '../components/ui/button/Button'
-import ErrorScreen from '../components/ui/feedback/Error.screen'
-import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
@@ -16,6 +14,8 @@ import {
   useEditModuleVersionMutation,
   useGetModuleQuery,
 } from '../services/modules'
+import ErrorScreen from './Error.screen'
+import LoadingScreen from './Loading.screen'
 
 type Params = {
   slug: string

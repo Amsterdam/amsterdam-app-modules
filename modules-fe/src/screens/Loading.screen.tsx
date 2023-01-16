@@ -1,7 +1,7 @@
 import Screen from 'components/ui/layout/Screen'
-import Row from '../layout/Row'
-import Icon from '../media/Icon'
-import Phrase from '../text/Phrase'
+import Row from '../components/ui/layout/Row'
+import Icon from '../components/ui/media/Icon'
+import Phrase from '../components/ui/text/Phrase'
 
 const LoadingScreen = () => (
   <Screen>

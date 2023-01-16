@@ -14,7 +14,7 @@ export const routes: RouteObject[] = [
   {
     path: '/',
     element: <HomeScreen />,
-    errorElement: <ErrorScreen />,
+    errorElement: <ErrorScreen message="Pagina niet gevonden (404)." />,
   },
   {
     path: '/modules',

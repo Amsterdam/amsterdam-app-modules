@@ -3,12 +3,12 @@ import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import {ModuleStatus} from 'types/module'
 import Button from '../components/ui/button/Button'
-import ErrorScreen from '../components/ui/feedback/Error.screen'
-import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetModuleQuery} from '../services/modules'
+import ErrorScreen from './Error.screen'
+import LoadingScreen from './Loading.screen'
 
 type Params = {
   slug: string

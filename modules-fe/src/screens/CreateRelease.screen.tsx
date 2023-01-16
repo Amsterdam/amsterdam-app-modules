@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import DragDropModules from 'components/features/DragDropModules'
 import VersionField from 'components/form-fields/VersionField'
 import Button from 'components/ui/button/Button'
-import LoadingScreen from 'components/ui/feedback/Loading.screen'
+import LoadingScreen from 'screens/Loading.screen'
 import {useGetLatestReleaseQuery} from 'services/releases'
 import {
   selectRelease,

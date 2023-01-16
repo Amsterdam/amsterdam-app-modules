@@ -1,8 +1,6 @@
 import {useNavigate} from 'react-router-dom'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
-import ErrorScreen from '../components/ui/feedback/Error.screen'
-import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
@@ -11,6 +9,8 @@ import ListItem from '../components/ui/text/ListItem'
 import Phrase from '../components/ui/text/Phrase'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetReleasesQuery} from '../services/releases'
+import ErrorScreen from './Error.screen'
+import LoadingScreen from './Loading.screen'
 
 const ReleasesScreen = () => {
   const navigate = useNavigate()
