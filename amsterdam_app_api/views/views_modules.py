@@ -537,7 +537,7 @@ def modules_latest(request):
 @api_view(['PATCH'])
 def module_version_status(request, slug, version):
     """ Disable or enable a version of a module in one or more releases. """
-    data = dict(request.data)
+    data = request.data
 
     # Check if the moduleVersion exists (guard)
     _module = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
@@ -545,22 +545,25 @@ def module_version_status(request, slug, version):
         return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
 
     # Check if all appVersions in the body have a given moduleSlug and moduleVersion (guard)
-    _app_versions = data['releases']
-    for _app_version in _app_versions:
-        module_by_app = ModulesByApp.objects.filter(moduleSlug=slug,
-                                                    moduleVersion=version,
-                                                    appVersion=_app_version).first()
-        if module_by_app is None:
-            response = {"message": "specified a release that doesn’t contain the module version or doesn’t even exist."}
-            return Response(response, status=400)
+    for i in range(len(data)):
+        _app_versions = data[i]['releases']
+        for _app_version in _app_versions:
+            module_by_app = ModulesByApp.objects.filter(moduleSlug=slug,
+                                                        moduleVersion=version,
+                                                        appVersion=_app_version).first()
+            if module_by_app is None:
+                response = {"message": "specified a release that doesn’t contain the module version or doesn’t even exist."}
+                return Response(response, status=400)
 
     # Update the status of each module
-    for _app_version in _app_versions:
-        module_by_app = ModulesByApp.objects.filter(moduleSlug=slug,
-                                                    moduleVersion=version,
-                                                    appVersion=_app_version).first()
-        module_by_app.status = data['status']
-        module_by_app.save()
+    for i in range(len(data)):
+        _app_versions = data[i]['releases']
+        for _app_version in _app_versions:
+            module_by_app = ModulesByApp.objects.filter(moduleSlug=slug,
+                                                        moduleVersion=version,
+                                                        appVersion=_app_version).first()
+            module_by_app.status = data[i]['status']
+            module_by_app.save()
 
     # Retrieve (modified) modules from database
     _releases = {}

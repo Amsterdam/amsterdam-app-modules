@@ -799,7 +799,7 @@ class Views(TestCase):
 
     def test_module_version_status_path_404(self):
         c = Client()
-        data = {}
+        data = []
         response = c.patch('/api/v1/module/bogus/version/0.0.0/status',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
@@ -811,7 +811,7 @@ class Views(TestCase):
 
     def test_module_version_status_path_400(self):
         c = Client()
-        data = {'status': 1, 'releases': ['0.0.0']}
+        data = [{'status': 1, 'releases': ['0.0.0']}]
         response = c.patch('/api/v1/module/slug0/version/1.2.3/status',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
@@ -825,7 +825,7 @@ class Views(TestCase):
 
     def test_module_version_status_path_200(self):
         c = Client()
-        data = {'status': 1, 'releases': ['0.0.1']}
+        data = [{'status': 1, 'releases': ['0.0.1']}]
         response = c.patch('/api/v1/module/slug0/version/1.2.3/status',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
