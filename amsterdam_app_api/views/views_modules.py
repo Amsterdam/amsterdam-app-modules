@@ -552,7 +552,9 @@ def module_version_status(request, slug, version):
                                                         moduleVersion=version,
                                                         appVersion=_app_version).first()
             if module_by_app is None:
-                response = {"message": "specified a release that doesn’t contain the module version or doesn’t even exist."}
+                response = {
+                    "message": "specified a release that doesn’t contain the module version or doesn’t even exist."
+                }
                 return Response(response, status=400)
 
     # Update the status of each module

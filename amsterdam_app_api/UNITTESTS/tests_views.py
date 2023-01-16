@@ -798,6 +798,7 @@ class Views(TestCase):
         self.assertDictEqual(response.data, expected_result)
 
     def test_module_version_status_path_404(self):
+        """ Test /api/v1/module/{slug}/version/{version}/status 404 """
         c = Client()
         data = []
         response = c.patch('/api/v1/module/bogus/version/0.0.0/status',
@@ -805,11 +806,12 @@ class Views(TestCase):
                            HTTP_AUTHORIZATION=self.authorization_header,
                            content_type='application/json',
                            accept='application/json')
-        expected_result = {"message": f"Module with slug ‘bogus’ and version ‘0.0.0’ not found."}
+        expected_result = {"message": "Module with slug ‘bogus’ and version ‘0.0.0’ not found."}
         self.assertEqual(response.status_code, 404)
         self.assertDictEqual(response.data, expected_result)
 
     def test_module_version_status_path_400(self):
+        """ Test /api/v1/module/{slug}/version/{version}/status 400 """
         c = Client()
         data = [{'status': 1, 'releases': ['0.0.0']}]
         response = c.patch('/api/v1/module/slug0/version/1.2.3/status',
@@ -824,6 +826,7 @@ class Views(TestCase):
         self.assertDictEqual(response.data, expected_result)
 
     def test_module_version_status_path_200(self):
+        """ Test /api/v1/module/{slug}/version/{version}/status 200 """
         c = Client()
         data = [{'status': 1, 'releases': ['0.0.1']}]
         response = c.patch('/api/v1/module/slug0/version/1.2.3/status',
