@@ -1,7 +1,7 @@
 import {skipToken} from '@reduxjs/toolkit/dist/query'
 import {useCallback, useEffect, useMemo} from 'react'
 import {FormProvider, useForm} from 'react-hook-form'
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import ModuleStatusField from 'components/form-fields/ModuleStatusField'
 import Button from 'components/ui/button/Button'
 import {CheckboxValue} from 'components/ui/forms/CheckboxField'
@@ -10,7 +10,10 @@ import Screen from 'components/ui/layout/Screen'
 import Icon from 'components/ui/media/Icon'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
 import LoadingScreen from 'screens/Loading.screen'
-import {useGetModuleVersionQuery} from 'services/modules'
+import {
+  useEditModuleVersionStatusMutation,
+  useGetModuleVersionQuery,
+} from 'services/modules'
 import {ModuleStatusInRelease} from 'types/module'
 import {
   getActiveReleases,
@@ -33,6 +36,8 @@ const EditModuleVersionStatusScreen = () => {
   const {handleSubmit, setValue, watch} = form
   const watchAll = watch('allSelected')
   const watchReleases = watch('releases')
+  const [editModuleVersionStatus] = useEditModuleVersionStatusMutation()
+  const navigate = useNavigate()
 
   const {data: moduleVersion, isLoading} = useGetModuleVersionQuery(
     slug && version
@@ -95,6 +100,10 @@ const EditModuleVersionStatusScreen = () => {
   }, [resetForm, releases, moduleVersion?.statusInReleases])
 
   const onSubmit = (data: FormData) => {
+    if (!slug || !version) {
+      return
+    }
+
     const activeReleases: ModuleStatusInRelease = {status: 1, releases: []}
     const inactiveReleases: ModuleStatusInRelease = {status: 0, releases: []}
 
@@ -105,9 +114,15 @@ const EditModuleVersionStatusScreen = () => {
         inactiveReleases.releases.push(release)
       }
     })
-    const result = [inactiveReleases, activeReleases]
+    const statusInReleases = [inactiveReleases, activeReleases]
 
-    return result // TODO send to API once ready
+    editModuleVersionStatus({slug, version, statusInReleases}).then(
+      response => {
+        if ('data' in response) {
+          navigate(`/module/${slug}`)
+        }
+      },
+    )
   }
 
   if (isLoading) {

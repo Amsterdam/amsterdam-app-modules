@@ -54,6 +54,20 @@ export const modulesApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Module'],
     }),
+    editModuleVersionStatus: builder.mutation<
+      ModuleVersion,
+      Pick<ModuleVersionWithRelease, 'statusInReleases'> & {
+        slug: string
+        version: string
+      }
+    >({
+      query: ({slug, version, statusInReleases}) => ({
+        url: `/api/v1/module/${slug}/version/${version}/status`,
+        method: 'PATCH',
+        body: statusInReleases,
+      }),
+      invalidatesTags: ['Module'],
+    }),
     getModule: builder.query<ModuleWithVersions, ModuleQueryArg>({
       query: ({slug}) => `/api/v1/module/${slug}`,
       providesTags: ['Module'],
@@ -78,6 +92,7 @@ export const {
   useCreateModuleVersionMutation,
   useEditModuleMutation,
   useEditModuleVersionMutation,
+  useEditModuleVersionStatusMutation,
   useGetModuleQuery,
   useGetModuleVersionQuery,
   useGetModulesQuery,
