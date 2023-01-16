@@ -1,21 +1,18 @@
 import {skipToken} from '@reduxjs/toolkit/query'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import ModuleDescriptionField from 'components/form-fields/ModuleDescriptionField'
+import ModuleIconField from 'components/form-fields/ModuleIconField'
+import ModuleTitleField from 'components/form-fields/ModuleTitleField'
+import VersionField from 'components/form-fields/VersionField'
+import Button from 'components/ui/button/Button'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
+import ErrorScreen from 'screens/Error.screen'
+import LoadingScreen from 'screens/Loading.screen'
+import {useEditModuleVersionMutation, useGetModuleQuery} from 'services/modules'
 import {ModuleVersion} from 'types/module'
-import ModuleDescriptionField from '../components/form-fields/ModuleDescriptionField'
-import ModuleIconField from '../components/form-fields/ModuleIconField'
-import ModuleTitleField from '../components/form-fields/ModuleTitleField'
-import VersionField from '../components/form-fields/VersionField'
-import Button from '../components/ui/button/Button'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
-import Column from '../components/ui/layout/Column'
-import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
-import {
-  useEditModuleVersionMutation,
-  useGetModuleQuery,
-} from '../services/modules'
 
 type Params = {
   slug: string
@@ -70,12 +67,15 @@ const EditModuleScreen = () => {
   }
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
+
+  const versionFieldValue = form.watch('version') ?? moduleVersion?.version
+  const titleFieldValue = form.watch('title') ?? moduleVersion?.title
 
   if (!moduleVersion) {
     return (
-      <ErrorBox
+      <ErrorScreen
         message={`Versie ${version} van module ‘${slug}’ niet gevonden.`}
       />
     )
@@ -84,9 +84,10 @@ const EditModuleScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>
-          Bewerken: {moduleVersion.title} {moduleVersion.version}
-        </Title>
+        <ScreenTitle
+          subtitle="Moduleversie"
+          title={`${titleFieldValue} ${versionFieldValue}`}
+        />
         <FormProvider {...form}>
           <Column gutter="lg">
             <ModuleTitleField defaultValue={moduleVersion.title} />
@@ -96,14 +97,14 @@ const EditModuleScreen = () => {
               baseVersion={moduleVersion.version}
               defaultValue={moduleVersion.version}
             />
+            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
             {!!moduleVersion.statusInReleases?.length && (
               <Button
-                label="Zet aan/uit"
+                label="Aan- of uitzetten"
                 onClick={() => navigate(`/module/${slug}/${version}/status`)}
                 variant="secondary"
               />
             )}
-            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
           </Column>
         </FormProvider>
       </Column>

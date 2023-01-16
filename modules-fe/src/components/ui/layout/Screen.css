@@ -7,7 +7,7 @@
 
 .Container {
   width: var(--size-screen-width);
-  padding-inline: var(--size-spacing-xl);
-  padding-bottom: var(--size-spacing-xl);
+  padding: var(--size-spacing-lg);
+  padding-bottom: var(--size-spacing-xxl);
   background-color: var(--bg-color-cutout);
 }

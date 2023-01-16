@@ -6,7 +6,7 @@ type Props = {
   releases: string[]
 }
 
-export const selectAllLabel = 'Selecteer alle'
+export const selectAllLabel = 'Alle releases'
 
 const ModuleStatusField = ({releases}: Props) => (
   <Column gutter="sm">

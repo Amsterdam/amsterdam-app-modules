@@ -1,7 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {setupListeners} from '@reduxjs/toolkit/query'
-import {modulesApi} from '../services/modules'
-import {releaseSlice} from '../slices/release.slice'
+import {modulesApi} from 'services/modules'
+import {releaseSlice} from 'slices/release.slice'
 
 export const store = configureStore({
   reducer: {

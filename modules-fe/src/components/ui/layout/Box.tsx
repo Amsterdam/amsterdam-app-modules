@@ -1,5 +1,5 @@
 import {ReactNode} from 'react'
-import {SpacingToken} from './types'
+import {SpacingToken} from 'components/ui/layout/types'
 import './inset.css'
 
 type Props = {

@@ -1,9 +1,17 @@
-import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import Phrase from 'components/ui/text/Phrase'
 
-const ErrorScreen = () => (
+type Props = {
+  message: string
+}
+
+const ErrorScreen = ({message}: Props) => (
   <Screen>
-    <Title>404</Title>
+    <Column>
+      <Phrase emphasis="strong">Fout</Phrase>
+      <Phrase>{message}</Phrase>
+    </Column>
   </Screen>
 )
 

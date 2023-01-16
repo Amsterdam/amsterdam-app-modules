@@ -1,6 +1,6 @@
+import {IconName, IconPath} from 'components/ui/media/iconPath'
+import {IconSize} from 'components/ui/media/types'
 import './Icon.css'
-import {IconName, IconPath} from './iconPath'
-import {IconSize} from './types'
 
 export type IconProps = {
   color?: 'error' | 'inverse' | 'muted'

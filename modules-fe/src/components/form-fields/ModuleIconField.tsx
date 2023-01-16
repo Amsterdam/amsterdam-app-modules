@@ -1,5 +1,5 @@
-import TextField from '../ui/forms/TextField'
-import {moduleIconNames} from '../ui/media/iconPath'
+import TextField from 'components/ui/forms/TextField'
+import {moduleIconNames} from 'components/ui/media/iconPath'
 
 type Props = {
   defaultValue: string | undefined
@@ -17,6 +17,7 @@ const ModuleIconField = ({defaultValue}: Props) => (
         moduleIconNames.includes(value) ||
         'Geef de naam van een bestaand pictogram.',
     }}
+    width="half"
   />
 )
 

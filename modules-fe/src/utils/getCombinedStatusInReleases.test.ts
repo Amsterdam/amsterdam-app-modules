@@ -1,4 +1,4 @@
-import {getCombinedStatusInReleases} from './getCombinedStatusInReleases'
+import {getCombinedStatusInReleases} from 'utils/getCombinedStatusInReleases'
 
 describe('getAllReleases', () => {
   it('should return all the releases in an array', () => {

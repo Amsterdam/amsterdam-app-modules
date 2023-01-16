@@ -1,13 +1,13 @@
 import {useCallback, useMemo} from 'react'
 import {DragDropContext, DropResult} from 'react-beautiful-dnd'
 import {useDispatch, useSelector} from 'react-redux'
-import LoadingBox from 'components/ui/feedback/LoadingBox'
+import DraggableModules from 'components/features/DraggableModules'
 import Column from 'components/ui/layout/Column'
 import Grid from 'components/ui/layout/Grid'
+import LoadingScreen from 'screens/Loading.screen'
 import {useGetModulesQuery} from 'services/modules'
 import {selectReleaseModules, setModules} from 'slices/release.slice'
-import {reorderList, removeFromList, addToList} from 'utils/list'
-import DraggableModules from './DraggableModules'
+import {addToList, removeFromList, reorderList} from 'utils/list'
 
 enum DroppableId {
   includedModules = 'includedModules',
@@ -63,7 +63,7 @@ const DragDropModules = () => {
   )
 
   if (isLoadingModules) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   if (!modules) {

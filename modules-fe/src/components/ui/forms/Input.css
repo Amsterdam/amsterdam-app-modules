@@ -4,6 +4,7 @@
   padding-block: calc(var(--size-spacing-sm) - var(--border-width));
   padding-inline: calc(var(--size-spacing-md) - var(--border-width));
   border-color: var(--border-color);
+  border-radius: 0;
   border-style: solid;
   border-width: var(--border-width);
 }

@@ -1,6 +1,6 @@
 import {ReactNode} from 'react'
-import './BlockLink.css'
 import {Link, LinkProps} from 'react-router-dom'
+import './BlockLink.css'
 
 type Props = {
   children: ReactNode

@@ -3,12 +3,17 @@ import './Title.css'
 
 type Props = {
   children: ReactNode
+  level?: 1 | 2 | 3
 }
 
-const Title = ({children}: Props) => (
-  <h1 className="Title" data-font="title">
-    {children}
-  </h1>
-)
+const Title = ({children, level = 1}: Props) => {
+  const Heading = `h${level}` as keyof JSX.IntrinsicElements
+
+  return (
+    <Heading className="Title" data-font="title" data-level={level}>
+      {children}
+    </Heading>
+  )
+}
 
 export default Title

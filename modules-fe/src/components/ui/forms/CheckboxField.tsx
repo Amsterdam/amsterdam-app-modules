@@ -1,8 +1,8 @@
 import React from 'react'
 import {UseControllerProps, useFormContext} from 'react-hook-form'
-import Column from '../layout/Column'
-import Row from '../layout/Row'
-import Phrase from '../text/Phrase'
+import Column from 'components/ui/layout/Column'
+import Row from 'components/ui/layout/Row'
+import Phrase from 'components/ui/text/Phrase'
 import './CheckboxField.css'
 
 export type CheckboxValue = true | 'indeterminate' | false
@@ -35,7 +35,7 @@ type Props = {
 const CheckboxField = ({isGroupFormField, label, name}: Props) => {
   const {register, setValue, watch} = useFormContext()
   const value = isGroupFormField
-    ? [...watch(name)].includes(label)
+    ? [...(watch(name) ?? [])].includes(label)
     : watch(name)
   const {onChange: onChangeRHF, ...rest} = register(name)
 

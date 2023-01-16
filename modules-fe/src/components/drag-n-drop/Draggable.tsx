@@ -22,11 +22,12 @@ const Draggable = ({children, ...props}: Props) => (
   <DraggableDnD {...props}>
     {(provided, snapshot) => (
       <div
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
+        className="Draggable"
         data-is-dragging={snapshot.isDragging}
-        style={getItemStyle(provided.draggableProps.style)}>
+        ref={provided.innerRef}
+        style={getItemStyle(provided.draggableProps.style)}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}>
         {children}
       </div>
     )}

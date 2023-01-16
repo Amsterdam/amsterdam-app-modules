@@ -1,19 +1,19 @@
 import {skipToken} from '@reduxjs/toolkit/query'
 import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
+import BlockLink from 'components/ui/button/BlockLink'
+import Button from 'components/ui/button/Button'
+import Module from 'components/ui/containers/Module'
+import Box from 'components/ui/layout/Box'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import List from 'components/ui/text/List'
+import ListItem from 'components/ui/text/ListItem'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
+import ErrorScreen from 'screens/Error.screen'
+import LoadingScreen from 'screens/Loading.screen'
+import {useGetModuleQuery} from 'services/modules'
 import {ModuleStatus} from 'types/module'
-import BlockLink from '../components/ui/button/BlockLink'
-import Button from '../components/ui/button/Button'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
-import Box from '../components/ui/layout/Box'
-import Column from '../components/ui/layout/Column'
-import Screen from '../components/ui/layout/Screen'
-import List from '../components/ui/text/List'
-import ListItem from '../components/ui/text/ListItem'
-import Phrase from '../components/ui/text/Phrase'
-import Title from '../components/ui/text/Title'
-import {useGetModuleQuery} from '../services/modules'
 
 type Params = {
   slug: string
@@ -47,9 +47,9 @@ const ModuleScreen = () => {
     if (
       // eslint-disable-next-line no-alert
       window.confirm(
-        `Weet je zeker dat je alle versies van de module ${
+        `Bevestig dat je alle versies van de module ‘${latestVersion?.title}’ ${
           moduleStatus ? 'uit' : 'aan'
-        } wilt zetten?`,
+        } wil zetten.`,
       )
     ) {
       setModuleStatus(
@@ -61,38 +61,36 @@ const ModuleScreen = () => {
   }
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   if (!module?.versions.length) {
-    return <ErrorBox message={`Geen versies van module ‘${slug}’ gevonden.`} />
+    return (
+      <ErrorScreen message={`Geen versies gevonden van module ‘${slug}’.`} />
+    )
   }
 
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Module: {latestVersion?.title}</Title>
+        <ScreenTitle subtitle="Module" title={latestVersion?.title} />
         <Button
-          label="Voeg versie toe"
+          label="Moduleversie toevoegen"
           onClick={() => {
             navigate(`/module/${slug}/create`)
           }}
         />
-        <Box inset="no" negativeInsetHorizontal="md">
-          <List>
-            {module.versions.map(({title, version}) => (
-              <ListItem key={version}>
-                <BlockLink to={`/module/${slug}/${version}`}>
-                  <Box>
-                    <Phrase>
-                      {version} – {title}
-                    </Phrase>
-                  </Box>
-                </BlockLink>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+        <List>
+          {module.versions.map(({icon, title, version}) => (
+            <ListItem key={version}>
+              <BlockLink to={`/module/${slug}/${version}`}>
+                <Box>
+                  <Module {...{icon, title, version}} />
+                </Box>
+              </BlockLink>
+            </ListItem>
+          ))}
+        </List>
         <Button
           variant="secondary"
           label={

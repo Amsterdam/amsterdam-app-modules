@@ -4,18 +4,18 @@ import {FormProvider, useForm} from 'react-hook-form'
 import {useParams} from 'react-router-dom'
 import ModuleStatusField from 'components/form-fields/ModuleStatusField'
 import Button from 'components/ui/button/Button'
-import LoadingBox from 'components/ui/feedback/LoadingBox'
 import {CheckboxValue} from 'components/ui/forms/CheckboxField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
-import Title from 'components/ui/text/Title'
+import Icon from 'components/ui/media/Icon'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
+import LoadingScreen from 'screens/Loading.screen'
 import {useGetModuleVersionQuery} from 'services/modules'
 import {ModuleStatusInRelease} from 'types/module'
 import {
   getActiveReleases,
   getCombinedStatusInReleases,
 } from 'utils/getCombinedStatusInReleases'
-import Icon from '../components/ui/media/Icon'
 
 type Params = {
   slug: string
@@ -111,7 +111,7 @@ const EditModuleVersionStatusScreen = () => {
   }
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   const isSaving = false
@@ -123,9 +123,10 @@ const EditModuleVersionStatusScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>
-          Aan- of uitzetten module: {moduleVersion?.title} {version}
-        </Title>
+        <ScreenTitle
+          subtitle="Moduleversie"
+          title={`${moduleVersion?.title} ${version}`}
+        />
         <FormProvider {...form}>
           <ModuleStatusField releases={releases} />
         </FormProvider>

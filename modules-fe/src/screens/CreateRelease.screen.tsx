@@ -4,7 +4,10 @@ import {useDispatch, useSelector} from 'react-redux'
 import DragDropModules from 'components/features/DragDropModules'
 import VersionField from 'components/form-fields/VersionField'
 import Button from 'components/ui/button/Button'
-import LoadingBox from 'components/ui/feedback/LoadingBox'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
+import LoadingScreen from 'screens/Loading.screen'
 import {useGetLatestReleaseQuery} from 'services/releases'
 import {
   selectRelease,
@@ -13,9 +16,6 @@ import {
   setReleaseVersion,
 } from 'slices/release.slice'
 import {Release} from 'types/release'
-import Column from '../components/ui/layout/Column'
-import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
 
 const CreateReleaseScreen = () => {
   const dispatch = useDispatch()
@@ -41,7 +41,7 @@ const CreateReleaseScreen = () => {
   }
 
   if (isLoadingLatestRelease) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   if (!latestRelease) {
@@ -51,7 +51,10 @@ const CreateReleaseScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>Toevoegen: Release {releaseVersion}</Title>
+        <ScreenTitle
+          subtitle="Nieuwe release"
+          title={`Amsterdam App ${releaseVersion ?? ''}`}
+        />
         <FormProvider {...form}>
           <VersionField baseVersion={latestRelease.version} />
           <DragDropModules />

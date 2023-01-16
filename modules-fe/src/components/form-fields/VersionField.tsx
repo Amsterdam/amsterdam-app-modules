@@ -1,4 +1,4 @@
-import RadioFieldSet from '../ui/forms/RadioFieldSet'
+import RadioFieldSet from 'components/ui/forms/RadioFieldSet'
 
 type Props = {
   baseVersion: string

@@ -1,4 +1,4 @@
-import TextField from '../ui/forms/TextField'
+import TextField from 'components/ui/forms/TextField'
 
 type Props = {
   defaultValue: string | undefined
@@ -12,6 +12,7 @@ const ModuleTitleField = ({defaultValue}: Props) => (
     rules={{
       required: 'Geef de module een naam.',
     }}
+    width="half"
   />
 )
 

@@ -2,23 +2,23 @@ import {skipToken} from '@reduxjs/toolkit/query'
 import {useCallback, useEffect} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import ModuleDescriptionField from 'components/form-fields/ModuleDescriptionField'
+import ModuleIconField from 'components/form-fields/ModuleIconField'
 import ModuleSlugField from 'components/form-fields/ModuleSlugField'
-import ModuleDescriptionField from '../components/form-fields/ModuleDescriptionField'
-import ModuleIconField from '../components/form-fields/ModuleIconField'
-import ModuleTitleField from '../components/form-fields/ModuleTitleField'
-import VersionField from '../components/form-fields/VersionField'
-import Button from '../components/ui/button/Button'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
-import Column from '../components/ui/layout/Column'
-import Screen from '../components/ui/layout/Screen'
-import Title from '../components/ui/text/Title'
+import ModuleTitleField from 'components/form-fields/ModuleTitleField'
+import VersionField from 'components/form-fields/VersionField'
+import Button from 'components/ui/button/Button'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
+import ErrorScreen from 'screens/Error.screen'
+import LoadingScreen from 'screens/Loading.screen'
 import {
   useCreateModuleMutation,
   useCreateModuleVersionMutation,
   useGetModuleQuery,
-} from '../services/modules'
-import {ModuleVersion} from '../types/module'
+} from 'services/modules'
+import {ModuleVersion} from 'types/module'
 
 type Params = {
   slug?: string
@@ -45,7 +45,7 @@ const CreateModuleScreen = () => {
       : skipToken,
   )
   const latestVersion =
-    !isNewModule && module && module.versions
+    !isNewModule && module?.versions
       ? module.versions[module.versions.length - 1]
       : defaultModule
 
@@ -90,28 +90,35 @@ const CreateModuleScreen = () => {
     }
   }, [latestVersion.moduleSlug, setValue])
 
-  const versionFieldValue = form.watch('version') ?? ''
-  const titleFieldValue = form.watch('title') ?? ''
-
   if (
     isGetModuleLoading ||
     isMutateModuleLoading ||
     isMutateModuleVersionLoading
   ) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   if (!latestVersion) {
-    return <ErrorBox message={`Geen versies gevonden van module ‘${slug}’.`} />
+    return (
+      <ErrorScreen message={`Geen versies gevonden van module ‘${slug}’.`} />
+    )
   }
+
+  const versionFieldValue = form.watch('version') ?? ''
+  const titleFieldValue = form.watch('title') ?? latestVersion.title
+  const addModuleText = `Nieuwe ${isNewModule ? 'module' : 'moduleversie'}`
 
   return (
     <Screen>
       <Column gutter="lg">
-        <Title>
-          Toevoegen module{!isNewModule && 'versie'}: {titleFieldValue}{' '}
-          {versionFieldValue}
-        </Title>
+        <ScreenTitle
+          subtitle={!titleFieldValue ? undefined : addModuleText}
+          title={
+            !titleFieldValue
+              ? addModuleText
+              : `${titleFieldValue || 'Naam module'} ${versionFieldValue}`
+          }
+        />
         <FormProvider {...form}>
           <Column gutter="lg">
             {!!isNewModule && (
@@ -121,7 +128,7 @@ const CreateModuleScreen = () => {
             <ModuleDescriptionField defaultValue={latestVersion.description} />
             <ModuleIconField defaultValue={latestVersion.icon} />
             <VersionField baseVersion={latestVersion.version} />
-            <Button label="Toevoegen" onClick={handleSubmit(onSubmitForm)} />
+            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
           </Column>
         </FormProvider>
       </Column>
