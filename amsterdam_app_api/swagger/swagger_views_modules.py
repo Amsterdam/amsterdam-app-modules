@@ -304,11 +304,8 @@ as_module_slug_status = {
                                             type=openapi.TYPE_STRING,
                                             required=True)],
     'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            "status": status,
-            "releases": openapi.Schema(type=openapi.TYPE_ARRAY, items=version)
-        }
+        type=openapi.TYPE_ARRAY,
+        items=openapi.Schema(type=openapi.TYPE_OBJECT, properties=module_slug_status)
     ),
     'responses': {
         200: openapi.Response(
