@@ -11,8 +11,10 @@ const Screen = ({children}: Props) => (
   <div className="Screen">
     <div className="Container">
       <Column gutter="xl">
-        <Logo />
-        <div>{children}</div>
+        <header>
+          <Logo />
+        </header>
+        <main>{children}</main>
       </Column>
     </div>
   </div>
