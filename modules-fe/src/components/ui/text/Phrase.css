@@ -7,5 +7,5 @@
 .Phrase[data-color="muted"] {color: var(--text-color-muted);}
 
 .Phrase[data-emphasis="strong"] {
-  font-weight: 800;
+  font-weight: 700;
 }

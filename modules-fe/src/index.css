@@ -1,3 +1,24 @@
+@font-face {
+  font-family: Amsterdam Sans;
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/AmsterdamSans-Regular.woff2') format('woff2')
+}
+
+@font-face {
+  font-family: Amsterdam Sans;
+  font-style: normal;
+  font-weight: 700;
+  src: url('./assets/fonts/AmsterdamSans-Bold.woff2') format('woff2')
+}
+
+@font-face {
+  font-family: Amsterdam Sans;
+  font-style: normal;
+  font-weight: 800;
+  src: url('./assets/fonts/AmsterdamSans-ExtraBold.woff2') format('woff2')
+}
+
 @import-normalize; /* bring in normalize.css styles */
 
 :root {
