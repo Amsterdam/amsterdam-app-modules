@@ -4,7 +4,7 @@ import {FormProvider, useForm} from 'react-hook-form'
 import {useParams} from 'react-router-dom'
 import ModuleStatusField from 'components/form-fields/ModuleStatusField'
 import Button from 'components/ui/button/Button'
-import LoadingBox from 'components/ui/feedback/LoadingBox'
+import LoadingScreen from 'components/ui/feedback/Loading.screen'
 import {CheckboxValue} from 'components/ui/forms/CheckboxField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
@@ -111,7 +111,7 @@ const EditModuleVersionStatusScreen = () => {
   }
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   const isSaving = false

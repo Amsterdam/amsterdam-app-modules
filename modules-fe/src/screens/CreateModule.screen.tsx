@@ -8,8 +8,8 @@ import ModuleIconField from '../components/form-fields/ModuleIconField'
 import ModuleTitleField from '../components/form-fields/ModuleTitleField'
 import VersionField from '../components/form-fields/VersionField'
 import Button from '../components/ui/button/Button'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
+import ErrorScreen from '../components/ui/feedback/Error.screen'
+import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
@@ -95,11 +95,13 @@ const CreateModuleScreen = () => {
     isMutateModuleLoading ||
     isMutateModuleVersionLoading
   ) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   if (!latestVersion) {
-    return <ErrorBox message={`Geen versies gevonden van module ‘${slug}’.`} />
+    return (
+      <ErrorScreen message={`Geen versies gevonden van module ‘${slug}’.`} />
+    )
   }
 
   const versionFieldValue = form.watch('version') ?? ''

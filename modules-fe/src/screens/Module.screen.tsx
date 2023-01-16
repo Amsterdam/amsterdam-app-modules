@@ -2,16 +2,11 @@ import {skipToken} from '@reduxjs/toolkit/query'
 import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import {ModuleStatus} from 'types/module'
-import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
-import Module from '../components/ui/containers/Module'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
-import Box from '../components/ui/layout/Box'
+import ErrorScreen from '../components/ui/feedback/Error.screen'
+import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
-import List from '../components/ui/text/List'
-import ListItem from '../components/ui/text/ListItem'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
 import {useGetModuleQuery} from '../services/modules'
 
@@ -61,11 +56,13 @@ const ModuleScreen = () => {
   }
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
-  if (!module?.versions.length) {
-    return <ErrorBox message={`Geen versies van module ‘${slug}’ gevonden.`} />
+  if (module?.versions.length) {
+    return (
+      <ErrorScreen message={`Geen versies gevonden van module ‘${slug}’.`} />
+    )
   }
 
   return (
@@ -78,17 +75,6 @@ const ModuleScreen = () => {
             navigate(`/module/${slug}/create`)
           }}
         />
-        <List>
-          {module.versions.map(({icon, title, version}) => (
-            <ListItem key={version}>
-              <BlockLink to={`/module/${slug}/${version}`}>
-                <Box>
-                  <Module {...{icon, title, version}} />
-                </Box>
-              </BlockLink>
-            </ListItem>
-          ))}
-        </List>
         <Button
           variant="secondary"
           label={

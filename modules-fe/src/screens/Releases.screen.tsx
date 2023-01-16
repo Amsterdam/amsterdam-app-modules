@@ -1,8 +1,8 @@
 import {useNavigate} from 'react-router-dom'
 import BlockLink from '../components/ui/button/BlockLink'
 import Button from '../components/ui/button/Button'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
+import ErrorScreen from '../components/ui/feedback/Error.screen'
+import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
@@ -18,11 +18,11 @@ const ReleasesScreen = () => {
   const {data: releases, isLoading} = useGetReleasesQuery()
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   if (!releases || !releases.length) {
-    return <ErrorBox message="Geen releases gevonden." />
+    return <ErrorScreen message="Geen releases gevonden." />
   }
 
   return (

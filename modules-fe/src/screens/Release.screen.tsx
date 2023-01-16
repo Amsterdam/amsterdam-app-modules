@@ -11,8 +11,8 @@ import {
 } from 'slices/release.slice'
 import {ModuleVersion} from 'types/module'
 import MockModules from '../assets/mocks/modules.json'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
+import ErrorScreen from '../components/ui/feedback/Error.screen'
+import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
@@ -52,12 +52,12 @@ const ReleaseScreen = () => {
   }
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   if (!modules || !modules.length) {
     return (
-      <ErrorBox message={`Geen modules gevonden voor release ${version}.`} />
+      <ErrorScreen message={`Geen modules gevonden voor release ${version}.`} />
     )
   }
 

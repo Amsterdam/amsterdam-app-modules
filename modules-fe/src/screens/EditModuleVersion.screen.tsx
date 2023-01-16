@@ -7,8 +7,8 @@ import ModuleIconField from '../components/form-fields/ModuleIconField'
 import ModuleTitleField from '../components/form-fields/ModuleTitleField'
 import VersionField from '../components/form-fields/VersionField'
 import Button from '../components/ui/button/Button'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
+import ErrorScreen from '../components/ui/feedback/Error.screen'
+import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
 import ScreenTitle from '../components/ui/text/ScreenTitle'
@@ -70,7 +70,7 @@ const EditModuleScreen = () => {
   }
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   const versionFieldValue = form.watch('version') ?? moduleVersion?.version
@@ -78,7 +78,7 @@ const EditModuleScreen = () => {
 
   if (!moduleVersion) {
     return (
-      <ErrorBox
+      <ErrorScreen
         message={`Versie ${version} van module ‘${slug}’ niet gevonden.`}
       />
     )

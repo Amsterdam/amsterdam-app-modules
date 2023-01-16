@@ -1,9 +1,13 @@
+import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
-import ScreenTitle from '../components/ui/text/ScreenTitle'
+import Phrase from '../components/ui/text/Phrase'
 
 const ErrorScreen = () => (
   <Screen>
-    <ScreenTitle subtitle="Pagina niet gevonden" title="404" />
+    <Column>
+      <Phrase emphasis="strong">Fout 404</Phrase>
+      <Phrase>Pagina niet gevonden.</Phrase>
+    </Column>
   </Screen>
 )
 

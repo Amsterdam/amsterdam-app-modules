@@ -2,8 +2,8 @@ import {useNavigate} from 'react-router-dom'
 import Button from 'components/ui/button/Button'
 import BlockLink from '../components/ui/button/BlockLink'
 import Module from '../components/ui/containers/Module'
-import ErrorBox from '../components/ui/feedback/ErrorBox'
-import LoadingBox from '../components/ui/feedback/LoadingBox'
+import ErrorScreen from '../components/ui/feedback/Error.screen'
+import LoadingScreen from '../components/ui/feedback/Loading.screen'
 import Box from '../components/ui/layout/Box'
 import Column from '../components/ui/layout/Column'
 import Screen from '../components/ui/layout/Screen'
@@ -17,11 +17,11 @@ const ModulesScreen = () => {
   const {data: modules, isLoading} = useGetModulesQuery()
 
   if (isLoading) {
-    return <LoadingBox />
+    return <LoadingScreen />
   }
 
   if (!modules) {
-    return <ErrorBox message="Geen modules gevonden." />
+    return <ErrorScreen message="Geen modules gevonden." />
   }
 
   const sortedModules = [...modules].sort((a, b) =>
