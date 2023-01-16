@@ -1,5 +1,5 @@
-import Screen from 'components/ui/layout/Screen'
 import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
 import Phrase from 'components/ui/text/Phrase'
 
 type Props = {
