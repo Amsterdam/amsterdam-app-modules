@@ -17,6 +17,7 @@ const ModuleIconField = ({defaultValue}: Props) => (
         moduleIconNames.includes(value) ||
         'Geef de naam van een bestaand pictogram.',
     }}
+    width="half"
   />
 )
 

@@ -12,6 +12,7 @@ const ModuleTitleField = ({defaultValue}: Props) => (
     rules={{
       required: 'Geef de module een naam.',
     }}
+    width="half"
   />
 )
 

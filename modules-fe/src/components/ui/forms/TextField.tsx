@@ -3,12 +3,18 @@ import {Controller, UseControllerProps} from 'react-hook-form'
 import Column from '../layout/Column'
 import Phrase from '../text/Phrase'
 import Input from './Input'
+import './TextField.css'
+
+enum FieldWidth {
+  half = 'half',
+}
 
 type Props = {
   label: string
+  width?: keyof typeof FieldWidth
 } & UseControllerProps
 
-const TextField = ({defaultValue, label, name, rules}: Props) => {
+const TextField = ({defaultValue, label, name, rules, width}: Props) => {
   const id = uniqueId('TextField-')
 
   return (
@@ -17,7 +23,7 @@ const TextField = ({defaultValue, label, name, rules}: Props) => {
       name={name}
       render={({field: {onChange, value}, fieldState: {error}}) => (
         <Column gutter="sm">
-          <label htmlFor={id}>
+          <label className="TextFieldLabel" data-width={width} htmlFor={id}>
             <Column gutter="sm">
               <Phrase color="muted">{label}</Phrase>
               <Input {...{id, name, onChange, value}} hasError={!!error} />
