@@ -73,6 +73,9 @@ const EditModuleScreen = () => {
     return <LoadingBox />
   }
 
+  const versionFieldValue = form.watch('version') ?? moduleVersion?.version
+  const titleFieldValue = form.watch('title') ?? moduleVersion?.title
+
   if (!moduleVersion) {
     return (
       <ErrorBox
@@ -86,7 +89,7 @@ const EditModuleScreen = () => {
       <Column gutter="lg">
         <ScreenTitle
           subtitle="Moduleversie"
-          title={`${moduleVersion.title} ${moduleVersion.version}`}
+          title={`${titleFieldValue} ${versionFieldValue}`}
         />
         <FormProvider {...form}>
           <Column gutter="lg">

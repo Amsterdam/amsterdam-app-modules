@@ -45,7 +45,7 @@ const CreateModuleScreen = () => {
       : skipToken,
   )
   const latestVersion =
-    !isNewModule && module && module.versions
+    !isNewModule && module?.versions
       ? module.versions[module.versions.length - 1]
       : defaultModule
 
@@ -90,9 +90,6 @@ const CreateModuleScreen = () => {
     }
   }, [latestVersion.moduleSlug, setValue])
 
-  const versionFieldValue = form.watch('version') ?? ''
-  const titleFieldValue = form.watch('title') ?? ''
-
   if (
     isGetModuleLoading ||
     isMutateModuleLoading ||
@@ -105,16 +102,17 @@ const CreateModuleScreen = () => {
     return <ErrorBox message={`Geen versies gevonden van module ‘${slug}’.`} />
   }
 
-  const titleIsEmpty = titleFieldValue === ''
+  const versionFieldValue = form.watch('version') ?? ''
+  const titleFieldValue = form.watch('title') ?? latestVersion.title
   const addModuleText = `Nieuwe ${isNewModule ? 'module' : 'moduleversie'}`
 
   return (
     <Screen>
       <Column gutter="lg">
         <ScreenTitle
-          subtitle={titleIsEmpty ? undefined : addModuleText}
+          subtitle={!titleFieldValue ? undefined : addModuleText}
           title={
-            titleIsEmpty
+            !titleFieldValue
               ? addModuleText
               : `${titleFieldValue || 'Naam module'} ${versionFieldValue}`
           }
