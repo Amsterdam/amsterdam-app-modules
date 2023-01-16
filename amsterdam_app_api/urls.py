@@ -46,6 +46,7 @@ urlpatterns = [
     path('modules_for_app', csrf_exempt(views_modules.modules_for_app_get)),
 
     # End-points from https://amsterdam-app.stoplight.io/docs/amsterdam-app/
+    path('module/<str:slug>/version/<str:version>/status', csrf_exempt(views_modules.module_version_status)),
     path('module/<str:slug>/version/<str:version>', csrf_exempt(views_modules.module_version)),
     path('module', csrf_exempt(views_modules.module)),
     path('module/<str:slug>', csrf_exempt(views_modules.module_slug)),
