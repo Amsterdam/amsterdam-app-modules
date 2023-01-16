@@ -106,7 +106,7 @@ const CreateModuleScreen = () => {
   }
 
   const titleIsEmpty = titleFieldValue === ''
-  const addModuleText = `${isNewModule ? 'Module' : 'Moduleversie'} toevoegen`
+  const addModuleText = `Nieuwe ${isNewModule ? 'module' : 'moduleversie'}`
 
   return (
     <Screen>

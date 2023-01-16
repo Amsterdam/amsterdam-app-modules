@@ -64,7 +64,7 @@ const ReleaseScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <ScreenTitle title={`Release ${version}`} />
+        <ScreenTitle subtitle="Release" title={`Amsterdam App ${version}`} />
         <DragDropModules />
         <Button label="Opslaan" onClick={onSave} />
       </Column>
