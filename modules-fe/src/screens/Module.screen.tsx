@@ -47,9 +47,9 @@ const ModuleScreen = () => {
     if (
       // eslint-disable-next-line no-alert
       window.confirm(
-        `Weet je zeker dat je alle versies van de module ${
+        `Bevestig dat je alle versies van de module ‘${latestVersion?.title}’ ${
           moduleStatus ? 'uit' : 'aan'
-        } wilt zetten?`,
+        } wil zetten.`,
       )
     ) {
       setModuleStatus(
