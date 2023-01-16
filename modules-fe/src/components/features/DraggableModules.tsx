@@ -1,12 +1,12 @@
 import Draggable from 'components/drag-n-drop/Draggable'
 import Droppable from 'components/drag-n-drop/Droppable'
+import Module from 'components/ui/containers/Module'
 import Box from 'components/ui/layout/Box'
 import Column from 'components/ui/layout/Column'
 import List from 'components/ui/text/List'
 import ListItem from 'components/ui/text/ListItem'
 import Phrase from 'components/ui/text/Phrase'
 import {ModuleVersion} from 'types/module'
-import Module from '../ui/containers/Module'
 
 type DraggableModulesProps = {
   droppableId: string

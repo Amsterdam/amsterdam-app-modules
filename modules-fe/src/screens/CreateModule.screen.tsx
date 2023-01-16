@@ -2,23 +2,23 @@ import {skipToken} from '@reduxjs/toolkit/query'
 import {useCallback, useEffect} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import ModuleDescriptionField from 'components/form-fields/ModuleDescriptionField'
+import ModuleIconField from 'components/form-fields/ModuleIconField'
 import ModuleSlugField from 'components/form-fields/ModuleSlugField'
-import ModuleDescriptionField from '../components/form-fields/ModuleDescriptionField'
-import ModuleIconField from '../components/form-fields/ModuleIconField'
-import ModuleTitleField from '../components/form-fields/ModuleTitleField'
-import VersionField from '../components/form-fields/VersionField'
-import Button from '../components/ui/button/Button'
-import Column from '../components/ui/layout/Column'
-import Screen from '../components/ui/layout/Screen'
-import ScreenTitle from '../components/ui/text/ScreenTitle'
+import ModuleTitleField from 'components/form-fields/ModuleTitleField'
+import VersionField from 'components/form-fields/VersionField'
+import Button from 'components/ui/button/Button'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
+import ErrorScreen from 'screens/Error.screen'
+import LoadingScreen from 'screens/Loading.screen'
 import {
   useCreateModuleMutation,
   useCreateModuleVersionMutation,
   useGetModuleQuery,
-} from '../services/modules'
-import {ModuleVersion} from '../types/module'
-import ErrorScreen from './Error.screen'
-import LoadingScreen from './Loading.screen'
+} from 'services/modules'
+import {ModuleVersion} from 'types/module'
 
 type Params = {
   slug?: string

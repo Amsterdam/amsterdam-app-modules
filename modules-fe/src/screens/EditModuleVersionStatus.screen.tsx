@@ -7,6 +7,8 @@ import Button from 'components/ui/button/Button'
 import {CheckboxValue} from 'components/ui/forms/CheckboxField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
+import Icon from 'components/ui/media/Icon'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
 import LoadingScreen from 'screens/Loading.screen'
 import {useGetModuleVersionQuery} from 'services/modules'
 import {ModuleStatusInRelease} from 'types/module'
@@ -14,8 +16,6 @@ import {
   getActiveReleases,
   getCombinedStatusInReleases,
 } from 'utils/getCombinedStatusInReleases'
-import Icon from '../components/ui/media/Icon'
-import ScreenTitle from '../components/ui/text/ScreenTitle'
 
 type Params = {
   slug: string

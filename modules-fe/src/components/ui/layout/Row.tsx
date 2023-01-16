@@ -1,7 +1,11 @@
 import {ReactNode} from 'react'
-import './Row.css'
+import {
+  CrossAxisAlignment,
+  MainAxisAlignment,
+  SpacingToken,
+} from 'components/ui/layout/types'
 import './gutter.css'
-import {CrossAxisAlignment, MainAxisAlignment, SpacingToken} from './types'
+import './Row.css'
 
 type Props = {
   align?: MainAxisAlignment

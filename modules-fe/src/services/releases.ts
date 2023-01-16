@@ -1,7 +1,7 @@
-import LatestReleaseMock from '../assets/mocks/latestRelease.json'
-import {ModuleInRelease} from '../types/module'
-import {Release} from '../types/release'
-import {baseApi} from './baseApi'
+import LatestReleaseMock from 'assets/mocks/latestRelease.json'
+import {baseApi} from 'services/baseApi'
+import {ModuleInRelease} from 'types/module'
+import {Release} from 'types/release'
 
 type ReleaseQueryArg = {
   version: Release['version']

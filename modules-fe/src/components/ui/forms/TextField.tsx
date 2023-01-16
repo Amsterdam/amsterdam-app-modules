@@ -1,8 +1,8 @@
 import uniqueId from 'lodash.uniqueid'
 import {Controller, UseControllerProps} from 'react-hook-form'
-import Column from '../layout/Column'
-import Phrase from '../text/Phrase'
-import Input from './Input'
+import Input from 'components/ui/forms/Input'
+import Column from 'components/ui/layout/Column'
+import Phrase from 'components/ui/text/Phrase'
 import './TextField.css'
 
 enum FieldWidth {

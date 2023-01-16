@@ -13,9 +13,9 @@ import {
   setReleaseVersion,
 } from 'slices/release.slice'
 import {Release} from 'types/release'
-import Column from '../components/ui/layout/Column'
-import Screen from '../components/ui/layout/Screen'
-import ScreenTitle from '../components/ui/text/ScreenTitle'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
 
 const CreateReleaseScreen = () => {
   const dispatch = useDispatch()

@@ -1,7 +1,7 @@
 import {ReactNode} from 'react'
+import Column from 'components/ui/layout/Column'
+import Logo from 'components/ui/media/Logo'
 import './Screen.css'
-import Logo from '../media/Logo'
-import Column from './Column'
 
 type Props = {
   children: ReactNode

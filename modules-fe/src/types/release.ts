@@ -1,4 +1,4 @@
-import {ModuleVersion} from './module'
+import {ModuleVersion} from 'types/module'
 
 export type Release = {
   version: string

@@ -1,4 +1,4 @@
-import TextField from '../ui/forms/TextField'
+import TextField from 'components/ui/forms/TextField'
 
 type Props = {
   defaultValue: string | undefined

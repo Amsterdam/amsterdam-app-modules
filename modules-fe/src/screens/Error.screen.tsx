@@ -1,6 +1,6 @@
 import Screen from 'components/ui/layout/Screen'
-import Column from '../components/ui/layout/Column'
-import Phrase from '../components/ui/text/Phrase'
+import Column from 'components/ui/layout/Column'
+import Phrase from 'components/ui/text/Phrase'
 
 type Props = {
   message: string

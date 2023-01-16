@@ -1,5 +1,5 @@
 import {MouseEventHandler, ReactNode} from 'react'
-import Row from '../layout/Row'
+import Row from 'components/ui/layout/Row'
 import './Button.css'
 
 export enum ButtonVariant {

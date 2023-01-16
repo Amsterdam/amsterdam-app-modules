@@ -1,7 +1,7 @@
+import Row from 'components/ui/layout/Row'
+import Icon from 'components/ui/media/Icon'
 import Phrase, {PhraseProps} from 'components/ui/text/Phrase'
 import {ModuleVersion} from 'types/module'
-import Row from '../layout/Row'
-import Icon from '../media/Icon'
 
 type Props = Pick<ModuleVersion, 'icon' | 'title'> &
   Partial<Pick<ModuleVersion, 'version'>> &

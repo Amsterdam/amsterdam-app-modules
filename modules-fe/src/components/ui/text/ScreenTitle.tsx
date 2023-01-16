@@ -1,5 +1,5 @@
+import Title from 'components/ui/text/Title'
 import './ScreenTitle.css'
-import Title from './Title'
 
 type Props = {
   subtitle?: string

@@ -1,6 +1,6 @@
-import LogoImage from '../../../assets/images/logo.svg'
-import BlockLink from '../button/BlockLink'
-import Row from '../layout/Row'
+import LogoImage from 'assets/images/logo.svg'
+import BlockLink from 'components/ui/button/BlockLink'
+import Row from 'components/ui/layout/Row'
 import './Logo.css'
 
 const Logo = () => (

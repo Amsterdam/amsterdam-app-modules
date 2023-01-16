@@ -1,13 +1,13 @@
 import {useCallback, useMemo} from 'react'
 import {DragDropContext, DropResult} from 'react-beautiful-dnd'
 import {useDispatch, useSelector} from 'react-redux'
+import DraggableModules from 'components/features/DraggableModules'
 import Column from 'components/ui/layout/Column'
 import Grid from 'components/ui/layout/Grid'
 import LoadingScreen from 'screens/Loading.screen'
 import {useGetModulesQuery} from 'services/modules'
 import {selectReleaseModules, setModules} from 'slices/release.slice'
 import {addToList, removeFromList, reorderList} from 'utils/list'
-import DraggableModules from './DraggableModules'
 
 enum DroppableId {
   includedModules = 'includedModules',

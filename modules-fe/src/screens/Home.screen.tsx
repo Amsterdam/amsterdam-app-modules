@@ -1,10 +1,10 @@
 import {useNavigate} from 'react-router-dom'
-import Button from '../components/ui/button/Button'
-import Column from '../components/ui/layout/Column'
-import Row from '../components/ui/layout/Row'
-import Screen from '../components/ui/layout/Screen'
-import Phrase from '../components/ui/text/Phrase'
-import ScreenTitle from '../components/ui/text/ScreenTitle'
+import Button from 'components/ui/button/Button'
+import Column from 'components/ui/layout/Column'
+import Row from 'components/ui/layout/Row'
+import Screen from 'components/ui/layout/Screen'
+import Phrase from 'components/ui/text/Phrase'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
 
 const HomeScreen = () => {
   const navigate = useNavigate()
