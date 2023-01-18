@@ -4,6 +4,7 @@ const authorizedEndpoints = [
   'createModule',
   'createModuleVersion',
   'editModuleVersion',
+  'editModuleVersionStatus',
 ]
 
 const mockAuthorizationKey = 'mock-authorization-id'
