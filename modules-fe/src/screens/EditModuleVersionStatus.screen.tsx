@@ -36,7 +36,10 @@ const EditModuleVersionStatusScreen = () => {
   const {handleSubmit, setValue, watch} = form
   const watchAll = watch('allSelected')
   const watchReleases = watch('releases')
-  const [editModuleVersionStatus] = useEditModuleVersionStatusMutation()
+  const [
+    editModuleVersionStatus,
+    {isLoading: isLoadingModuleVersionStatusMutation},
+  ] = useEditModuleVersionStatusMutation()
   const navigate = useNavigate()
 
   const {data: moduleVersion, isLoading} = useGetModuleVersionQuery(
@@ -119,7 +122,7 @@ const EditModuleVersionStatusScreen = () => {
     editModuleVersionStatus({slug, version, statusInReleases}).then(
       response => {
         if ('data' in response) {
-          navigate(`/module/${slug}`)
+          navigate(`/module/${slug}/${version}`)
         }
       },
     )
