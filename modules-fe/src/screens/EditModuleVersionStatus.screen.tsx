@@ -42,14 +42,15 @@ const EditModuleVersionStatusScreen = () => {
   ] = useEditModuleVersionStatusMutation()
   const navigate = useNavigate()
 
-  const {data: moduleVersion, isLoading} = useGetModuleVersionQuery(
-    slug && version
-      ? {
-          slug,
-          version,
-        }
-      : skipToken,
-  )
+  const {data: moduleVersion, isLoading: isLoadingModuleVersion} =
+    useGetModuleVersionQuery(
+      slug && version
+        ? {
+            slug,
+            version,
+          }
+        : skipToken,
+    )
 
   const releases = useMemo(
     () =>
@@ -128,11 +129,9 @@ const EditModuleVersionStatusScreen = () => {
     )
   }
 
-  if (isLoading) {
+  if (isLoadingModuleVersion) {
     return <LoadingScreen />
   }
-
-  const isSaving = false
 
   if (!moduleVersion?.statusInReleases) {
     return null
@@ -149,8 +148,12 @@ const EditModuleVersionStatusScreen = () => {
           <ModuleStatusField releases={releases} />
         </FormProvider>
         <Button
-          disabled={isSaving}
-          icon={isSaving ? <Icon color="inverse" name="spinner" /> : undefined}
+          disabled={isLoadingModuleVersionStatusMutation}
+          icon={
+            isLoadingModuleVersionStatusMutation ? (
+              <Icon color="inverse" name="spinner" />
+            ) : undefined
+          }
           label="Opslaan"
           onClick={handleSubmit(onSubmit)}
         />
