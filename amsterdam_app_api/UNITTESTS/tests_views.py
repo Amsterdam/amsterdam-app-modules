@@ -4,7 +4,7 @@ from django.test import Client
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from amsterdam_app_api.UNITTESTS.TestData import TestData
-from amsterdam_app_api.models import Module, ModuleVersions, ModulesByApp, ModuleOrder
+from amsterdam_app_api.models import Module, ModuleVersions, ModulesByApp, ModuleOrder, Releases
 from amsterdam_app_api.serializers import ModulesByAppSerializer
 
 username = 'mock'
@@ -29,6 +29,9 @@ class SetUp:
         for module_order in self.data.module_order:
             ModuleOrder.objects.create(**module_order)
 
+        for release in self.data.releases:
+            Releases.objects.create(**release)
+
         self.user = get_user_model().objects.create_user(username=username,
                                                          password=password,
                                                          email=email)
@@ -46,7 +49,7 @@ class GetToken(TestCase):
 
     def test_get_token(self):
         """ Acquire token and check if it has len 2 (access/refresh token)"""
-        response = self.client.post('/api/v1/get-token/', {'username': username, 'password': password})
+        response = self.client.post('/api/v1/token/access', {'username': username, 'password': password})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 2)
 
@@ -56,7 +59,7 @@ class Views(TestCase):
     def setUp(self):
         """ Setup mock data """
         SetUp()
-        response = self.client.post('/api/v1/get-token/', {'username': username, 'password': password})
+        response = self.client.post('/api/v1/token/access', {'username': username, 'password': password})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 2)
         self.authorization_header = response.data['access']
@@ -509,3 +512,154 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
         self.assertDictEqual(response.data[0], expected_result[0])
+
+    def test_release_get_404(self):
+        """ Test get release not existing """
+        c = Client()
+        response = c.get('/api/v1/release/10.0.0',
+                         HTTP_AUTHORIZATION=self.authorization_header,
+                         content_type='application/json',
+                         accept='application/json')
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, {'message': 'Release version does not exists.'})
+
+    def test_release_get_200(self):
+        """ Test get release existing """
+        import datetime  # pylint: disable=unused-import
+        c = Client()
+        response = c.get('/api/v1/release/0.0.1',
+                         HTTP_AUTHORIZATION=self.authorization_header,
+                         content_type='application/json',
+                         accept='application/json')
+        expected_result = {
+            'version': '0.0.1',
+            'releaseNotes': 'release 0.0.1',
+            'published': '1971-01-01',
+            'unpublished': '1971-12-31',
+            'created': response.data['created'],
+            'modified': None,
+            'modules': [
+                {
+                    'moduleSlug': 'slug0',
+                    'version': '1.2.3',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 1
+                }, {
+                    'moduleSlug': 'slug1',
+                    'version': '1.3.4',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 0
+                }, {
+                    'moduleSlug': 'slug2',
+                    'version': '1.30.4',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 1
+                }
+            ]
+        }
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_release_post_400_1(self):
+        """ test release pot missing keys """
+        c = Client()
+        data = {}
+        response = c.post('/api/v1/release',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, {"message": "incorrect request body."})
+
+    def test_release_post_400_2(self):
+        """ test release pot missing keys """
+        c = Client()
+        data = {'version': None, 'releaseNotes': None, 'published': None, 'unpublished': None, 'modules': None}
+        response = c.post('/api/v1/release',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, {"message": "incorrect request body."})
+
+    def test_release_post_400_3(self):
+        """ test release pot missing keys """
+        c = Client()
+        data = {'version': '', 'releaseNotes': '', 'published': '', 'unpublished': None, 'modules': []}
+        response = c.post('/api/v1/release',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, {"message": "incorrect request body."})
+
+    def test_release_post_409(self):
+        """ test release pot missing keys """
+        c = Client()
+        data = {'version': '0.0.0', 'releaseNotes': '', 'published': '', 'unpublished': '', 'modules': []}
+        response = c.post('/api/v1/release',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        self.assertEqual(response.status_code, 409)
+        self.assertDictEqual(response.data, {'message': 'Release version already exists.'})
+
+    def test_release_post_404(self):
+        """ test release pot missing keys """
+        c = Client()
+        data = {
+            'version': '10.0.0',
+            'releaseNotes': '',
+            'published': '',
+            'unpublished': '',
+            'modules': [{'moduleSlug': 'bogus', 'version': '0.0.0', 'status': 0}]
+        }
+        response = c.post('/api/v1/release',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, {"message": "Module with slug ‘bogus’ and version ‘0.0.0’ not found."})
+
+    def test_release_post_200(self):
+        """ test release pot missing keys """
+        import datetime  # pylint: disable=unused-import
+        c = Client()
+        data = {
+            'version': '10.0.0',
+            'releaseNotes': 'test',
+            'published': '1970-01-01',
+            'unpublished': '',
+            'modules': [{'moduleSlug': 'slug0', 'version': '1.2.3', 'status': 0}]
+        }
+        response = c.post('/api/v1/release',
+                          data=data,
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+
+        expected_result = {
+            'version': '10.0.0',
+            'releaseNotes': 'test',
+            'published': '1970-01-01',
+            'unpublished': '',
+            'created': response.data['created'],
+            'modified': None,
+            'modules': [{'moduleSlug': 'slug0', 'version': '1.2.3', 'status': 0}]}
+
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+        module_order = ModuleOrder.objects.filter(appVersion='10.0.0').first()
+        self.assertEqual(module_order.appVersion, '10.0.0')
+        self.assertListEqual(module_order.order, ['slug0'])
+
+        _modules_by_app = list(ModulesByApp.objects.filter(appVersion='10.0.0').all())
+        _modules_by_app_serialized = ModulesByAppSerializer(_modules_by_app, many=True).data
+
+        self.assertEqual(len(_modules_by_app_serialized), 1)

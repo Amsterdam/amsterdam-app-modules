@@ -1,6 +1,7 @@
 bs4
 coverage
 django
+django-cors-headers
 django-nose
 djangorestframework
 djangorestframework-simplejwt
@@ -12,3 +13,4 @@ wheel
 Pillow
 pylint
 pylint-django
+

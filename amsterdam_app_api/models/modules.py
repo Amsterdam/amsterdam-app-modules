@@ -1,5 +1,6 @@
 """ Modules models for Mobile App
 """
+from datetime import datetime
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
@@ -76,3 +77,23 @@ class ModuleOrder(models.Model):
     """
     appVersion = models.CharField(max_length=100, blank=False, unique=True, primary_key=True)
     order = ArrayField(models.CharField(max_length=500, blank=False), blank=False)
+
+
+class Releases(models.Model):
+    """ App releases
+    """
+    version = models.CharField(max_length=15, blank=False, unique=True, primary_key=True)
+    releaseNotes = models.CharField(max_length=2000, blank=False, unique=False)
+    published = models.CharField(max_length=10, blank=False, unique=False)
+    unpublished = models.CharField(max_length=10, null=True)
+    created = models.DateTimeField(auto_created=True)
+    modified = models.DateTimeField(null=True)
+
+    def save(self, *args, **kwargs):
+        """ On save, update timestamps """
+        exist = Releases.objects.filter(version=self.version).first()
+        if exist is None:
+            self.created = datetime.now()
+        else:
+            self.modified = datetime.now()
+        return super(Releases, self).save(*args, **kwargs)

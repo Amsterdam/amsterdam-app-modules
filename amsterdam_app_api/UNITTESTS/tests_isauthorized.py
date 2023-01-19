@@ -38,7 +38,7 @@ class TestIsAuthorized(TestCase):
                                                          password=password,
                                                          email=email)
         self.user.save()
-        response = self.client.post('/api/v1/get-token/', {'username': username, 'password': password})
+        response = self.client.post('/api/v1/token/access', {'username': username, 'password': password})
         self.jwt_token = response.data['access']
 
         self.factory = RequestFactory()

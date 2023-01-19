@@ -67,7 +67,7 @@ module_slug_status = {
     "releases": openapi.Schema(type=openapi.TYPE_ARRAY, items=version)
 }
 
-as_module_app_versions ={
+as_module_app_versions = {
     'methods': ['get'],
     'responses': {
         200: openapi.Response(
@@ -140,14 +140,98 @@ modules_version = {
 }
 
 modules_versions = {
-    'title': openapi.Schema(type=openapi.TYPE_STRING, description='module title'),
-    'moduleSlug': openapi.Schema(type=openapi.TYPE_STRING, description='module slug'),
-    'description': openapi.Schema(type=openapi.TYPE_STRING, description='module description'),
-    'version': openapi.Schema(type=openapi.TYPE_STRING, description='module version (x.y.z)'),
-    'icon': openapi.Schema(type=openapi.TYPE_STRING, description='icon name'),
+    **modules_version,
     'statusInReleases': openapi.Schema(type=openapi.TYPE_ARRAY,
                                        items=openapi.Schema(type=openapi.TYPE_OBJECT,
                                                             properties=status_in_releases))
+}
+
+module_in_release = {
+    **modules_version,
+    'status': openapi.Schema(type=openapi.TYPE_NUMBER, description='status (enum: 0, 1, ...)'),
+}
+
+release = {
+    'version': openapi.Schema(type=openapi.TYPE_STRING, description='module version (x.y.z)'),
+    'releaseNotes': openapi.Schema(type=openapi.TYPE_STRING, description='release notes'),
+    'published': openapi.Schema(type=openapi.TYPE_STRING, description='date (YYYY-mm-dd)'),
+    'unpublished': openapi.Schema(type=openapi.TYPE_STRING, description='date (YYYY-mm-dd)')
+}
+
+get_release = {
+    **release,
+    'created': openapi.Schema(type=openapi.FORMAT_DATETIME),
+    'modified': openapi.Schema(type=openapi.FORMAT_DATETIME),
+    'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
+                              items=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                   properties=module_in_release))
+}
+
+post_release = {
+    **release,
+    'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
+                              items=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                   properties={
+                                                       'moduleSlug': openapi.Schema(type=openapi.TYPE_STRING,
+                                                                                    description='module slug'),
+                                                       'version': openapi.Schema(type=openapi.TYPE_STRING,
+                                                                                 description='module version (x.y.z)'),
+                                                       'status': openapi.Schema(type=openapi.TYPE_NUMBER,
+                                                                                description='status (enum: 0, 1, ...)')
+                                                   }))
+}
+
+as_get_release = {
+    'methods': ['get'],
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                  properties=get_release))
+    },
+    'tags': ['Release']
+}
+
+as_post_release = {
+    'methods': ['post'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties=release
+    ),
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                  properties={
+                                      **release,
+                                      'created': openapi.Schema(type=openapi.FORMAT_DATETIME),
+                                      'modified': openapi.Schema(type=openapi.FORMAT_DATETIME),
+                                  })),
+        400: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "incorrect request body."
+                                  }
+                              }),
+        404: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "Module with slug ‘{slug}’ and version ‘{version}’ not found."
+                                  }
+                              }),
+        409: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'message': 'Release version already exists.'
+                                  }
+                              }),
+    },
+    'tags': ['Release']
 }
 
 
@@ -457,115 +541,6 @@ as_module_delete = {
 }
 
 
-as_modules_post = {
-    'methods': ['POST'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["slug", "title", "icon", "version", "description"],
-        properties=modules,
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              })
-    },
-    'tags': ['Modules']
-}
-
-
-as_modules_patch = {
-    'methods': ['PATCH'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["slug", "version"],
-        properties=modules,
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              })
-    },
-    'tags': ['Modules']
-}
-
-
-as_modules_delete = {
-    'methods': ['DELETE'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=['version', 'slug'],
-        properties={
-            'version': version,
-            'slug': slug
-        }
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              }),
-        500: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'error string'
-                                  }
-                              }),
-    },
-    'tags': ['Modules']
-}
-
-
-as_modules_enable = {
-    'methods': ['PATCH'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["slug", "status"],
-        properties=modules_enable,
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              })
-    },
-    'tags': ['Modules']
-}
-
 as_modules_by_app_get = {
     'methods': ['get'],
     'manual_parameters': [openapi.Parameter('appVersion',
@@ -585,193 +560,6 @@ as_modules_by_app_get = {
     },
     'tags': ['Modules by App']
 }
-
-
-as_modules_by_app_post = {
-    'methods': ['POST'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["appVersion", "moduleSlug", "moduleVersion", "status"],
-        properties=modules_by_app,
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              })
-    },
-    'tags': ['Modules by App']
-}
-
-
-as_modules_by_app_patch = {
-    'methods': ['PATCH'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["appVersion", "moduleSlug"],
-        properties=modules_by_app,
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              })
-    },
-    'tags': ['Modules by App']
-}
-
-
-as_modules_by_app_delete = {
-    'methods': ['DELETE'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["appVersion", "moduleSlug"],
-        properties={
-            'version': version,
-            'slug': slug
-        }
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              }),
-        500: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'error string'
-                                  }
-                              }),
-    },
-    'tags': ['Modules by App']
-}
-
-
-as_module_order_get = {
-    'methods': ['get'],
-    'manual_parameters': [openapi.Parameter('appVersion',
-                                            openapi.IN_HEADER,
-                                            description="appVersion for requesting modules",
-                                            type=openapi.TYPE_STRING)],
-    'responses': {
-        200: openapi.Response(
-            'application/json',
-            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
-                                  properties={
-                                      'status': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='result status'),
-                                      'result': module_order
-                                  }))
-    },
-    'tags': ['Module Order']
-}
-
-
-as_module_order_post = {
-    'methods': ['POST'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["appVersion", "order"],
-        properties=module_order,
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              })
-    },
-    'tags': ['Module Order']
-}
-
-
-as_module_order_patch = {
-    'methods': ['PATCH'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["appVersion", "order"],
-        properties=module_order,
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              })
-    },
-    'tags': ['Module Order']
-}
-
-
-as_module_order_delete = {
-    'methods': ['DELETE'],
-    'manual_parameters': [openapi.Parameter('Authorization',
-                                            openapi.IN_HEADER,
-                                            description="Authorization token",
-                                            type=openapi.TYPE_STRING,
-                                            required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["appVersion"],
-        properties={'appVersion': version}
-    ),
-    'responses': {
-        200: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'string'
-                                  }
-                              }),
-        500: openapi.Response('application/json',
-                              examples={
-                                  'application/json': {
-                                      'status': True,
-                                      'result': 'error string'
-                                  }
-                              }),
-    },
-    'tags': ['Module Order']
-}
-
 
 as_modules_for_app_get = {
     'methods': ['get'],
