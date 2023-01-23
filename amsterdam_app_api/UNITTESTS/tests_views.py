@@ -663,3 +663,80 @@ class Views(TestCase):
         _modules_by_app_serialized = ModulesByAppSerializer(_modules_by_app, many=True).data
 
         self.assertEqual(len(_modules_by_app_serialized), 1)
+
+    def test_releases_get(self):
+        """ test releases """
+        import datetime  # pylint: disable=unused-import
+        _module_by_app = {'appVersion': '0.0.0', 'moduleSlug': 'slug0', 'moduleVersion': '0.0.1', 'status': 1}
+        ModulesByApp.objects.create(**_module_by_app)
+
+        _module_version = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'icon': 'icon',
+            'version': '0.0.1',
+            'description': 'description'
+        }
+        ModuleVersions.objects.create(**_module_version)
+        c = Client()
+        response = c.get('/api/v1/releases',
+                         HTTP_AUTHORIZATION=self.authorization_header,
+                         content_type='application/json')
+        expected_result = [
+            {
+                'version': '0.0.1',
+                'releaseNotes': 'release 0.0.1',
+                'published': '1971-01-01',
+                'unpublished': '1971-12-31',
+                'created': response.data[0]['created'],
+                'modified': None,
+                'modules': [
+                    {
+                        'moduleSlug': 'slug0',
+                        'version': '1.2.3',
+                        'title': 'title',
+                        'description': 'description',
+                        'icon': 'icon',
+                        'status': 1
+                    },
+                    {
+                        'moduleSlug': 'slug1',
+                        'version': '1.3.4',
+                        'title': 'title',
+                        'description': 'description',
+                        'icon': 'icon',
+                        'status': 0
+                    },
+                    {
+                        'moduleSlug': 'slug2',
+                        'version': '1.30.4',
+                        'title': 'title',
+                        'description': 'description',
+                        'icon': 'icon',
+                        'status': 1
+                    }
+                ]
+            },
+            {
+                'version': '0.0.0',
+                'releaseNotes': 'release 0.0.0',
+                'published': '1970-01-01',
+                'unpublished': '1970-12-31',
+                'created': response.data[1]['created'],
+                'modified': None,
+                'modules': [
+                    {
+                        'moduleSlug': 'slug0',
+                        'version': '0.0.1',
+                        'title': 'title',
+                        'description': 'description',
+                        'icon': 'icon',
+                        'status': 1
+                    }
+                ]
+            }
+        ]
+
+        self.assertEqual(response.status_code, 200)
+        for i in range(len(response.data)):
+            self.assertDictEqual(response.data[i], expected_result[i])
