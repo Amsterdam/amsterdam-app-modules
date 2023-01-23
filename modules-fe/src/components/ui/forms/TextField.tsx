@@ -12,21 +12,25 @@ enum FieldWidth {
 type Props = {
   label: string
   width?: keyof typeof FieldWidth
-} & UseControllerProps
+} & UseControllerProps &
+  React.HTMLProps<HTMLInputElement>
 
-const TextField = ({defaultValue, label, name, rules, width}: Props) => {
+const TextField = ({defaultValue, label, name, rules, type, width}: Props) => {
   const id = uniqueId('TextField-')
 
   return (
     <Controller
-      defaultValue={defaultValue as string}
+      defaultValue={defaultValue || ''}
       name={name}
       render={({field: {onChange, value}, fieldState: {error}}) => (
         <Column gutter="sm">
           <label className="TextFieldLabel" data-width={width} htmlFor={id}>
             <Column gutter="sm">
               <Phrase color="muted">{label}</Phrase>
-              <Input {...{id, name, onChange, value}} hasError={!!error} />
+              <Input
+                {...{id, name, onChange, type, value}}
+                hasError={!!error}
+              />
             </Column>
           </label>
           {!!error && <Phrase color="error">{error.message}</Phrase>}
