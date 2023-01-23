@@ -30,13 +30,15 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     # Path to obtain a new access and refresh token (refresh token expires after 24h)
-    path('get-token/', csrf_exempt(TokenObtainPairView.as_view()), name='token_obtain_pair'),
-    path('refresh-token/', csrf_exempt(TokenRefreshView.as_view()), name='token_refresh'),
+    path('token/access', csrf_exempt(TokenObtainPairView.as_view()), name='token_obtain_pair'),
+    path('token/refresh', csrf_exempt(TokenRefreshView.as_view()), name='token_refresh'),
+
+    # Legacy API app-version < 0.28.0
+    path('modules_for_app', csrf_exempt(views_modules.modules_for_app_get)),
 
     # Modules
     path('modules_app_versions', csrf_exempt(views_modules.modules_app_versions)),
     path('modules_by_app', csrf_exempt(views_modules.modules_by_app)),
-    path('modules_for_app', csrf_exempt(views_modules.modules_for_app_get)),
 
     # End-points from https://amsterdam-app.stoplight.io/docs/amsterdam-app/
     path('module/<str:slug>/version/<str:version>/status', csrf_exempt(views_modules.module_version_status)),
@@ -44,6 +46,8 @@ urlpatterns = [
     path('module', csrf_exempt(views_modules.module)),
     path('module/<str:slug>', csrf_exempt(views_modules.module_slug)),
     path('module/<str:slug>/version', csrf_exempt(views_modules.post_module_version)),
-    path('modules/latest', csrf_exempt(views_modules.modules_latest))
-]
+    path('modules/latest', csrf_exempt(views_modules.modules_latest)),
 
+    path('release', csrf_exempt(views_modules.post_release)),
+    path('release/<str:version>', csrf_exempt(views_modules.get_release))
+]

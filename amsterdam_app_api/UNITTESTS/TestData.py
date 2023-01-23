@@ -66,3 +66,18 @@ class TestData:
             {'appVersion': '0.0.0', 'order': ['slug0']},
             {'appVersion': '0.0.1', 'order': ['slug0', 'slug1', 'slug2']}
         ]
+
+        self.releases = [
+            {
+                "version": "0.0.0",
+                "releaseNotes": "release 0.0.0",
+                "published": "1970-01-01",
+                "unpublished": "1970-12-31"
+            },
+            {
+                "version": "0.0.1",
+                "releaseNotes": "release 0.0.1",
+                "published": "1971-01-01",
+                "unpublished": "1971-12-31"
+            },
+        ]

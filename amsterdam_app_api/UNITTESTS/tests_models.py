@@ -2,7 +2,7 @@
 """
 from django.test import TestCase
 from amsterdam_app_api.serializers import ModuleOrderSerializer
-from amsterdam_app_api.models import ModuleVersions, ModuleOrder, ModulesByApp
+from amsterdam_app_api.models import ModuleVersions, ModuleOrder, ModulesByApp, Releases
 
 
 class AllModulesModels(TestCase):
@@ -10,7 +10,6 @@ class AllModulesModels(TestCase):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # super(AllModulesModels, self).__init__(*args, **kwargs)
         self.module_versions = [
             {'moduleSlug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.0', 'description': 'description'},
             {'moduleSlug': 'slug0', 'title': 'title', 'icon': 'icon', 'version': '0.0.1', 'description': 'description'},
@@ -28,11 +27,26 @@ class AllModulesModels(TestCase):
             {'appVersion': '0.0.0', 'order': ['slug0']},
             {'appVersion': '0.0.1', 'order': ['slug0', 'slug1', 'slug2']}
         ]
+        self.releases = [
+            {
+                "version": "0.0.0",
+                "releaseNotes": "release 0.0.0",
+                "published": "1970-01-01",
+                "unpublished": "1970-12-31"
+            },
+            {
+                "version": "0.0.1",
+                "releaseNotes": "release 0.0.1",
+                "published": "1971-01-01",
+                "unpublished": "1971-12-31"
+            },
+        ]
 
     def setUp(self):
         ModuleVersions.objects.all().delete()
         ModuleOrder.objects.all().delete()
         ModulesByApp.objects.all().delete()
+        Releases.objects.all().delete()
 
     def init_modules(self):
         """ Test creating objects in database
@@ -44,6 +58,8 @@ class AllModulesModels(TestCase):
             ModulesByApp.objects.create(**module_by_app)
         for order in self.module_order:
             ModuleOrder.objects.create(**order)
+        for release in self.releases:
+            Releases.objects.create(**release)
 
     def test_modules_save(self):
         """ Test saving module
@@ -113,3 +129,26 @@ class AllModulesModels(TestCase):
         module.partial_update(status=0)
         data = ModulesByApp.objects.filter(moduleSlug='slug0', appVersion='0.0.0').first()
         self.assertEqual(data.status, 0)
+
+    def test_release_create_modify(self):
+        """ Test modify release
+        :return:
+        """
+        # Test create
+        for release in self.releases:
+            Releases.objects.create(**release)
+
+        release = Releases.objects.filter(version='0.0.0').first()
+        self.assertNotEqual(release, None)
+
+        # modify
+        created = release.created
+        modified = release.modified
+        release.releaseNotes = 'bogus'
+        release.save()
+
+        # assert modify
+        check = Releases.objects.filter(version='0.0.0').first()
+        self.assertEqual(check.releaseNotes, 'bogus')
+        self.assertEqual(check.created, created)
+        self.assertNotEqual(check.modified, modified)

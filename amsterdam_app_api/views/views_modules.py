@@ -9,17 +9,11 @@ from amsterdam_app_api.models import Module
 from amsterdam_app_api.models import ModuleVersions
 from amsterdam_app_api.models import ModulesByApp
 from amsterdam_app_api.models import ModuleOrder
+from amsterdam_app_api.models import Releases
 from amsterdam_app_api.serializers import ModuleSerializer
 from amsterdam_app_api.serializers import ModuleVersionsSerializer
 from amsterdam_app_api.serializers import ModulesByAppSerializer
-from amsterdam_app_api.serializers import ModuleOrderSerializer
-from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
-from amsterdam_app_api.GenericFunctions.SetFilter import SetFilter
 from amsterdam_app_api.GenericFunctions.Sort import Sort
-from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_get
-from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_post
-from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_patch
-from amsterdam_app_api.swagger.swagger_views_modules import as_module_order_delete
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_patch
@@ -30,14 +24,9 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_pa
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_delete
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_status
-from amsterdam_app_api.swagger.swagger_views_modules import as_modules_post
-from amsterdam_app_api.swagger.swagger_views_modules import as_modules_patch
-from amsterdam_app_api.swagger.swagger_views_modules import as_modules_delete
-from amsterdam_app_api.swagger.swagger_views_modules import as_modules_enable
+from amsterdam_app_api.swagger.swagger_views_modules import as_post_release
+from amsterdam_app_api.swagger.swagger_views_modules import as_get_release
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_get
-from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_post
-from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_patch
-from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_delete
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_for_app_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_app_versions
 from amsterdam_app_api.api_messages import Messages
@@ -387,3 +376,121 @@ def module_version_status(request, slug, version):
 
     # Send response
     return Response([{'status': int(k), 'releases': v} for k, v in _releases.items()], status=200)
+
+
+@swagger_auto_schema(**as_get_release)
+@api_view(['GET'])
+def get_release(request, version):
+    """ Returns a specific release and the versions of the modules it consists of. """
+    _release = Releases.objects.filter(version=version).first()
+    if _release is None:
+        return Response({'message': 'Release version does not exists.'}, status=404)
+    _module_order = ModuleOrder.objects.filter(appVersion=version).first()
+    _modules = []
+    for _slug in _module_order.order:
+        _module_by_app = ModulesByApp.objects.filter(appVersion=version, moduleSlug=_slug).first()
+        _module_version = ModuleVersions.objects.filter(moduleSlug=_slug, version=_module_by_app.moduleVersion).first()
+        _modules.append({
+            "moduleSlug": _slug,
+            "version": _module_by_app.moduleVersion,
+            "title": _module_version.title,
+            "description": _module_version.description,
+            "icon": _module_version.icon,
+            "status": _module_by_app.status
+        })
+
+    result = {
+        "version": version,
+        "releaseNotes": _release.releaseNotes,
+        "published": _release.published,
+        "unpublished": _release.unpublished,
+        "created": _release.created,
+        "modified": _release.modified,
+        "modules": _modules
+    }
+    return Response(result, status=200)
+
+
+@swagger_auto_schema(**as_post_release)
+@api_view(['POST'])
+def post_release(request):
+    """ Creates a release, storing its details and the list of module versions belonging to it.
+        The order of modules in the request body is the order of appearance in the app
+    """
+    data = request.data
+
+    # Guards...
+    if not all(key in data for key in ('version', 'releaseNotes', 'published', 'unpublished', 'modules')):
+        return Response({"message": "incorrect request body."}, status=400)
+
+    if not isinstance(data['modules'], list):
+        return Response({"message": "incorrect request body."}, status=400)
+
+    for _module_version in data['modules']:
+        if not all(key in _module_version for key in ('moduleSlug', 'version', 'status')):
+            return Response({"message": "incorrect request body."}, status=400)
+
+    for key in ('version', 'releaseNotes', 'published', 'unpublished'):
+        if not isinstance(data[key], str):
+            return Response({"message": "incorrect request body."}, status=400)
+
+    _release = Releases.objects.filter(version=data['version']).first()
+    if _release is not None:
+        return Response({'message': 'Release version already exists.'}, status=409)
+
+    for _module_version in data['modules']:
+        slug = _module_version['moduleSlug']
+        version = _module_version['version']
+        _module = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
+        if _module is None:
+            return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
+
+    #
+    # Create new app version
+    #
+
+    # Create new release
+    _new_release = {
+        "version": data['version'],
+        "releaseNotes": data['releaseNotes'],
+        "published": data['published'],
+        "unpublished": data['unpublished']
+    }
+    Releases.objects.create(**_new_release)
+
+    # Add modules to release
+    _module_order = {'appVersion': data['version'], 'order': []}
+    for _module in data['modules']:
+        _module_order['order'].append(_module['moduleSlug'])
+        _module_by_app = {
+            'appVersion': data['version'],
+            'moduleSlug': _module['moduleSlug'],
+            'moduleVersion': _module['version'],
+            'status': _module['status']
+        }
+        ModulesByApp.objects.create(**_module_by_app)
+
+    # Add new modules order
+    ModuleOrder.objects.create(**_module_order)
+
+    #
+    # return object from database
+    #
+
+    release = Releases.objects.filter(version=data['version']).first()
+    _module_order = ModuleOrder.objects.filter(appVersion=data['version']).first()
+    _modules = []
+    for _slug in _module_order.order:
+        _module = ModulesByApp.objects.filter(appVersion=data['version'], moduleSlug=_slug).first()
+        _modules.append({'moduleSlug': _module.moduleSlug, 'version': _module.moduleVersion, 'status': _module.status})
+
+    result = {
+        "version": release.version,
+        "releaseNotes": release.releaseNotes,
+        "published": release.published,
+        "unpublished": release.unpublished,
+        "created": release.created,
+        "modified": release.modified,
+        "modules": _modules
+    }
+    return Response(result, status=200)
