@@ -5,6 +5,7 @@ import EditModuleVersionScreen from 'screens/EditModuleVersion.screen'
 import EditModuleVersionStatusScreen from 'screens/EditModuleVersionStatus.screen'
 import ErrorScreen from 'screens/Error.screen'
 import HomeScreen from 'screens/Home.screen'
+import LoginScreen from 'screens/Login.screen'
 import ModuleScreen from 'screens/Module.screen'
 import ModulesScreen from 'screens/Modules.screen'
 import ReleaseScreen from 'screens/Release.screen'
@@ -15,6 +16,10 @@ export const routes: RouteObject[] = [
     path: '/',
     element: <HomeScreen />,
     errorElement: <ErrorScreen message="Pagina niet gevonden (404)." />,
+  },
+  {
+    path: '/login',
+    element: <LoginScreen />,
   },
   {
     path: '/modules',
