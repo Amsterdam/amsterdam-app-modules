@@ -80,7 +80,7 @@ as_module_app_versions = {
                                                                                     description='app versions'))
                                   }))
     },
-    'tags': ['App Versions']
+    'tags': ['App Versions (to be removed)']
 }
 
 
@@ -191,6 +191,20 @@ as_get_release = {
     },
     'tags': ['Release']
 }
+
+
+as_get_releases = {
+    'methods': ['get'],
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_ARRAY,
+                                  items=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                       properties=get_release))),
+    },
+    'tags': ['Releases']
+}
+
 
 as_post_release = {
     'methods': ['post'],
@@ -558,7 +572,7 @@ as_modules_by_app_get = {
                                                                                     properties=modules_by_app))
                                   }))
     },
-    'tags': ['Modules by App']
+    'tags': ['Modules by App (to be removed)']
 }
 
 as_modules_for_app_get = {
@@ -579,5 +593,5 @@ as_modules_for_app_get = {
                                   }))
 
     },
-    'tags': ['Modules for App']
+    'tags': ['Modules for App (legacy app: <= 0.27.0)']
 }

@@ -26,6 +26,7 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_status
 from amsterdam_app_api.swagger.swagger_views_modules import as_post_release
 from amsterdam_app_api.swagger.swagger_views_modules import as_get_release
+from amsterdam_app_api.swagger.swagger_views_modules import as_get_releases
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_for_app_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_app_versions
@@ -270,7 +271,6 @@ def post_module_version(request, slug=None):
     return Response(ModuleVersionsSerializer(_new_module_version, many=False).data, status=200)
 
 
-
 @swagger_auto_schema(**as_module_slug_get)
 @api_view(['GET'])
 def module_slug(request, slug=None):
@@ -409,6 +409,49 @@ def get_release(request, version):
         "modules": _modules
     }
     return Response(result, status=200)
+
+
+@swagger_auto_schema(**as_get_releases)
+@api_view(['GET'])
+def get_releases(request):
+    """ Returns a specific release and the versions of the modules it consists of. """
+    _releases = list(Releases.objects.filter().all())
+
+    results = []
+    for _release in _releases:
+        _module_order = ModuleOrder.objects.filter(appVersion=_release.version).first()
+        _modules = []
+        for _slug in _module_order.order:
+            try:
+                _module_by_app = ModulesByApp.objects.filter(appVersion=_release.version, moduleSlug=_slug).first()
+                _module_version = ModuleVersions.objects.filter(moduleSlug=_slug,
+                                                                version=_module_by_app.moduleVersion).first()
+
+                _modules.append({
+                    "moduleSlug": _slug,
+                    "version": _module_by_app.moduleVersion,
+                    "title": _module_version.title,
+                    "description": _module_version.description,
+                    "icon": _module_version.icon,
+                    "status": _module_by_app.status
+                })
+            except Exception as error:  # pylint: disable=unused-variable
+                pass
+        try:
+            results.append({
+                "version": _release.version,
+                "releaseNotes": _release.releaseNotes,
+                "published": _release.published,
+                "unpublished": _release.unpublished,
+                "created": _release.created,
+                "modified": _release.modified,
+                "modules": _modules
+            })
+        except Exception as error:  # pylint: disable=unused-variable
+            pass
+
+    sorted_result = Sort().list_of_dicts(results, key='version',sort_order='desc')
+    return Response(sorted_result, status=200)
 
 
 @swagger_auto_schema(**as_post_release)
