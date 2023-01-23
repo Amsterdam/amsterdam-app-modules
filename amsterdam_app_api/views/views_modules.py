@@ -197,16 +197,19 @@ def module_version(request, slug=None, version=None):
     if request.method == 'GET':
         result = module_version_get(request, slug=slug, version=version)
         return result
-    elif request.method == 'PATCH':
+
+    if request.method == 'PATCH':
         result = module_version_patch(request, slug=slug, version=version)
         return result
-    elif request.method == 'DELETE':
+
+    if request.method == 'DELETE':
         result = module_version_delete(request, slug=slug, version=version)
         return result
     return Response({'message': 'Method not allowed'}, status=401)
 
 
 def module_version_get(request, slug=None, version=None):
+    """ Get module version """
     _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
     if _module_version is None:
         return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
@@ -222,6 +225,7 @@ def module_version_get(request, slug=None, version=None):
 
 @IsAuthorized
 def module_version_patch(request, slug=None, version=None):
+    """ patch module version """
     _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
     if _module_version is None:
         return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
@@ -248,6 +252,7 @@ def module_version_patch(request, slug=None, version=None):
 
 @IsAuthorized
 def module_version_delete(request, slug=None, version=None):
+    """ delete module version """
     _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
     if _module_version is None:
         return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
