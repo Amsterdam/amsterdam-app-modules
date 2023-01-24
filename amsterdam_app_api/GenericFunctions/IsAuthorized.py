@@ -3,7 +3,7 @@
 import functools
 import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
-from django.http.response import HttpResponseForbidden
+from django.http.response import HttpResponse
 from amsterdam_app_backend.settings import SECRET_KEY
 
 
@@ -38,7 +38,7 @@ class IsAuthorized:
             pass
 
         # Access is not allowed, abort with 401
-        return HttpResponseForbidden()
+        return HttpResponse('Unauthorized', status=401)
 
     @staticmethod
     def is_valid_jwt_token(jwt_encrypted_token=None):

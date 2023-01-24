@@ -167,7 +167,7 @@ get_release = {
                                                    properties=module_in_release))
 }
 
-post_release = {
+post_patch_release = {
     **release,
     'modules': openapi.Schema(type=openapi.TYPE_ARRAY,
                               items=openapi.Schema(type=openapi.TYPE_OBJECT,
@@ -215,7 +215,7 @@ as_post_release = {
                                             required=True)],
     'request_body': openapi.Schema(
         type=openapi.TYPE_OBJECT,
-        properties=release
+        properties=post_patch_release
     ),
     'responses': {
         200: openapi.Response(
@@ -242,6 +242,75 @@ as_post_release = {
                               examples={
                                   'application/json': {
                                       'message': 'Release version already exists.'
+                                  }
+                              }),
+    },
+    'tags': ['Release']
+}
+
+
+as_patch_release = {
+    'methods': ['patch'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'request_body': openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties=post_patch_release
+    ),
+    'responses': {
+        200: openapi.Response(
+            'application/json',
+            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                  properties={
+                                      **release,
+                                      'created': openapi.Schema(type=openapi.FORMAT_DATETIME),
+                                      'modified': openapi.Schema(type=openapi.FORMAT_DATETIME),
+                                  })),
+        400: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "incorrect request body."
+                                  }
+                              }),
+        404: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "Module with slug ‘{slug}’ and version ‘{version}’ not found."
+                                  }
+                              }),
+        409: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'message': 'Release version already exists.'
+                                  }
+                              }),
+    },
+    'tags': ['Release']
+}
+
+
+as_delete_release = {
+    'methods': ['delete'],
+    'manual_parameters': [openapi.Parameter('Authorization',
+                                            openapi.IN_HEADER,
+                                            description="Authorization token",
+                                            type=openapi.TYPE_STRING,
+                                            required=True)],
+    'responses': {
+        200: openapi.Response(''),
+        403: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      'message': 'Release version ‘{version}’ is already published'
+                                  }
+                              }),
+        404: openapi.Response('application/json',
+                              examples={
+                                  'application/json': {
+                                      "message": "Release version ‘{version}’ not found."
                                   }
                               }),
     },

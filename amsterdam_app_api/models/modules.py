@@ -84,7 +84,7 @@ class Releases(models.Model):
     """
     version = models.CharField(max_length=15, blank=False, unique=True, primary_key=True)
     releaseNotes = models.CharField(max_length=2000, blank=False, unique=False)
-    published = models.CharField(max_length=10, blank=False, unique=False)
+    published = models.CharField(max_length=10, null=True)
     unpublished = models.CharField(max_length=10, null=True)
     created = models.DateTimeField(auto_created=True)
     modified = models.DateTimeField(null=True)
