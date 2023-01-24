@@ -591,7 +591,7 @@ class Views(TestCase):
     def test_release_post_400_3(self):
         """ test release pot missing keys """
         c = Client()
-        data = {'version': '', 'releaseNotes': '', 'published': '', 'unpublished': None, 'modules': []}
+        data = {'version': '', 'releaseNotes': None, 'modules': []}
         response = c.post('/api/v1/release',
                           data=data,
                           HTTP_AUTHORIZATION=self.authorization_header,
