@@ -5,12 +5,13 @@ import Button from 'components/ui/button/Button'
 import TextField from 'components/ui/forms/TextField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
+import Icon from 'components/ui/media/Icon'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
 import {useAuthorization} from 'hooks/useAuthorization'
 import {Login} from 'types/authorization'
 
 const LoginScreen = () => {
-  const {isAccessTokenValid, login} = useAuthorization()
+  const {isAccessTokenValid, isLoggingIn, login} = useAuthorization()
   const navigate = useNavigate()
 
   const form = useForm<Login>()
@@ -22,7 +23,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (isAccessTokenValid) {
-      navigate(-1)
+      navigate('/')
     }
   }, [isAccessTokenValid, navigate])
 
@@ -51,7 +52,16 @@ const LoginScreen = () => {
                 width="half"
               />
             </Column>
-            <Button label="Login" onClick={handleSubmit(onSubmitForm)} />
+            <Button
+              disabled={isLoggingIn}
+              icon={
+                isLoggingIn ? (
+                  <Icon color="inverse" name="spinner" />
+                ) : undefined
+              }
+              label="Login"
+              onClick={handleSubmit(onSubmitForm)}
+            />
           </Column>
         </FormProvider>
       </Column>
