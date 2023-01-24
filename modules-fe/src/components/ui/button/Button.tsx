@@ -5,6 +5,7 @@ import './Button.css'
 export enum ButtonVariant {
   primary = 'primary',
   secondary = 'secondary',
+  tertiary = 'tertiary',
 }
 
 type Props = {

@@ -10,5 +10,5 @@ export type AuthorizationToken = {
 
 export type AuthorizationResponse = {
   access: string
-  refresh: string
+  refresh: string | undefined
 }

@@ -16,13 +16,16 @@ export const authorizationSlice = createSlice({
       state,
       {payload: {access, refresh}}: PayloadAction<AuthorizationResponse>,
     ) => {
+      if (refresh !== undefined) {
+        state.refreshToken = refresh
+      }
       state.accessToken = access
-      state.refreshToken = refresh
     },
+    logout: () => initialState,
   },
 })
 
-export const {setTokens} = authorizationSlice.actions
+export const {logout, setTokens} = authorizationSlice.actions
 
 export const selectAuthorizationAccesstoken = (state: RootState) =>
   state.authorization.accessToken

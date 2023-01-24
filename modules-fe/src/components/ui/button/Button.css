@@ -52,6 +52,16 @@
   --color: var(--text-color-button-secondary-disabled);
 }
 
+.Button[data-variant="tertiary"] {
+  --background-color: transparent;
+  --border-color: transparent;
+  --color: currentColor;
+}
+
+.Button[data-variant="tertiary"]:hover {
+  --border-color: var(--border-color-button-tertiary-hover);
+  --border-width: var(--size-border-lg);
+}
 
 .Button:disabled {
   cursor: not-allowed;
