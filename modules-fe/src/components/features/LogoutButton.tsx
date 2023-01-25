@@ -9,7 +9,7 @@ const LogoutButton = () => {
   return (
     <Button
       icon={<Icon name="logout" />}
-      label="Logout"
+      label="Uitloggen"
       onClick={() => {
         dispatch(logout())
       }}

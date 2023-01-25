@@ -6,6 +6,7 @@ import TextField from 'components/ui/forms/TextField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
 import Icon from 'components/ui/media/Icon'
+import Phrase from 'components/ui/text/Phrase'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
 import {useAuthorization} from 'hooks/useAuthorization'
 import {Login} from 'types/authorization'
@@ -30,7 +31,8 @@ const LoginScreen = () => {
   return (
     <Screen>
       <Column gutter="lg">
-        <ScreenTitle title="Login" />
+        <ScreenTitle subtitle="Amsterdam App" title="Modulebeheersysteem" />
+        <Phrase>Je moet inloggen om deze applicatie te gebruiken.</Phrase>
         <FormProvider {...form}>
           <Column gutter="lg">
             <TextField
@@ -57,7 +59,7 @@ const LoginScreen = () => {
                   <Icon color="inverse" name="spinner" />
                 ) : undefined
               }
-              label="Login"
+              label="Inloggen"
               onClick={handleSubmit(onSubmitForm)}
             />
           </Column>
