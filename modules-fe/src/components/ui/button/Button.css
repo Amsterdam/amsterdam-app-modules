@@ -55,7 +55,7 @@
 .Button[data-variant="tertiary"] {
   --background-color: transparent;
   --border-color: transparent;
-  --color: currentColor;
+  --color: var(--text-color-primary);
 }
 
 .Button[data-variant="tertiary"]:hover {
