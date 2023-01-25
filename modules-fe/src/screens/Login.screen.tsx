@@ -34,35 +34,38 @@ const LoginScreen = () => {
         <ScreenTitle subtitle="Amsterdam App" title="Modulebeheersysteem" />
         <Phrase>Je moet inloggen om deze applicatie te gebruiken.</Phrase>
         <FormProvider {...form}>
-          <Column gutter="lg">
-            <TextField
-              label="E-mailadres"
-              name="username"
-              rules={{
-                required: 'Voer een e-mailadres in.',
-              }}
-              width="half"
-            />
-            <TextField
-              label="Wachtwoord"
-              name="password"
-              rules={{
-                required: 'Voer een wachtwoord in.',
-              }}
-              type="password"
-              width="half"
-            />
-            <Button
-              disabled={isLoggingIn}
-              icon={
-                isLoggingIn ? (
-                  <Icon color="inverse" name="spinner" />
-                ) : undefined
-              }
-              label="Inloggen"
-              onClick={handleSubmit(onSubmitForm)}
-            />
-          </Column>
+          <form onSubmit={handleSubmit(onSubmitForm)}>
+            <Column gutter="lg">
+              <TextField
+                label="E-mailadres"
+                name="username"
+                rules={{
+                  required: 'Voer een e-mailadres in.',
+                }}
+                width="half"
+              />
+              <TextField
+                label="Wachtwoord"
+                name="password"
+                rules={{
+                  required: 'Voer een wachtwoord in.',
+                }}
+                type="password"
+                width="half"
+              />
+              <Button
+                disabled={isLoggingIn}
+                icon={
+                  isLoggingIn ? (
+                    <Icon color="inverse" name="spinner" />
+                  ) : undefined
+                }
+                label="Inloggen"
+                onClick={handleSubmit(onSubmitForm)}
+                type="submit"
+              />
+            </Column>
+          </form>
         </FormProvider>
       </Column>
     </Screen>
