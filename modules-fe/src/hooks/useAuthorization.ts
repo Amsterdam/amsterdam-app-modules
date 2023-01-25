@@ -6,8 +6,8 @@ import {
   useLoginMutation,
 } from 'services/authorization'
 import {
-  selectAuthorizationAccesstoken,
-  selectAuthorizationRefreshtoken,
+  selectAuthorizationAccessToken,
+  selectAuthorizationRefreshToken,
   setTokens,
 } from 'slices/authorization.slice'
 import {Login} from 'types/authorization'
@@ -15,8 +15,8 @@ import {getTokenValidity} from 'utils/authorization'
 
 export const useAuthorization = () => {
   const dispatch = useDispatch()
-  const accessToken = useSelector(selectAuthorizationAccesstoken)
-  const refreshToken = useSelector(selectAuthorizationRefreshtoken)
+  const accessToken = useSelector(selectAuthorizationAccessToken)
+  const refreshToken = useSelector(selectAuthorizationRefreshToken)
   const [
     loginMutation,
     {

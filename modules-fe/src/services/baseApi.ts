@@ -6,8 +6,8 @@ import {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react'
 import {
-  selectAuthorizationAccesstoken,
-  selectAuthorizationRefreshtoken,
+  selectAuthorizationAccessToken,
+  selectAuthorizationRefreshToken,
 } from 'slices/authorization.slice'
 import {RootState} from 'store/store'
 import {getTokenValidity} from 'utils/authorization'
@@ -26,9 +26,9 @@ const baseQuery: BaseQueryFn<
 > = async (args, baseQueryApi, extraOptions) => {
   const {dispatch, getState} = baseQueryApi
   const getNewAccessToken = async () => {
-    const token = selectAuthorizationAccesstoken(getState() as RootState)
+    const token = selectAuthorizationAccessToken(getState() as RootState)
     if (!getTokenValidity(token)) {
-      const refresh = selectAuthorizationRefreshtoken(getState() as RootState)
+      const refresh = selectAuthorizationRefreshToken(getState() as RootState)
       const refreshResult = await fetchBaseQuery({
         baseUrl: '/',
       })(
@@ -58,7 +58,7 @@ const baseQuery: BaseQueryFn<
   return fetchBaseQuery({
     baseUrl: '/',
     prepareHeaders: (headers, {endpoint}) => {
-      const token = selectAuthorizationAccesstoken(getState() as RootState)
+      const token = selectAuthorizationAccessToken(getState() as RootState)
       if (authorizedEndpoints.includes(endpoint)) {
         headers.set('Authorization', token)
       }

@@ -27,7 +27,7 @@ export const authorizationSlice = createSlice({
 
 export const {logout, setTokens} = authorizationSlice.actions
 
-export const selectAuthorizationAccesstoken = (state: RootState) =>
+export const selectAuthorizationAccessToken = (state: RootState) =>
   state.authorization.accessToken
-export const selectAuthorizationRefreshtoken = (state: RootState) =>
+export const selectAuthorizationRefreshToken = (state: RootState) =>
   state.authorization.refreshToken
