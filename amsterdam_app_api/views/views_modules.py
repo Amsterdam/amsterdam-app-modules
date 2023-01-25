@@ -573,10 +573,6 @@ def patch_release(request, version=None):
 
     data = request.data
 
-    if version == 'latest':
-        _releases = list(Releases.objects.all())
-        version = get_highest_version([x.version for x in _releases])
-
     # Guards...
     if not all(key in data for key in ('version', 'releaseNotes', 'published', 'unpublished', 'modules')):
         return Response({"message": "incorrect request body."}, status=400)
