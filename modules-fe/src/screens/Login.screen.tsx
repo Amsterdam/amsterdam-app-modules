@@ -33,25 +33,23 @@ const LoginScreen = () => {
         <ScreenTitle title="Login" />
         <FormProvider {...form}>
           <Column gutter="lg">
-            <Column gutter="sm">
-              <TextField
-                label="Gebruikersnaam"
-                name="username"
-                rules={{
-                  required: 'Voer een gebruikersnaam in.',
-                }}
-                width="half"
-              />
-              <TextField
-                label="Wachtwoord"
-                name="password"
-                rules={{
-                  required: 'Voer een wachtwoord in.',
-                }}
-                type="password"
-                width="half"
-              />
-            </Column>
+            <TextField
+              label="Gebruikersnaam"
+              name="username"
+              rules={{
+                required: 'Voer een gebruikersnaam in.',
+              }}
+              width="half"
+            />
+            <TextField
+              label="Wachtwoord"
+              name="password"
+              rules={{
+                required: 'Voer een wachtwoord in.',
+              }}
+              type="password"
+              width="half"
+            />
             <Button
               disabled={isLoggingIn}
               icon={
