@@ -1,23 +1,34 @@
 import {ReactNode} from 'react'
+import LogoutButton from 'components/features/LogoutButton'
 import Column from 'components/ui/layout/Column'
 import Logo from 'components/ui/media/Logo'
 import './Screen.css'
+import {useAuthorization} from 'hooks/useAuthorization'
+import Row from './Row'
 
 type Props = {
   children: ReactNode
 }
 
-const Screen = ({children}: Props) => (
-  <div className="Screen">
-    <div className="Container">
-      <Column gutter="xl">
-        <header>
-          <Logo />
-        </header>
-        <main>{children}</main>
-      </Column>
+const Screen = ({children}: Props) => {
+  const {isAccessTokenValid, isRefreshTokenValid} = useAuthorization()
+  const isUserLoggedIn = isAccessTokenValid || isRefreshTokenValid
+
+  return (
+    <div className="Screen">
+      <div className="Container">
+        <Column gutter="xl">
+          <header>
+            <Row align="between" valign="start">
+              <Logo />
+              {!!isUserLoggedIn && <LogoutButton />}
+            </Row>
+          </header>
+          <main>{children}</main>
+        </Column>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default Screen

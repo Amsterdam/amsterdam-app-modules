@@ -71,6 +71,7 @@
   --border-color-button-emphasis: var(--baseColor-primary-blue);
   --border-color-button-secondary-hover: var(--baseColor-functional-darkblue);
   --border-color-button-secondary-disabled: var(--baseColor-neutral-grey3);
+  --border-color-button-tertiary-hover: var(--baseColor-neutral-grey2);
   --border-color-warning: var(--baseColor-support-invalid);
 
   /* text colors */
