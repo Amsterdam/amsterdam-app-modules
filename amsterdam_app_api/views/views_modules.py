@@ -13,7 +13,7 @@ from amsterdam_app_api.models import Releases
 from amsterdam_app_api.serializers import ModuleSerializer
 from amsterdam_app_api.serializers import ModuleVersionsSerializer
 from amsterdam_app_api.serializers import ModulesByAppSerializer
-from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
+# from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
 from amsterdam_app_api.GenericFunctions.Sort import Sort
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_post
@@ -128,11 +128,11 @@ def slug_status_in_releases(slug):
     for _module_version in module_versions:
         releases = ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=_module_version.version).all()
         status_in_releases = {}
-        for release in releases:
-            if release.status in status_in_releases:
-                status_in_releases[release.status]['releases'].append(release.appVersion)
+        for _release in releases:
+            if _release.status in status_in_releases:
+                status_in_releases[_release.status]['releases'].append(_release.appVersion)
             else:
-                status_in_releases[release.status] = {'releases': [release.appVersion]}
+                status_in_releases[_release.status] = {'releases': [_release.appVersion]}
         _slug_status_in_releases[_module_version.version] = [
             {'status': k, 'releases': v['releases']} for k, v in status_in_releases.items()
         ]
@@ -239,6 +239,11 @@ def module_version_patch(request, slug=None, version=None):
 
     if 'version' in data and not correct_version_format(data['version']):
         return Response({"message": 'incorrect request version formatting.'}, status=400)
+
+    _module_by_app = ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).first()
+    if _module_by_app is not None:
+        _message = f"Module with slug ‘{slug}’ and version ‘{version}’ in use by release ‘{_module_by_app.appVersion}‘."
+        return Response({"message": _message}, status=403)
 
     try:
         _module_version.version = data['version'] if 'version' in data else _module_version.version
@@ -408,6 +413,10 @@ def module_version_status(request, slug, version):
 @swagger_auto_schema(**as_patch_release)
 @api_view(['GET', 'DELETE', 'PATCH'])
 def release(request, version):
+    """ [GET] Returns a specific release and the versions of the modules it consists of.
+        [DELETE] Deletes a release.
+        [PATCH] Updates details of a release.
+    """
     if request.method == 'GET':
         response = get_release(request, version)
         return response
@@ -416,7 +425,8 @@ def release(request, version):
         return response
     if request.method == 'PATCH':
         response = patch_release(request, version)
-        return  response
+        return response
+    return Response({'message': 'Method not allowed'}, status=403)
 
 
 def get_release(request, version):
@@ -517,7 +527,7 @@ def post_release(request):
     # return object from database
     #
 
-    release = Releases.objects.filter(version=data['version']).first()
+    _release = Releases.objects.filter(version=data['version']).first()
     _module_order = ModuleOrder.objects.filter(appVersion=data['version']).first()
     _modules = []
     for _slug in _module_order.order:
@@ -525,12 +535,12 @@ def post_release(request):
         _modules.append({'moduleSlug': _module.moduleSlug, 'version': _module.moduleVersion, 'status': _module.status})
 
     result = {
-        "version": release.version,
-        "releaseNotes": release.releaseNotes,
-        "published": release.published,
-        "unpublished": release.unpublished,
-        "created": release.created,
-        "modified": release.modified,
+        "version": _release.version,
+        "releaseNotes": _release.releaseNotes,
+        "published": _release.published,
+        "unpublished": _release.unpublished,
+        "created": _release.created,
+        "modified": _release.modified,
         "modules": _modules
     }
     return Response(result, status=200)
@@ -575,7 +585,8 @@ def patch_release(request, version=None):
         _module_version = _modules_version['version']
         _module = ModuleVersions.objects.filter(moduleSlug=slug, version=_module_version).first()
         if _module is None:
-            return Response({"message": f"Module with slug ‘{slug}’ and version ‘{_module_version}’ not found."}, status=404)
+            return Response({"message": f"Module with slug ‘{slug}’ and version ‘{_module_version}’ not found."},
+                            status=404)
 
     #
     # Create new app version
@@ -614,7 +625,7 @@ def patch_release(request, version=None):
     # return object from database
     #
 
-    release = Releases.objects.filter(version=data['version']).first()
+    _release = Releases.objects.filter(version=data['version']).first()
     _module_order = ModuleOrder.objects.filter(appVersion=data['version']).first()
     _modules = []
     for _slug in _module_order.order:
@@ -622,18 +633,19 @@ def patch_release(request, version=None):
         _modules.append({'moduleSlug': _module.moduleSlug, 'version': _module.moduleVersion, 'status': _module.status})
 
     result = {
-        "version": release.version,
-        "releaseNotes": release.releaseNotes,
-        "published": release.published,
-        "unpublished": release.unpublished,
-        "created": release.created,
-        "modified": release.modified,
+        "version": _release.version,
+        "releaseNotes": _release.releaseNotes,
+        "published": _release.published,
+        "unpublished": _release.unpublished,
+        "created": _release.created,
+        "modified": _release.modified,
         "modules": _modules
     }
     return Response(result, status=200)
 
 
 def delete_release(request, version=None):
+    """ Delete a release """
     _release = Releases.objects.filter(version=version).first()
     if _release is None:
         return Response({'message': f'Release version ‘{version}’ not found.'}, status=404)
