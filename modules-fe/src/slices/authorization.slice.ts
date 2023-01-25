@@ -1,4 +1,3 @@
-// eslint-disable-file no-use-before-define
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from 'store/store'
 import {AuthorizationResponse, AuthorizationToken} from 'types/authorization'
