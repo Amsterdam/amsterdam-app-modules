@@ -8,7 +8,6 @@ import List from 'components/ui/text/List'
 import ListItem from 'components/ui/text/ListItem'
 import Phrase from 'components/ui/text/Phrase'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
-import ErrorScreen from 'screens/Error.screen'
 import LoadingScreen from 'screens/Loading.screen'
 import {useGetReleasesQuery} from 'services/releases'
 
@@ -21,10 +20,6 @@ const ReleasesScreen = () => {
     return <LoadingScreen />
   }
 
-  if (!releases || !releases.length) {
-    return <ErrorScreen message="Geen releases gevonden." />
-  }
-
   return (
     <Screen>
       <Column gutter="lg">
@@ -33,17 +28,24 @@ const ReleasesScreen = () => {
           label="Release toevoegen"
           onClick={() => navigate('/release/create')}
         />
-        <List>
-          {releases.map(version => (
-            <ListItem key={version}>
-              <BlockLink to={`/release/${version}`}>
-                <Box>
-                  <Phrase>Release {version}</Phrase>
-                </Box>
-              </BlockLink>
-            </ListItem>
-          ))}
-        </List>
+        {releases?.length ? (
+          <List>
+            {releases.map(release => {
+              const {version} = release
+              return (
+                <ListItem key={version}>
+                  <BlockLink to={`/release/${version}`}>
+                    <Box>
+                      <Phrase>Release {version}</Phrase>
+                    </Box>
+                  </BlockLink>
+                </ListItem>
+              )
+            })}
+          </List>
+        ) : (
+          <Phrase>Geen releases gevonden.</Phrase>
+        )}
       </Column>
     </Screen>
   )
