@@ -12,14 +12,14 @@ import {useAuthorization} from 'hooks/useAuthorization'
 import {Login} from 'types/authorization'
 
 const LoginScreen = () => {
-  const {isAccessTokenValid, isLoggingIn, login} = useAuthorization()
+  const {isAccessTokenValid, isLoggingIn, logIn} = useAuthorization()
   const navigate = useNavigate()
 
   const form = useForm<Login>()
   const {handleSubmit} = form
 
   const onSubmitForm = (data: Login) => {
-    login(data)
+    logIn(data)
   }
 
   useEffect(() => {

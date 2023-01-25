@@ -47,7 +47,7 @@ export const useAuthorization = () => {
     })
   }, [dispatch, refreshToken, refreshTokens])
 
-  const login = useCallback(
+  const logIn = useCallback(
     (credentials: Login) => {
       loginMutation(credentials).then(response => {
         if ('data' in response) {
@@ -79,7 +79,7 @@ export const useAuthorization = () => {
 
   return {
     isAccessTokenValid,
-    login,
+    logIn,
     loginData,
     loginError,
     isLoggingIn,
