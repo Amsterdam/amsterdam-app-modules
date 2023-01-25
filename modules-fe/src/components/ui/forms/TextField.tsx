@@ -1,4 +1,5 @@
 import uniqueId from 'lodash.uniqueid'
+import {HTMLProps} from 'react'
 import {Controller, UseControllerProps} from 'react-hook-form'
 import Input from 'components/ui/forms/Input'
 import Column from 'components/ui/layout/Column'
@@ -13,7 +14,7 @@ type Props = {
   label: string
   width?: keyof typeof FieldWidth
 } & UseControllerProps &
-  React.HTMLProps<HTMLInputElement>
+  HTMLProps<HTMLInputElement>
 
 const TextField = ({defaultValue, label, name, rules, type, width}: Props) => {
   const id = uniqueId('TextField-')
