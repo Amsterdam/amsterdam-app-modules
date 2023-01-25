@@ -13,6 +13,7 @@ from amsterdam_app_api.models import Releases
 from amsterdam_app_api.serializers import ModuleSerializer
 from amsterdam_app_api.serializers import ModuleVersionsSerializer
 from amsterdam_app_api.serializers import ModulesByAppSerializer
+# from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
 from amsterdam_app_api.GenericFunctions.Sort import Sort
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_post
@@ -25,7 +26,9 @@ from amsterdam_app_api.swagger.swagger_views_modules import as_module_version_de
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_slug_status
 from amsterdam_app_api.swagger.swagger_views_modules import as_post_release
+from amsterdam_app_api.swagger.swagger_views_modules import as_patch_release
 from amsterdam_app_api.swagger.swagger_views_modules import as_get_release
+from amsterdam_app_api.swagger.swagger_views_modules import as_delete_release
 from amsterdam_app_api.swagger.swagger_views_modules import as_get_releases
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_by_app_get
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_for_app_get
@@ -125,11 +128,11 @@ def slug_status_in_releases(slug):
     for _module_version in module_versions:
         releases = ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=_module_version.version).all()
         status_in_releases = {}
-        for release in releases:
-            if release.status in status_in_releases:
-                status_in_releases[release.status]['releases'].append(release.appVersion)
+        for _release in releases:
+            if _release.status in status_in_releases:
+                status_in_releases[_release.status]['releases'].append(_release.appVersion)
             else:
-                status_in_releases[release.status] = {'releases': [release.appVersion]}
+                status_in_releases[_release.status] = {'releases': [_release.appVersion]}
         _slug_status_in_releases[_module_version.version] = [
             {'status': k, 'releases': v['releases']} for k, v in status_in_releases.items()
         ]
@@ -140,6 +143,7 @@ def slug_status_in_releases(slug):
 @swagger_auto_schema(**as_module_patch)
 @swagger_auto_schema(**as_module_delete)
 @api_view(['POST', 'PATCH', 'DELETE'])
+# @IsAuthorized
 def module(request):
     """ Create, modify or delete a module slug.
 
@@ -193,59 +197,84 @@ def module_version(request, slug=None, version=None):
         query: Returns a specific version of a module, along with its status in all releases of the app.
     """
     if request.method == 'GET':
-        _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
-        if _module_version is None:
-            return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
-        serializer = ModuleVersionsSerializer(_module_version, many=False)
-        data = serializer.data
-        if 'id' in data:
-            del data['id']
-
-        status_in_releases = slug_status_in_releases(slug)
-        data['statusInReleases'] = status_in_releases[version] if version in status_in_releases else []
-        return Response(data, status=200)
+        result = module_version_get(request, slug=slug, version=version)
+        return result
 
     if request.method == 'PATCH':
-        _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
-        if _module_version is None:
-            return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
-
-        data = dict(request.data)
-        not_allowed = [x for x in data if x not in ['version', 'title', 'description', 'icon']]
-        if len(not_allowed):
-            return Response({"message": 'incorrect request body.'}, status=400)
-
-        if 'version' in data and not correct_version_format(data['version']):
-            return Response({"message": 'incorrect request version formatting.'}, status=400)
-
-        try:
-            _module_version.version = data['version'] if 'version' in data else _module_version.version
-            _module_version.title = data['title'] if 'title' in data else _module_version.title
-            _module_version.description = data['description'] if 'description' in data else _module_version.description
-            _module_version.icon = data['icon'] if 'icon' in data else _module_version.icon
-            _module_version.save()
-            return Response(ModuleVersionsSerializer(_module_version, many=False).data, status=200)
-        except IntegrityError:
-            return Response({"message": f"Module with slug ‘{slug}’ and version ‘{data['version']}’ already exists."},
-                            status=400)
+        result = module_version_patch(request, slug=slug, version=version)
+        return result
 
     if request.method == 'DELETE':
-        _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
-        if _module_version is None:
-            return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
+        result = module_version_delete(request, slug=slug, version=version)
+        return result
+    return Response({'message': 'Method not allowed'}, status=401)
 
-        _module_version_in_releases = list(ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).all())
-        if len(_module_version_in_releases) != 0:
-            return Response({"message": f"Module with slug ‘{slug}’ is being used in a release."}, status=403)
 
-        _module_version.delete()
-        return Response(status=200)
+def module_version_get(request, slug=None, version=None):
+    """ Get module version """
+    _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
+    if _module_version is None:
+        return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
+    serializer = ModuleVersionsSerializer(_module_version, many=False)
+    data = serializer.data
+    if 'id' in data:
+        del data['id']
 
-    return Response('method not allowed', status=500)
+    status_in_releases = slug_status_in_releases(slug)
+    data['statusInReleases'] = status_in_releases[version] if version in status_in_releases else []
+    return Response(data, status=200)
+
+
+# @IsAuthorized
+def module_version_patch(request, slug=None, version=None):
+    """ patch module version """
+    _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
+    if _module_version is None:
+        return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
+
+    data = dict(request.data)
+    not_allowed = [x for x in data if x not in ['version', 'title', 'description', 'icon']]
+    if len(not_allowed):
+        return Response({"message": 'incorrect request body.'}, status=400)
+
+    if 'version' in data and not correct_version_format(data['version']):
+        return Response({"message": 'incorrect request version formatting.'}, status=400)
+
+    _module_by_app = ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).first()
+    if _module_by_app is not None:
+        _message = f"Module with slug ‘{slug}’ and version ‘{version}’ in use by release ‘{_module_by_app.appVersion}‘."
+        return Response({"message": _message}, status=403)
+
+    try:
+        _module_version.version = data['version'] if 'version' in data else _module_version.version
+        _module_version.title = data['title'] if 'title' in data else _module_version.title
+        _module_version.description = data['description'] if 'description' in data else _module_version.description
+        _module_version.icon = data['icon'] if 'icon' in data else _module_version.icon
+        _module_version.save()
+        return Response(ModuleVersionsSerializer(_module_version, many=False).data, status=200)
+    except IntegrityError:
+        return Response({"message": f"Module with slug ‘{slug}’ and version ‘{data['version']}’ already exists."},
+                        status=400)
+
+
+# @IsAuthorized
+def module_version_delete(request, slug=None, version=None):
+    """ delete module version """
+    _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
+    if _module_version is None:
+        return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
+
+    _module_version_in_releases = list(ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).all())
+    if len(_module_version_in_releases) != 0:
+        return Response({"message": f"Module with slug ‘{slug}’ is being used in a release."}, status=403)
+
+    _module_version.delete()
+    return Response(status=200)
 
 
 @swagger_auto_schema(**as_module_version_post)
 @api_view(['POST'])
+# @IsAuthorized
 def post_module_version(request, slug=None):
     """ Create a new version of an existing module.. """
     data = dict(request.data)
@@ -333,6 +362,7 @@ def modules_latest(request):
 
 @swagger_auto_schema(**as_module_slug_status)
 @api_view(['PATCH'])
+# @IsAuthorized
 def module_version_status(request, slug, version):
     """ Disable or enable a version of a module in one or more releases. """
     data = request.data
@@ -379,7 +409,26 @@ def module_version_status(request, slug, version):
 
 
 @swagger_auto_schema(**as_get_release)
-@api_view(['GET'])
+@swagger_auto_schema(**as_delete_release)
+@swagger_auto_schema(**as_patch_release)
+@api_view(['GET', 'DELETE', 'PATCH'])
+def release(request, version):
+    """ [GET] Returns a specific release and the versions of the modules it consists of.
+        [DELETE] Deletes a release.
+        [PATCH] Updates details of a release.
+    """
+    if request.method == 'GET':
+        response = get_release(request, version)
+        return response
+    if request.method == 'DELETE':
+        response = delete_release(request, version)
+        return response
+    if request.method == 'PATCH':
+        response = patch_release(request, version)
+        return response
+    return Response({'message': 'Method not allowed'}, status=403)
+
+
 def get_release(request, version):
     """ Returns a specific release and the versions of the modules it consists of. """
     _release = Releases.objects.filter(version=version).first()
@@ -411,51 +460,9 @@ def get_release(request, version):
     return Response(result, status=200)
 
 
-@swagger_auto_schema(**as_get_releases)
-@api_view(['GET'])
-def get_releases(request):
-    """ Returns a specific release and the versions of the modules it consists of. """
-    _releases = list(Releases.objects.filter().all())
-
-    results = []
-    for _release in _releases:
-        _module_order = ModuleOrder.objects.filter(appVersion=_release.version).first()
-        _modules = []
-        for _slug in _module_order.order:
-            try:
-                _module_by_app = ModulesByApp.objects.filter(appVersion=_release.version, moduleSlug=_slug).first()
-                _module_version = ModuleVersions.objects.filter(moduleSlug=_slug,
-                                                                version=_module_by_app.moduleVersion).first()
-
-                _modules.append({
-                    "moduleSlug": _slug,
-                    "version": _module_by_app.moduleVersion,
-                    "title": _module_version.title,
-                    "description": _module_version.description,
-                    "icon": _module_version.icon,
-                    "status": _module_by_app.status
-                })
-            except Exception as error:  # pylint: disable=unused-variable
-                pass
-        try:
-            results.append({
-                "version": _release.version,
-                "releaseNotes": _release.releaseNotes,
-                "published": _release.published,
-                "unpublished": _release.unpublished,
-                "created": _release.created,
-                "modified": _release.modified,
-                "modules": _modules
-            })
-        except Exception as error:  # pylint: disable=unused-variable
-            pass
-
-    sorted_result = Sort().list_of_dicts(results, key='version',sort_order='desc')
-    return Response(sorted_result, status=200)
-
-
 @swagger_auto_schema(**as_post_release)
 @api_view(['POST'])
+# @IsAuthorized
 def post_release(request):
     """ Creates a release, storing its details and the list of module versions belonging to it.
         The order of modules in the request body is the order of appearance in the app
@@ -473,7 +480,7 @@ def post_release(request):
         if not all(key in _module_version for key in ('moduleSlug', 'version', 'status')):
             return Response({"message": "incorrect request body."}, status=400)
 
-    for key in ('version', 'releaseNotes', 'published', 'unpublished'):
+    for key in ('version', 'releaseNotes'):
         if not isinstance(data[key], str):
             return Response({"message": "incorrect request body."}, status=400)
 
@@ -520,7 +527,7 @@ def post_release(request):
     # return object from database
     #
 
-    release = Releases.objects.filter(version=data['version']).first()
+    _release = Releases.objects.filter(version=data['version']).first()
     _module_order = ModuleOrder.objects.filter(appVersion=data['version']).first()
     _modules = []
     for _slug in _module_order.order:
@@ -528,12 +535,166 @@ def post_release(request):
         _modules.append({'moduleSlug': _module.moduleSlug, 'version': _module.moduleVersion, 'status': _module.status})
 
     result = {
-        "version": release.version,
-        "releaseNotes": release.releaseNotes,
-        "published": release.published,
-        "unpublished": release.unpublished,
-        "created": release.created,
-        "modified": release.modified,
+        "version": _release.version,
+        "releaseNotes": _release.releaseNotes,
+        "published": _release.published,
+        "unpublished": _release.unpublished,
+        "created": _release.created,
+        "modified": _release.modified,
         "modules": _modules
     }
     return Response(result, status=200)
+
+
+# @IsAuthorized
+def patch_release(request, version=None):
+    """ Patches a release, storing its details and the list of module versions belonging to it.
+        The order of modules in the request body is the order of appearance in the app
+    """
+    data = request.data
+
+    # Guards...
+    if not all(key in data for key in ('version', 'releaseNotes', 'published', 'unpublished', 'modules')):
+        return Response({"message": "incorrect request body."}, status=400)
+
+    if not isinstance(data['modules'], list):
+        return Response({"message": "incorrect request body."}, status=400)
+
+    for _module_version in data['modules']:
+        if not all(key in _module_version for key in ('moduleSlug', 'version', 'status')):
+            return Response({"message": "incorrect request body."}, status=400)
+
+    for key in ('version', 'releaseNotes'):
+        if not isinstance(data[key], str):
+            return Response({"message": "incorrect request body."}, status=400)
+
+    existing_release = Releases.objects.filter(version=data['version']).first()
+    if existing_release is not None:
+        return Response({'message': 'Release version already exists.'}, status=409)
+
+    current_release = Releases.objects.filter(version=version).first()
+    if current_release is None:
+        return Response({'message': f'Release version ‘{version}‘ not found.'}, status=404)
+
+    current_release = Releases.objects.filter(version=version).first()
+    if current_release.published is not None:
+        return Response({'message': f'Release version ‘{version}‘ already published.'}, status=403)
+
+    for _modules_version in data['modules']:
+        slug = _modules_version['moduleSlug']
+        _module_version = _modules_version['version']
+        _module = ModuleVersions.objects.filter(moduleSlug=slug, version=_module_version).first()
+        if _module is None:
+            return Response({"message": f"Module with slug ‘{slug}’ and version ‘{_module_version}’ not found."},
+                            status=404)
+
+    #
+    # Create new app version
+    #
+
+    # Remove release
+    ModulesByApp.objects.filter(appVersion=version).delete()
+    ModuleOrder.objects.filter(appVersion=version).delete()
+    Releases.objects.filter(version=version).delete()
+
+    # Create new release
+    _new_release = {
+        "version": data['version'],
+        "releaseNotes": data['releaseNotes'],
+        "published": data['published'],
+        "unpublished": data['unpublished']
+    }
+    Releases.objects.create(**_new_release)
+
+    # Add modules to release
+    _module_order = {'appVersion': data['version'], 'order': []}
+    for _module in data['modules']:
+        _module_order['order'].append(_module['moduleSlug'])
+        _module_by_app = {
+            'appVersion': data['version'],
+            'moduleSlug': _module['moduleSlug'],
+            'moduleVersion': _module['version'],
+            'status': _module['status']
+        }
+        ModulesByApp.objects.create(**_module_by_app)
+
+    # Add new modules order
+    ModuleOrder.objects.create(**_module_order)
+
+    #
+    # return object from database
+    #
+
+    _release = Releases.objects.filter(version=data['version']).first()
+    _module_order = ModuleOrder.objects.filter(appVersion=data['version']).first()
+    _modules = []
+    for _slug in _module_order.order:
+        _module = ModulesByApp.objects.filter(appVersion=data['version'], moduleSlug=_slug).first()
+        _modules.append({'moduleSlug': _module.moduleSlug, 'version': _module.moduleVersion, 'status': _module.status})
+
+    result = {
+        "version": _release.version,
+        "releaseNotes": _release.releaseNotes,
+        "published": _release.published,
+        "unpublished": _release.unpublished,
+        "created": _release.created,
+        "modified": _release.modified,
+        "modules": _modules
+    }
+    return Response(result, status=200)
+
+
+def delete_release(request, version=None):
+    """ Delete a release """
+    _release = Releases.objects.filter(version=version).first()
+    if _release is None:
+        return Response({'message': f'Release version ‘{version}’ not found.'}, status=404)
+    if _release.published is not None:
+        return Response({'message': f'Release version ‘{version}’ is already published.'}, status=403)
+    _release.delete()
+    ModulesByApp.objects.filter(appVersion=version).delete()
+    ModuleOrder.objects.filter(appVersion=version).delete()
+    return Response(status=200)
+
+
+@swagger_auto_schema(**as_get_releases)
+@api_view(['GET'])
+def get_releases(request):
+    """ Returns a specific release and the versions of the modules it consists of. """
+    _releases = list(Releases.objects.filter().all())
+
+    results = []
+    for _release in _releases:
+        _module_order = ModuleOrder.objects.filter(appVersion=_release.version).first()
+        _modules = []
+        for _slug in _module_order.order:
+            try:
+                _module_by_app = ModulesByApp.objects.filter(appVersion=_release.version, moduleSlug=_slug).first()
+                _module_version = ModuleVersions.objects.filter(moduleSlug=_slug,
+                                                                version=_module_by_app.moduleVersion).first()
+
+                _modules.append({
+                    "moduleSlug": _slug,
+                    "version": _module_by_app.moduleVersion,
+                    "title": _module_version.title,
+                    "description": _module_version.description,
+                    "icon": _module_version.icon,
+                    "status": _module_by_app.status
+                })
+            except Exception as error:  # pylint: disable=unused-variable
+                pass
+        try:
+            results.append({
+                "version": _release.version,
+                "releaseNotes": _release.releaseNotes,
+                "published": _release.published,
+                "unpublished": _release.unpublished,
+                "created": _release.created,
+                "modified": _release.modified,
+                "modules": _modules
+            })
+        except Exception as error:  # pylint: disable=unused-variable
+            pass
+
+    sorted_result = Sort().list_of_dicts(results, key='version',sort_order='desc')
+    return Response(sorted_result, status=200)

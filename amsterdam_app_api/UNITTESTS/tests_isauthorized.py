@@ -49,7 +49,7 @@ class TestIsAuthorized(TestCase):
         self.factory.post('/', headers=headers)
         dummy = FooBar()
         result = dummy.route()
-        self.assertEqual(result.reason_phrase, 'Forbidden')
+        self.assertEqual(result.reason_phrase, 'Unauthorized')
 
     def test_no_token(self):
         """ JWT token is absent """
@@ -57,7 +57,7 @@ class TestIsAuthorized(TestCase):
         self.factory.post('/', headers=headers)
         dummy = FooBar()
         result = dummy.route()
-        self.assertEqual(result.reason_phrase, 'Forbidden')
+        self.assertEqual(result.reason_phrase, 'Unauthorized')
 
     def test_jwt_token_valid(self):
         """ JWT token is valid """
@@ -73,4 +73,4 @@ class TestIsAuthorized(TestCase):
         self.factory.post('/', headers=headers)
         dummy = FooBar()
         result = dummy.route()
-        self.assertEqual(result.reason_phrase, 'Forbidden')
+        self.assertEqual(result.reason_phrase, 'Unauthorized')

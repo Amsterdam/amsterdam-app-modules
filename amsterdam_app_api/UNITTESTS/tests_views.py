@@ -318,11 +318,31 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertDictEqual(response.data, expected_result)
 
+    def test_module_slug_version_patch_in_use(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {'version': '10.11.12'}
+        response = c.patch('/api/v1/module/slug0/version/1.2.3',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {'message': 'Module with slug ‘slug0’ and version ‘1.2.3’ in use by release ‘0.0.1‘.'}
+        self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(response.data, expected_result)
+
     def test_module_slug_version_patch_integrity_error(self):
         """ test incorrect request body """
         c = Client()
         data = {'version': '1.2.20'}
-        response = c.patch('/api/v1/module/slug0/version/1.2.3',
+        _module_version = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'icon': 'icon',
+            'version': '9.9.9',
+            'description': 'description'
+        }
+        ModuleVersions.objects.create(**_module_version)
+        response = c.patch('/api/v1/module/slug0/version/9.9.9',
                             data=data,
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
@@ -334,12 +354,20 @@ class Views(TestCase):
         """ test incorrect request body """
         c = Client()
         data = {'version': '4.6.7'}
-        response = c.patch('/api/v1/module/slug0/version/1.2.3',
+        _module_version = {
+            'moduleSlug': 'slug10',
+            'title': 'title',
+            'icon': 'icon',
+            'version': '9.9.9',
+            'description': 'description'
+        }
+        ModuleVersions.objects.create(**_module_version)
+        response = c.patch('/api/v1/module/slug10/version/9.9.9',
                             data=data,
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
         expected_result = {
-            'moduleSlug': 'slug0',
+            'moduleSlug': 'slug10',
             'title': 'title',
             'version': '4.6.7',
             'description': 'description',
@@ -591,7 +619,7 @@ class Views(TestCase):
     def test_release_post_400_3(self):
         """ test release pot missing keys """
         c = Client()
-        data = {'version': '', 'releaseNotes': '', 'published': '', 'unpublished': None, 'modules': []}
+        data = {'version': '', 'releaseNotes': None, 'modules': []}
         response = c.post('/api/v1/release',
                           data=data,
                           HTTP_AUTHORIZATION=self.authorization_header,
@@ -740,3 +768,185 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         for i in range(len(response.data)):
             self.assertDictEqual(response.data[i], expected_result[i])
+
+    def test_delete_release_404(self):
+        """ test delete release 404 """
+        c = Client()
+        response = c.delete('/api/v1/release/10.0.0',
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {'message': 'Release version ‘10.0.0’ not found.'}
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_delete_release_403(self):
+        """ test delete release 403 """
+        c = Client()
+        response = c.delete('/api/v1/release/0.0.1',
+                          HTTP_AUTHORIZATION=self.authorization_header,
+                          content_type='application/json')
+        expected_result = {'message': 'Release version ‘0.0.1’ is already published.'}
+        self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_delete_release_200(self):
+        """ test delete release 200 """
+        c = Client()
+        data = {
+            'version': '10.0.0',
+            'releaseNotes': 'test',
+            'published': None,
+            'unpublished': None,
+            'modules': [{'moduleSlug': 'slug0', 'version': '1.2.3', 'status': 0}]
+        }
+        c.post('/api/v1/release',
+               data=data,
+               HTTP_AUTHORIZATION=self.authorization_header,
+               content_type='application/json')
+
+        response = c.delete('/api/v1/release/10.0.0',
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, None)
+
+    def test_release_patch_400_1(self):
+        """ test release patch missing keys """
+        c = Client()
+        data = {}
+        response = c.patch('/api/v1/release/0.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, {"message": "incorrect request body."})
+
+    def test_release_patch_400_2(self):
+        """ test release patch missing keys """
+        c = Client()
+        data = {'version': None, 'releaseNotes': None, 'published': None, 'unpublished': None, 'modules': None}
+        response = c.patch('/api/v1/release/0.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, {"message": "incorrect request body."})
+
+    def test_release_patch_400_3(self):
+        """ test release patch missing keys """
+        c = Client()
+        data = {'version': '', 'releaseNotes': None, 'published': None, 'unpublished': None, 'modules': [{}]}
+        response = c.patch('/api/v1/release/0.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, {"message": "incorrect request body."})
+
+    def test_release_patch_400_4(self):
+        """ test release patch missing keys """
+        c = Client()
+        data = {'version': '', 'releaseNotes': None, 'published': None, 'unpublished': None, 'modules': []}
+        response = c.patch('/api/v1/release/0.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(response.data, {"message": "incorrect request body."})
+
+    def test_release_patch_409(self):
+        """ test release patch missing keys """
+        c = Client()
+        data = {'version': '0.0.0', 'releaseNotes': '', 'published': '', 'unpublished': '', 'modules': []}
+        response = c.patch('/api/v1/release/0.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        self.assertEqual(response.status_code, 409)
+        self.assertDictEqual(response.data, {'message': 'Release version already exists.'})
+
+    def test_release_patch_403(self):
+        """ test release patch missing keys """
+        c = Client()
+        data = {
+            'version': '10.0.0',
+            'releaseNotes': '',
+            'published': '',
+            'unpublished': '',
+            'modules': [{'moduleSlug': 'bogus', 'version': '0.0.0', 'status': 0}]
+        }
+        response = c.patch('/api/v1/release/0.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(response.data, {'message': 'Release version ‘0.0.0‘ already published.'})
+
+    def test_release_patch_404(self):
+        """ test release patch missing keys """
+        c = Client()
+        data = {
+            'version': '14.0.0',
+            'releaseNotes': '',
+            'published': '',
+            'unpublished': '',
+            'modules': [{'moduleSlug': 'bogus', 'version': '0.0.0', 'status': 0}]
+        }
+
+        _release = {
+            'version': '12.0.0',
+            'releaseNotes': 'test',
+            'published': None,
+            'unpublished': None
+        }
+
+        Releases.objects.create(**_release)
+        response = c.patch('/api/v1/release/12.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, {'message': 'Module with slug ‘bogus’ and version ‘0.0.0’ not found.'})
+
+    def test_release_patch_200(self):
+        """ test release patch missing keys """
+        import datetime  # pylint: disable=unused-import
+        c = Client()
+        data = {
+            'version': '10.0.0',
+            'releaseNotes': 'test',
+            'published': '1970-01-01',
+            'unpublished': '',
+            'modules': [{'moduleSlug': 'slug0', 'version': '1.2.3', 'status': 0}]
+        }
+
+        _release = Releases.objects.filter(version='0.0.0').first()
+        _release.published = None
+        _release.unpublished = None
+        _release.save()
+
+        response = c.patch('/api/v1/release/0.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+
+        expected_result = {
+            'version': '10.0.0',
+            'releaseNotes': 'test',
+            'published': '1970-01-01',
+            'unpublished': '',
+            'created': response.data['created'],
+            'modified': None,
+            'modules': [{'moduleSlug': 'slug0', 'version': '1.2.3', 'status': 0}]}
+
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+        module_order = ModuleOrder.objects.filter(appVersion='10.0.0').first()
+        self.assertEqual(module_order.appVersion, '10.0.0')
+        self.assertListEqual(module_order.order, ['slug0'])
+
+        _modules_by_app = list(ModulesByApp.objects.filter(appVersion='10.0.0').all())
+        _modules_by_app_serialized = ModulesByAppSerializer(_modules_by_app, many=True).data
+
+        self.assertEqual(len(_modules_by_app_serialized), 1)
