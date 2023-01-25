@@ -10,7 +10,7 @@ type Props = {
   value: FieldPathValue<FieldValues, FieldPath<FieldValues>>
 }
 
-const Input = ({hasError, id, name, onChange, type = 'text', value}: Props) => (
+const Input = ({hasError, id, name, onChange, type, value}: Props) => (
   <input
     className="Input"
     data-font="body"

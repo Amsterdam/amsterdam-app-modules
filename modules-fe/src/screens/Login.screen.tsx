@@ -37,7 +37,7 @@ const LoginScreen = () => {
           <Column gutter="lg">
             <TextField
               label="E-mailadres"
-              name="username"
+              name="email"
               rules={{
                 required: 'Voer een e-mailadres in.',
               }}
