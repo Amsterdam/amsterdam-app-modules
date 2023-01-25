@@ -1,5 +1,4 @@
 import {ReactNode} from 'react'
-import {useLocation} from 'react-router-dom'
 import LogoutButton from 'components/features/LogoutButton'
 import Column from 'components/ui/layout/Column'
 import Logo from 'components/ui/media/Logo'
@@ -12,10 +11,8 @@ type Props = {
 }
 
 const Screen = ({children}: Props) => {
-  useAuthorization()
-  const location = useLocation()
-
-  const isLoginPage = location.pathname === '/login'
+  const {isAccessTokenValid, isRefreshTokenValid} = useAuthorization()
+  const isUserLoggedIn = isAccessTokenValid || isRefreshTokenValid
 
   return (
     <div className="Screen">
@@ -24,7 +21,7 @@ const Screen = ({children}: Props) => {
           <header>
             <Row align="between" valign="start">
               <Logo />
-              {!isLoginPage && <LogoutButton />}
+              {!!isUserLoggedIn && <LogoutButton />}
             </Row>
           </header>
           <main>{children}</main>

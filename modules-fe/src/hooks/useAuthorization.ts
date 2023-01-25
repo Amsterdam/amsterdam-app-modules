@@ -79,6 +79,7 @@ export const useAuthorization = () => {
 
   return {
     isAccessTokenValid,
+    isRefreshTokenValid,
     logIn,
     loginData,
     loginError,
