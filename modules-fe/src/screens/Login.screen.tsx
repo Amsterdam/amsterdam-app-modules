@@ -36,10 +36,10 @@ const LoginScreen = () => {
         <FormProvider {...form}>
           <Column gutter="lg">
             <TextField
-              label="Gebruikersnaam"
+              label="E-mailadres"
               name="username"
               rules={{
-                required: 'Voer een gebruikersnaam in.',
+                required: 'Voer een e-mailadres in.',
               }}
               width="half"
             />
