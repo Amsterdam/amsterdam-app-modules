@@ -607,6 +607,49 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 409)
         self.assertDictEqual(response.data, expected_result)
 
+    def test_release_get_latest_200(self):
+        """ Test get release existing """
+        import datetime  # pylint: disable=unused-import
+        c = Client()
+        response = c.get('/api/v1/release/latest',
+                         HTTP_AUTHORIZATION=self.authorization_header,
+                         content_type='application/json',
+                         accept='application/json')
+        expected_result = {
+            'version': '0.0.1',
+            'releaseNotes': 'release 0.0.1',
+            'published': '1971-01-01',
+            'unpublished': '1971-12-31',
+            'created': response.data['created'],
+            'modified': None,
+            'modules': [
+                {
+                    'moduleSlug': 'slug0',
+                    'version': '1.2.3',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 1
+                }, {
+                    'moduleSlug': 'slug1',
+                    'version': '1.3.4',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 0
+                }, {
+                    'moduleSlug': 'slug2',
+                    'version': '1.30.4',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 1
+                }
+            ]
+        }
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
     def test_release_post_400_1(self):
         """ test release pot missing keys """
         c = Client()
@@ -939,6 +982,49 @@ class Views(TestCase):
         _release.save()
 
         response = c.patch('/api/v1/release/0.0.0',
+                           data=data,
+                           HTTP_AUTHORIZATION=self.authorization_header,
+                           content_type='application/json')
+
+        expected_result = {
+            'version': '10.0.0',
+            'releaseNotes': 'test',
+            'published': '1970-01-01',
+            'unpublished': '',
+            'created': response.data['created'],
+            'modified': None,
+            'modules': [{'moduleSlug': 'slug0', 'version': '1.2.3', 'status': 0}]}
+
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+        module_order = ModuleOrder.objects.filter(appVersion='10.0.0').first()
+        self.assertEqual(module_order.appVersion, '10.0.0')
+        self.assertListEqual(module_order.order, ['slug0'])
+
+        _modules_by_app = list(ModulesByApp.objects.filter(appVersion='10.0.0').all())
+        _modules_by_app_serialized = ModulesByAppSerializer(_modules_by_app, many=True).data
+
+        self.assertEqual(len(_modules_by_app_serialized), 1)
+
+    def test_release_patch_latest_200(self):
+        """ test release patch missing keys """
+        import datetime  # pylint: disable=unused-import
+        c = Client()
+        data = {
+            'version': '10.0.0',
+            'releaseNotes': 'test',
+            'published': '1970-01-01',
+            'unpublished': '',
+            'modules': [{'moduleSlug': 'slug0', 'version': '1.2.3', 'status': 0}]
+        }
+
+        _release = Releases.objects.filter(version='0.0.1').first()
+        _release.published = None
+        _release.unpublished = None
+        _release.save()
+
+        response = c.patch('/api/v1/release/latest',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
                            content_type='application/json')
