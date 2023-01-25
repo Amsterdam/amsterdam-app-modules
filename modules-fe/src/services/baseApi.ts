@@ -9,8 +9,10 @@ import {
   logout,
   selectAuthorizationAccessToken,
   selectAuthorizationRefreshToken,
+  setTokens,
 } from 'slices/authorization.slice'
 import {RootState} from 'store/store'
+import {AuthorizationResponse} from 'types/authorization'
 import {getTokenValidity} from 'utils/authorization'
 
 const authorizedEndpoints = [
@@ -42,10 +44,7 @@ const baseQuery: BaseQueryFn<
         {},
       )
       if (refreshResult.data) {
-        dispatch({
-          type: 'authorization/setTokens',
-          payload: refreshResult.data,
-        })
+        dispatch(setTokens(refreshResult.data as AuthorizationResponse))
       } else {
         dispatch(logout())
       }
