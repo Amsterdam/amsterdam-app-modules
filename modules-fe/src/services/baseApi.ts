@@ -6,6 +6,7 @@ import {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react'
 import {
+  logout,
   selectAuthorizationAccessToken,
   selectAuthorizationRefreshToken,
 } from 'slices/authorization.slice'
@@ -46,7 +47,7 @@ const baseQuery: BaseQueryFn<
           payload: refreshResult.data,
         })
       } else {
-        dispatch({type: 'authorization/logout'})
+        dispatch(logout())
       }
     }
   }
