@@ -51,7 +51,9 @@ const baseQuery: BaseQueryFn<
     }
   }
 
-  await getNewAccessToken()
+  if (typeof args === 'object' && authorizedEndpoints.includes(args.url)) {
+    await getNewAccessToken()
+  }
 
   return fetchBaseQuery({
     baseUrl: '/',
