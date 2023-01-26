@@ -1,6 +1,7 @@
 import {skipToken} from '@reduxjs/toolkit/query'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import LoadingButton from 'components/features/LoadingButton'
 import ModuleDescriptionField from 'components/form-fields/ModuleDescriptionField'
 import ModuleIconField from 'components/form-fields/ModuleIconField'
 import ModuleTitleField from 'components/form-fields/ModuleTitleField'
@@ -37,8 +38,10 @@ const EditModuleScreen = () => {
   )
 
   const form = useForm<ModuleVersion>()
-  const [editModuleVersion] = useEditModuleVersionMutation()
-  const [deleteModuleVersion] = useDeleteModuleVersionMutation()
+  const [editModuleVersion, {isLoading: isEditingModuleVersion}] =
+    useEditModuleVersionMutation()
+  const [deleteModuleVersion, {isLoading: isDeletingModule}] =
+    useDeleteModuleVersionMutation()
   const {handleSubmit, formState} = form
   const {dirtyFields} = formState
 
@@ -125,7 +128,11 @@ const EditModuleScreen = () => {
               baseVersion={moduleVersion.version}
               defaultValue={moduleVersion.version}
             />
-            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
+            <LoadingButton
+              label="Opslaan"
+              loading={isEditingModuleVersion}
+              onClick={handleSubmit(onSubmitForm)}
+            />
             {moduleVersion.statusInReleases?.length ? (
               <Button
                 label="Aan- of uitzetten"
@@ -135,8 +142,9 @@ const EditModuleScreen = () => {
                 variant="secondary"
               />
             ) : (
-              <Button
+              <LoadingButton
                 label="Verwijderen"
+                loading={isDeletingModule}
                 onClick={handleRemoveModuleVersion}
                 variant="secondary"
               />

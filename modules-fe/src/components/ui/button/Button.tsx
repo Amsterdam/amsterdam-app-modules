@@ -1,4 +1,4 @@
-import {ButtonHTMLAttributes, MouseEventHandler, ReactNode} from 'react'
+import {ButtonHTMLAttributes, ReactNode} from 'react'
 import Row from 'components/ui/layout/Row'
 import './Button.css'
 
@@ -8,12 +8,11 @@ export enum ButtonVariant {
   tertiary = 'tertiary',
 }
 
-type Props = {
+export type ButtonProps = {
   disabled?: boolean
   flex?: boolean
   icon?: ReactNode
   label: string
-  onClick: MouseEventHandler<HTMLButtonElement>
   variant?: keyof typeof ButtonVariant
 } & ButtonHTMLAttributes<HTMLButtonElement>
 
@@ -22,18 +21,18 @@ const Button = ({
   flex,
   icon,
   label,
-  onClick,
   type = 'button',
   variant = 'primary',
-}: Props) => (
+  ...buttonProps
+}: ButtonProps) => (
   <button
     className="Button"
     data-flex={flex}
     data-variant={variant}
     disabled={disabled}
-    onClick={onClick}
     // eslint-disable-next-line react/button-has-type
-    type={type}>
+    type={type}
+    {...buttonProps}>
     <Row gutter="sm" valign="center">
       {icon}
       <span className="ButtonLabel" data-ellipsize data-font="body">

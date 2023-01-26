@@ -2,12 +2,12 @@ import {skipToken} from '@reduxjs/toolkit/query'
 import {useCallback, useEffect} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import LoadingButton from 'components/features/LoadingButton'
 import ModuleDescriptionField from 'components/form-fields/ModuleDescriptionField'
 import ModuleIconField from 'components/form-fields/ModuleIconField'
 import ModuleSlugField from 'components/form-fields/ModuleSlugField'
 import ModuleTitleField from 'components/form-fields/ModuleTitleField'
 import VersionField from 'components/form-fields/VersionField'
-import Button from 'components/ui/button/Button'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
@@ -67,7 +67,7 @@ const CreateModuleScreen = () => {
     [createModuleVersion, navigate],
   )
 
-  const onSubmitForm: SubmitHandler<ModuleVersion> = useCallback(
+  const onSubmit: SubmitHandler<ModuleVersion> = useCallback(
     data => {
       if (!data.moduleSlug) {
         return
@@ -128,7 +128,11 @@ const CreateModuleScreen = () => {
             <ModuleDescriptionField defaultValue={latestVersion.description} />
             <ModuleIconField defaultValue={latestVersion.icon} />
             <VersionField baseVersion={latestVersion.version} />
-            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
+            <LoadingButton
+              label="Opslaan"
+              loading={isMutateModuleVersionLoading}
+              onClick={handleSubmit(onSubmit)}
+            />
           </Column>
         </FormProvider>
       </Column>
