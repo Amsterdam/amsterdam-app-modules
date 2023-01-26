@@ -13,7 +13,7 @@ from amsterdam_app_api.models import Releases
 from amsterdam_app_api.serializers import ModuleSerializer
 from amsterdam_app_api.serializers import ModuleVersionsSerializer
 from amsterdam_app_api.serializers import ModulesByAppSerializer
-# from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
+from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
 from amsterdam_app_api.GenericFunctions.Sort import Sort
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_post
@@ -143,7 +143,7 @@ def slug_status_in_releases(slug):
 @swagger_auto_schema(**as_module_patch)
 @swagger_auto_schema(**as_module_delete)
 @api_view(['POST', 'PATCH', 'DELETE'])
-# @IsAuthorized
+@IsAuthorized
 def module(request):
     """ Create, modify or delete a module slug.
 
@@ -225,7 +225,7 @@ def module_version_get(request, slug=None, version=None):
     return Response(data, status=200)
 
 
-# @IsAuthorized
+@IsAuthorized
 def module_version_patch(request, slug=None, version=None):
     """ patch module version """
     _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
@@ -257,7 +257,7 @@ def module_version_patch(request, slug=None, version=None):
                         status=400)
 
 
-# @IsAuthorized
+@IsAuthorized
 def module_version_delete(request, slug=None, version=None):
     """ delete module version """
     _module_version = ModuleVersions.objects.filter(moduleSlug=slug, version=version).first()
@@ -274,7 +274,7 @@ def module_version_delete(request, slug=None, version=None):
 
 @swagger_auto_schema(**as_module_version_post)
 @api_view(['POST'])
-# @IsAuthorized
+@IsAuthorized
 def post_module_version(request, slug=None):
     """ Create a new version of an existing module.. """
     data = dict(request.data)
@@ -362,7 +362,7 @@ def modules_latest(request):
 
 @swagger_auto_schema(**as_module_slug_status)
 @api_view(['PATCH'])
-# @IsAuthorized
+@IsAuthorized
 def module_version_status(request, slug, version):
     """ Disable or enable a version of a module in one or more releases. """
     data = request.data
@@ -467,7 +467,7 @@ def get_release(request, version):
 
 @swagger_auto_schema(**as_post_release)
 @api_view(['POST'])
-# @IsAuthorized
+@IsAuthorized
 def post_release(request):
     """ Creates a release, storing its details and the list of module versions belonging to it.
         The order of modules in the request body is the order of appearance in the app
@@ -551,7 +551,7 @@ def post_release(request):
     return Response(result, status=200)
 
 
-# @IsAuthorized
+@IsAuthorized
 def patch_release(request, version=None):
     """ Patches a release, storing its details and the list of module versions belonging to it.
         The order of modules in the request body is the order of appearance in the app
