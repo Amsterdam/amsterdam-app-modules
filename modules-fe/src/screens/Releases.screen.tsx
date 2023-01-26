@@ -30,18 +30,15 @@ const ReleasesScreen = () => {
         />
         {releases?.length ? (
           <List>
-            {releases.map(release => {
-              const {version} = release
-              return (
-                <ListItem key={version}>
-                  <BlockLink to={`/release/${version}`}>
-                    <Box>
-                      <Phrase>Release {version}</Phrase>
-                    </Box>
-                  </BlockLink>
-                </ListItem>
-              )
-            })}
+            {releases.map(({version}) => (
+              <ListItem key={version}>
+                <BlockLink to={`/release/${version}`}>
+                  <Box>
+                    <Phrase>Release {version}</Phrase>
+                  </Box>
+                </BlockLink>
+              </ListItem>
+            ))}
           </List>
         ) : (
           <Phrase>Geen releases gevonden.</Phrase>
