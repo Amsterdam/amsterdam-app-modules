@@ -17,10 +17,10 @@ import {
   setReleaseVersion,
 } from 'slices/release.slice'
 import {ModuleVersion} from 'types/module'
-import {Release} from 'types/release'
+import {ReleaseBase} from 'types/release'
 
 type Params = {
-  version: Release['version']
+  version: ReleaseBase['version']
 }
 
 const ReleaseScreen = () => {
