@@ -23,3 +23,15 @@ export const removeFromList = <T>(list: T[], index: number) => {
 
   return items
 }
+
+export const pickProperties = <T, K extends keyof T>(
+  objects: T[],
+  properties: K[],
+): Pick<T, K>[] =>
+  objects.map(object => {
+    const pickedProperties = {} as Pick<T, K>
+    properties.forEach(property => {
+      pickedProperties[property] = object[property]
+    })
+    return pickedProperties
+  })

@@ -16,6 +16,7 @@ import {
 } from 'services/releases'
 import {selectReleaseModules, setModules} from 'slices/release.slice'
 import {ReleaseBase} from 'types/release'
+import {pickProperties} from 'utils/list'
 
 const CreateReleaseScreen = () => {
   const dispatch = useDispatch()
@@ -33,7 +34,13 @@ const CreateReleaseScreen = () => {
   }, [dispatch, latestRelease])
 
   const onSubmitForm = async (data: ReleaseBase) => {
-    const result = await createRelease({...data, modules: releaseModules})
+    const preparedData = {
+      ...data,
+      modules: pickProperties(releaseModules, ['moduleSlug', 'version']).map(
+        module => ({...module, status: 1}),
+      ),
+    }
+    const result = await createRelease(preparedData)
     if ('data' in result) {
       navigate('/releases')
     }
