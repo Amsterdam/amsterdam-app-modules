@@ -3,13 +3,11 @@ import {RootState} from 'store/store'
 import {ModuleVersion} from 'types/module'
 import {ReleaseWithModuleVersions} from 'types/release'
 
-const initialState: ReleaseWithModuleVersions = {
-  created: '',
-  modified: '',
-  published: '',
-  releaseNotes: '',
-  unpublished: '',
-  version: '',
+type State = {
+  modules: ModuleVersion[]
+}
+
+const initialState: State = {
   modules: [],
 }
 
@@ -17,12 +15,6 @@ export const releaseSlice = createSlice({
   name: 'release',
   initialState,
   reducers: {
-    setReleaseVersion: (
-      state,
-      {payload: version}: PayloadAction<ReleaseWithModuleVersions['version']>,
-    ) => {
-      state.version = version
-    },
     setModules: (
       state,
       {payload: modules}: PayloadAction<ReleaseWithModuleVersions['modules']>,
@@ -40,9 +32,6 @@ export const releaseSlice = createSlice({
   },
 })
 
-export const {addModule, deleteModule, setModules, setReleaseVersion} =
-  releaseSlice.actions
+export const {addModule, deleteModule, setModules} = releaseSlice.actions
 
-export const selectRelease = (state: RootState) => state.release
-export const selectReleaseVersion = (state: RootState) => state.release.version
 export const selectReleaseModules = (state: RootState) => state.release.modules

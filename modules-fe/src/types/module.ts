@@ -22,9 +22,8 @@ export type ModuleVersionWithRelease = ModuleVersion & {
 }
 
 export type ModuleInRelease = {
-  appVersion: string
   moduleSlug: string
-  moduleVersion: string
+  version: string
   status: ModuleStatus
 }
 

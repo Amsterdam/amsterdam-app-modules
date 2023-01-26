@@ -1,43 +1,49 @@
 import {useEffect} from 'react'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useDispatch, useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 import DragDropModules from 'components/features/DragDropModules'
 import VersionField from 'components/form-fields/VersionField'
 import Button from 'components/ui/button/Button'
+import TextField from 'components/ui/forms/TextField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
 import LoadingScreen from 'screens/Loading.screen'
-import {useGetLatestReleaseQuery} from 'services/releases'
 import {
-  selectRelease,
-  selectReleaseVersion,
-  setModules,
-  setReleaseVersion,
-} from 'slices/release.slice'
+  useCreateReleaseMutation,
+  useGetLatestReleaseQuery,
+} from 'services/releases'
+import {selectReleaseModules, setModules} from 'slices/release.slice'
 import {ReleaseBase} from 'types/release'
+import {pickProperties} from 'utils/list'
 
 const CreateReleaseScreen = () => {
   const dispatch = useDispatch()
-  const release = useSelector(selectRelease)
-  const releaseVersion = useSelector(selectReleaseVersion)
-  const form = useForm<Pick<ReleaseBase, 'version'>>()
-  const {handleSubmit} = form
+  const releaseModules = useSelector(selectReleaseModules)
+  const form = useForm<ReleaseBase>()
+  const {handleSubmit, watch} = form
   const {data: latestRelease, isLoading: isLoadingLatestRelease} =
     useGetLatestReleaseQuery()
-  const watchVersion = form.watch('version')
-
-  useEffect(() => {
-    dispatch(setReleaseVersion(watchVersion))
-  }, [dispatch, watchVersion])
+  const releaseVersion = watch('version')
+  const [createRelease] = useCreateReleaseMutation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (latestRelease) dispatch(setModules(latestRelease.modules))
   }, [dispatch, latestRelease])
 
-  const onSubmitForm = () => {
-    // eslint-disable-next-line no-console
-    console.log(release) // TODO: POST release to API
+  const onSubmitForm = async (data: ReleaseBase) => {
+    const preparedData = {
+      ...data,
+      modules: pickProperties(releaseModules, ['moduleSlug', 'version']).map(
+        module => ({...module, status: 1}),
+      ),
+    }
+    const result = await createRelease(preparedData)
+    if ('data' in result) {
+      navigate('/releases')
+    }
   }
 
   if (isLoadingLatestRelease) {
@@ -56,9 +62,24 @@ const CreateReleaseScreen = () => {
           title={`Amsterdam App ${releaseVersion ?? ''}`}
         />
         <FormProvider {...form}>
-          <VersionField baseVersion={latestRelease.version} />
-          <DragDropModules />
-          <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
+          <Column gutter="lg">
+            <VersionField baseVersion={latestRelease.version} />
+            <DragDropModules />
+            <TextField
+              label="Gepubliceerd"
+              name="published"
+              type="date"
+              width="half"
+            />
+            <TextField
+              label="Ongepubliceerd"
+              name="unpublished"
+              type="date"
+              width="half"
+            />
+            <TextField label="Release notes" name="releaseNotes" />
+            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
+          </Column>
         </FormProvider>
       </Column>
     </Screen>

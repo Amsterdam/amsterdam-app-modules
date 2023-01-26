@@ -17,6 +17,7 @@ import {getTokenValidity} from 'utils/authorization'
 
 const authorizedEndpoints = [
   'createModule',
+  'createRelease',
   'createModuleVersion',
   'editModuleVersion',
   'editModuleVersionStatus',
