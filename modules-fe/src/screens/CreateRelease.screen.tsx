@@ -1,6 +1,7 @@
 import {useEffect} from 'react'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useDispatch, useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 import DragDropModules from 'components/features/DragDropModules'
 import VersionField from 'components/form-fields/VersionField'
 import Button from 'components/ui/button/Button'
@@ -25,13 +26,17 @@ const CreateReleaseScreen = () => {
     useGetLatestReleaseQuery()
   const releaseVersion = watch('version')
   const [createRelease] = useCreateReleaseMutation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (latestRelease) dispatch(setModules(latestRelease.modules))
   }, [dispatch, latestRelease])
 
-  const onSubmitForm = (data: ReleaseBase) => {
-    createRelease({...data, modules: releaseModules})
+  const onSubmitForm = async (data: ReleaseBase) => {
+    const result = await createRelease({...data, modules: releaseModules})
+    if ('data' in result) {
+      navigate('/releases')
+    }
   }
 
   if (isLoadingLatestRelease) {
