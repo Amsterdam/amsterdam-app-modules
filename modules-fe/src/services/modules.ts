@@ -57,7 +57,7 @@ export const modulesApi = baseApi.injectEndpoints({
       Partial<ModuleVersion> & {pathVersion: string}
     >({
       query: ({moduleSlug, pathVersion, ...rest}) => ({
-        url: `/api/v1/module/${moduleSlug}/version/${pathVersion}/dhwiuhdw`,
+        url: `/api/v1/module/${moduleSlug}/version/${pathVersion}`,
         method: 'PATCH',
         body: {...rest},
       }),
