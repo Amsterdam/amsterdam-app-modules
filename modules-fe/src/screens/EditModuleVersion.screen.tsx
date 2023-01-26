@@ -38,10 +38,14 @@ const EditModuleScreen = () => {
   )
 
   const form = useForm<ModuleVersion>()
-  const [editModuleVersion, {isLoading: isEditingModuleVersion}] =
-    useEditModuleVersionMutation()
-  const [deleteModuleVersion, {isLoading: isDeletingModule}] =
-    useDeleteModuleVersionMutation()
+  const [
+    editModuleVersion,
+    {isLoading: isEditingModuleVersion, error: editingModuleError},
+  ] = useEditModuleVersionMutation()
+  const [
+    deleteModuleVersion,
+    {isLoading: isDeletingModule, error: deletingModuleError},
+  ] = useDeleteModuleVersionMutation()
   const {handleSubmit, formState} = form
   const {dirtyFields} = formState
 
@@ -59,11 +63,13 @@ const EditModuleScreen = () => {
       deleteModuleVersion({
         moduleSlug,
         version,
-      }).then(response => {
-        if ('data' in response) {
-          navigate(`/module/${moduleSlug}`)
-        }
       })
+        .unwrap()
+        .then(response => {
+          if ('data' in response) {
+            navigate(`/module/${moduleSlug}`)
+          }
+        })
     }
   }
 
@@ -89,11 +95,13 @@ const EditModuleScreen = () => {
         ...dirtyFieldsOnly,
         moduleSlug,
         pathVersion: version,
-      }).then(response => {
-        if ('data' in response) {
-          navigate(`/module/${moduleSlug}`)
-        }
       })
+        .unwrap()
+        .then(response => {
+          if ('data' in response) {
+            navigate(`/module/${moduleSlug}`)
+          }
+        })
     }
   }
 
@@ -129,6 +137,7 @@ const EditModuleScreen = () => {
               defaultValue={moduleVersion.version}
             />
             <LoadingButton
+              error={editingModuleError}
               label="Opslaan"
               loading={isEditingModuleVersion}
               onClick={handleSubmit(onSubmitForm)}
@@ -142,12 +151,15 @@ const EditModuleScreen = () => {
                 variant="secondary"
               />
             ) : (
-              <LoadingButton
-                label="Verwijderen"
-                loading={isDeletingModule}
-                onClick={handleRemoveModuleVersion}
-                variant="secondary"
-              />
+              <Column gutter="sm">
+                <LoadingButton
+                  error={deletingModuleError}
+                  label="Verwijderen"
+                  loading={isDeletingModule}
+                  onClick={handleRemoveModuleVersion}
+                  variant="secondary"
+                />
+              </Column>
             )}
           </Column>
         </FormProvider>
