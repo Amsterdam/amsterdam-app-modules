@@ -1,11 +1,10 @@
 import {useEffect} from 'react'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useNavigate} from 'react-router-dom'
-import Button from 'components/ui/button/Button'
+import LoadingButton from 'components/features/LoadingButton'
 import TextField from 'components/ui/forms/TextField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
-import Icon from 'components/ui/media/Icon'
 import Phrase from 'components/ui/text/Phrase'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
 import {useAuthorization} from 'hooks/useAuthorization'
@@ -53,14 +52,9 @@ const LoginScreen = () => {
                 type="password"
                 width="half"
               />
-              <Button
-                disabled={isLoggingIn}
-                icon={
-                  isLoggingIn ? (
-                    <Icon color="inverse" name="spinner" />
-                  ) : undefined
-                }
+              <LoadingButton
                 label="Inloggen"
+                loading={isLoggingIn}
                 onClick={handleSubmit(onSubmitForm)}
                 type="submit"
               />

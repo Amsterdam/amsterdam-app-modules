@@ -1,6 +1,7 @@
 import {skipToken} from '@reduxjs/toolkit/query'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
+import LoadingButton from 'components/features/LoadingButton'
 import ModuleDescriptionField from 'components/form-fields/ModuleDescriptionField'
 import ModuleIconField from 'components/form-fields/ModuleIconField'
 import ModuleTitleField from 'components/form-fields/ModuleTitleField'
@@ -11,7 +12,11 @@ import Screen from 'components/ui/layout/Screen'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
 import ErrorScreen from 'screens/Error.screen'
 import LoadingScreen from 'screens/Loading.screen'
-import {useEditModuleVersionMutation, useGetModuleQuery} from 'services/modules'
+import {
+  useDeleteModuleVersionMutation,
+  useEditModuleVersionMutation,
+  useGetModuleVersionQuery,
+} from 'services/modules'
 import {ModuleVersion} from 'types/module'
 
 type Params = {
@@ -22,33 +27,65 @@ type Params = {
 const EditModuleScreen = () => {
   const navigate = useNavigate()
 
-  const {slug, version} = useParams<Params>()
-  const {data: module, isLoading} = useGetModuleQuery(
-    slug
+  const {slug: slugParam, version: versionParam} = useParams<Params>()
+  const {data: moduleVersion, isLoading} = useGetModuleVersionQuery(
+    slugParam && versionParam
       ? {
-          slug,
+          slug: slugParam,
+          version: versionParam,
         }
       : skipToken,
   )
-  const moduleVersion = module?.versions.find(m => m.version === version)
 
   const form = useForm<ModuleVersion>()
-  const [editModuleVersion] = useEditModuleVersionMutation()
+  const [
+    editModuleVersion,
+    {isLoading: isEditingModuleVersion, error: editingModuleError},
+  ] = useEditModuleVersionMutation()
+  const [
+    deleteModuleVersion,
+    {isLoading: isDeletingModule, error: deletingModuleError},
+  ] = useDeleteModuleVersionMutation()
   const {handleSubmit, formState} = form
   const {dirtyFields} = formState
+
+  const handleRemoveModuleVersion = () => {
+    if (!moduleVersion) {
+      return
+    }
+    const {moduleSlug, version, title} = moduleVersion
+    if (
+      // eslint-disable-next-line no-alert
+      window.confirm(
+        `Weet je zeker dat je module ‘${title}’ v${version} wil verwijderen?`,
+      )
+    ) {
+      deleteModuleVersion({
+        moduleSlug,
+        version,
+      })
+        .unwrap()
+        .then(response => {
+          if ('data' in response) {
+            navigate(`/module/${moduleSlug}`)
+          }
+        })
+    }
+  }
 
   const onSubmitForm = (data: ModuleVersion) => {
     const dirtyFieldsOnly: Partial<ModuleVersion> = {}
     const dirtyFieldKeys = Object.keys(dirtyFields) as Array<
       keyof ModuleVersion
     >
-
-    if (!slug || !version) {
+    if (!moduleVersion) {
       return
     }
 
+    const {moduleSlug, version} = moduleVersion
+
     if (!dirtyFieldKeys.length) {
-      navigate(`/module/${slug}`)
+      navigate(`/module/${moduleSlug}`)
     } else {
       dirtyFieldKeys.forEach(<K extends keyof ModuleVersion>(field: K) => {
         dirtyFieldsOnly[field] = data[field]
@@ -56,13 +93,15 @@ const EditModuleScreen = () => {
 
       editModuleVersion({
         ...dirtyFieldsOnly,
-        moduleSlug: slug,
+        moduleSlug,
         pathVersion: version,
-      }).then(response => {
-        if ('data' in response) {
-          navigate(`/module/${slug}`)
-        }
       })
+        .unwrap()
+        .then(response => {
+          if ('data' in response) {
+            navigate(`/module/${moduleSlug}`)
+          }
+        })
     }
   }
 
@@ -76,7 +115,7 @@ const EditModuleScreen = () => {
   if (!moduleVersion) {
     return (
       <ErrorScreen
-        message={`Versie ${version} van module ‘${slug}’ niet gevonden.`}
+        message={`Versie ${versionParam} van module ‘${slugParam}’ niet gevonden.`}
       />
     )
   }
@@ -97,13 +136,30 @@ const EditModuleScreen = () => {
               baseVersion={moduleVersion.version}
               defaultValue={moduleVersion.version}
             />
-            <Button label="Opslaan" onClick={handleSubmit(onSubmitForm)} />
-            {!!moduleVersion.statusInReleases?.length && (
+            <LoadingButton
+              error={editingModuleError}
+              label="Opslaan"
+              loading={isEditingModuleVersion}
+              onClick={handleSubmit(onSubmitForm)}
+            />
+            {moduleVersion.statusInReleases?.length ? (
               <Button
                 label="Aan- of uitzetten"
-                onClick={() => navigate(`/module/${slug}/${version}/status`)}
+                onClick={() =>
+                  navigate(`/module/${slugParam}/${versionParam}/status`)
+                }
                 variant="secondary"
               />
+            ) : (
+              <Column gutter="sm">
+                <LoadingButton
+                  error={deletingModuleError}
+                  label="Verwijderen"
+                  loading={isDeletingModule}
+                  onClick={handleRemoveModuleVersion}
+                  variant="secondary"
+                />
+              </Column>
             )}
           </Column>
         </FormProvider>
