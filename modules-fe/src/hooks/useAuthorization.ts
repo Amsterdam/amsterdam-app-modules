@@ -39,13 +39,14 @@ export const useAuthorization = () => {
     [refreshToken],
   )
 
-  const getAccessTokenWithRefreshToken = useCallback(() => {
-    refreshTokens(refreshToken).then(response => {
-      if ('data' in response) {
-        dispatch(setTokens(response.data))
-      }
-    })
-  }, [dispatch, refreshToken, refreshTokens])
+  const getAccessTokenWithRefreshToken = useCallback(async () => {
+    const result = await refreshTokens(refreshToken)
+    if ('data' in result) {
+      dispatch(setTokens(result.data))
+    } else {
+      navigate('/login')
+    }
+  }, [dispatch, navigate, refreshToken, refreshTokens])
 
   const logIn = useCallback(
     (credentials: Login) => {
