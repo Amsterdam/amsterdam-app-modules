@@ -118,6 +118,15 @@ def correct_version_format(version):
     return True
 
 
+def get_highest_version(versions):
+    """ Get latest version from a list of versions
+        e.g from ["1.2.3", "2.0.0", "1.5.8"] it returns "2.0.0"
+    """
+    def version_to_tuple(version):
+        return tuple(map(int, version.split(".")))
+    return max(versions, key=version_to_tuple)
+
+
 def slug_status_in_releases(slug):
     """ Get status in releases
     :param slug:
@@ -413,9 +422,10 @@ def module_version_status(request, slug, version):
 @swagger_auto_schema(**as_patch_release)
 @api_view(['GET', 'DELETE', 'PATCH'])
 def release(request, version):
-    """ [GET] Returns a specific release and the versions of the modules it consists of.
-        [DELETE] Deletes a release.
-        [PATCH] Updates details of a release.
+    """ [GET]       Returns a specific release and the versions of the modules it consists of. Path parameter is x.y.z or
+                    latest
+        [DELETE]    Deletes a release.
+        [PATCH]     Updates details of a release. Path parameter is x.y.z or latest
     """
     if request.method == 'GET':
         response = get_release(request, version)
@@ -431,6 +441,10 @@ def release(request, version):
 
 def get_release(request, version):
     """ Returns a specific release and the versions of the modules it consists of. """
+    if version == 'latest':
+        _releases = list(Releases.objects.all())
+        version = get_highest_version([x.version for x in _releases])
+
     _release = Releases.objects.filter(version=version).first()
     if _release is None:
         return Response({'message': 'Release version does not exists.'}, status=404)
@@ -556,6 +570,7 @@ def patch_release(request, version=None):
     """ Patches a release, storing its details and the list of module versions belonging to it.
         The order of modules in the request body is the order of appearance in the app
     """
+
     data = request.data
 
     # Guards...
