@@ -10,12 +10,8 @@ import Screen from 'components/ui/layout/Screen'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
 import ErrorScreen from 'screens/Error.screen'
 import LoadingScreen from 'screens/Loading.screen'
-import {useGetModulesInReleaseQuery} from 'services/releases'
-import {
-  selectRelease,
-  setModules,
-  setReleaseVersion,
-} from 'slices/release.slice'
+import {useGetReleaseQuery} from 'services/releases'
+import {selectReleaseModules, setModules} from 'slices/release.slice'
 import {ModuleVersion} from 'types/module'
 import {ReleaseBase} from 'types/release'
 
@@ -25,22 +21,18 @@ type Params = {
 
 const ReleaseScreen = () => {
   const dispatch = useDispatch()
-  const release = useSelector(selectRelease)
+  const releaseModules = useSelector(selectReleaseModules)
   const {version} = useParams<Params>()
-  const {data: modulesInRelease, isLoading} = useGetModulesInReleaseQuery(
+  const {data: modulesInRelease, isLoading} = useGetReleaseQuery(
     version ? {version} : skipToken,
   )
   const modules = useMemo(() => {
     return modulesInRelease
-      ? modulesInRelease.map(module =>
+      ? modulesInRelease.modules.map(module =>
           MockModules.find(m => m.moduleSlug === module.moduleSlug),
         )
       : []
   }, [modulesInRelease])
-
-  useEffect(() => {
-    if (version) dispatch(setReleaseVersion(version))
-  }, [dispatch, version])
 
   useEffect(() => {
     if (modules) dispatch(setModules(modules as ModuleVersion[]))
@@ -48,7 +40,7 @@ const ReleaseScreen = () => {
 
   const onSave = () => {
     // eslint-disable-next-line no-console
-    console.log(release) // TODO: PATCH release to API
+    console.log(releaseModules) // TODO: PATCH release to API
   }
 
   if (isLoading) {
