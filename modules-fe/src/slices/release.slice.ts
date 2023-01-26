@@ -1,9 +1,14 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from 'store/store'
 import {ModuleVersion} from 'types/module'
-import {Release} from 'types/release'
+import {ReleaseWithModuleVersions} from 'types/release'
 
-const initialState: Release = {
+const initialState: ReleaseWithModuleVersions = {
+  created: '',
+  modified: '',
+  published: '',
+  releaseNotes: '',
+  unpublished: '',
   version: '',
   modules: [],
 }
@@ -14,13 +19,13 @@ export const releaseSlice = createSlice({
   reducers: {
     setReleaseVersion: (
       state,
-      {payload: version}: PayloadAction<Release['version']>,
+      {payload: version}: PayloadAction<ReleaseWithModuleVersions['version']>,
     ) => {
       state.version = version
     },
     setModules: (
       state,
-      {payload: modules}: PayloadAction<Release['modules']>,
+      {payload: modules}: PayloadAction<ReleaseWithModuleVersions['modules']>,
     ) => {
       state.modules = modules
     },

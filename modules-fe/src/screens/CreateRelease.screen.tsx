@@ -15,13 +15,13 @@ import {
   setModules,
   setReleaseVersion,
 } from 'slices/release.slice'
-import {Release} from 'types/release'
+import {ReleaseBase} from 'types/release'
 
 const CreateReleaseScreen = () => {
   const dispatch = useDispatch()
   const release = useSelector(selectRelease)
   const releaseVersion = useSelector(selectReleaseVersion)
-  const form = useForm<Pick<Release, 'version'>>()
+  const form = useForm<Pick<ReleaseBase, 'version'>>()
   const {handleSubmit} = form
   const {data: latestRelease, isLoading: isLoadingLatestRelease} =
     useGetLatestReleaseQuery()
