@@ -34,6 +34,15 @@ export const modulesApi = baseApi.injectEndpoints({
       transformResponse: (response: {result: ModuleVersion}) => response.result,
       invalidatesTags: ['Module'],
     }),
+    deleteModuleVersion: builder.mutation<
+      ModuleVersion,
+      Pick<ModuleVersion, 'moduleSlug' | 'version'>
+    >({
+      query: ({moduleSlug, version}) => ({
+        url: `/api/v1/module/${moduleSlug}/version/${version}`,
+        method: 'DELETE',
+      }),
+    }),
     editModule: builder.mutation<ModuleVersion, ModuleVersion>({
       query: module => ({
         url: `/api/v1/modules`,
@@ -90,6 +99,7 @@ export const modulesApi = baseApi.injectEndpoints({
 export const {
   useCreateModuleMutation,
   useCreateModuleVersionMutation,
+  useDeleteModuleVersionMutation,
   useEditModuleMutation,
   useEditModuleVersionMutation,
   useEditModuleVersionStatusMutation,
