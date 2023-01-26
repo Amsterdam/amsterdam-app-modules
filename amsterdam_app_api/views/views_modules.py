@@ -434,30 +434,35 @@ def get_release(request, version):
     _release = Releases.objects.filter(version=version).first()
     if _release is None:
         return Response({'message': 'Release version does not exists.'}, status=404)
-    _module_order = ModuleOrder.objects.filter(appVersion=version).first()
-    _modules = []
-    for _slug in _module_order.order:
-        _module_by_app = ModulesByApp.objects.filter(appVersion=version, moduleSlug=_slug).first()
-        _module_version = ModuleVersions.objects.filter(moduleSlug=_slug, version=_module_by_app.moduleVersion).first()
-        _modules.append({
-            "moduleSlug": _slug,
-            "version": _module_by_app.moduleVersion,
-            "title": _module_version.title,
-            "description": _module_version.description,
-            "icon": _module_version.icon,
-            "status": _module_by_app.status
-        })
 
-    result = {
-        "version": version,
-        "releaseNotes": _release.releaseNotes,
-        "published": _release.published,
-        "unpublished": _release.unpublished,
-        "created": _release.created,
-        "modified": _release.modified,
-        "modules": _modules
-    }
-    return Response(result, status=200)
+    try:
+        _module_order = ModuleOrder.objects.filter(appVersion=version).first()
+        _modules = []
+        for _slug in _module_order.order:
+
+            _module_by_app = ModulesByApp.objects.filter(appVersion=version, moduleSlug=_slug).first()
+            _module_version = ModuleVersions.objects.filter(moduleSlug=_slug, version=_module_by_app.moduleVersion).first()
+            _modules.append({
+                "moduleSlug": _slug,
+                "version": _module_by_app.moduleVersion,
+                "title": _module_version.title,
+                "description": _module_version.description,
+                "icon": _module_version.icon,
+                "status": _module_by_app.status
+            })
+
+        result = {
+            "version": version,
+            "releaseNotes": _release.releaseNotes,
+            "published": _release.published,
+            "unpublished": _release.unpublished,
+            "created": _release.created,
+            "modified": _release.modified,
+            "modules": _modules
+        }
+        return Response(result, status=200)
+    except Exception as error:
+        return Response({'message': f'Integrity error ‘{error}‘ encountered. Check your database.'}, status=409)
 
 
 @swagger_auto_schema(**as_post_release)

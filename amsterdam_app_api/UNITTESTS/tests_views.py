@@ -594,6 +594,19 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
+    def test_release_get_409(self):
+        """ Test get release integrity error """
+        ModuleOrder.objects.filter(appVersion='0.0.1').delete()
+        c = Client()
+        response = c.get('/api/v1/release/0.0.1',
+                         HTTP_AUTHORIZATION=self.authorization_header,
+                         content_type='application/json',
+                         accept='application/json')
+        expected_result = {'message': "Integrity error ‘'NoneType' object has no attribute 'order'‘ encountered. "
+                                      "Check your database."}
+        self.assertEqual(response.status_code, 409)
+        self.assertDictEqual(response.data, expected_result)
+
     def test_release_post_400_1(self):
         """ test release pot missing keys """
         c = Client()
