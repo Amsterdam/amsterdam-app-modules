@@ -71,7 +71,7 @@ const EditModuleScreen = () => {
     }
   }
 
-  const onSubmitForm = (data: ModuleVersion) => {
+  const onSubmit = (data: ModuleVersion) => {
     const dirtyFieldsOnly: Partial<ModuleVersion> = {}
     const dirtyFieldKeys = Object.keys(dirtyFields) as Array<
       keyof ModuleVersion
@@ -138,7 +138,7 @@ const EditModuleScreen = () => {
               error={editingModuleError}
               label="Opslaan"
               loading={isEditingModuleVersion}
-              onClick={handleSubmit(onSubmitForm)}
+              onClick={handleSubmit(onSubmit)}
             />
             {moduleVersion.statusInReleases?.length ? (
               <Button

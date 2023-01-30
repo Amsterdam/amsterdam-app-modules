@@ -1,4 +1,9 @@
-import {ModuleInRelease, ModuleVersion} from 'types/module'
+import {
+  ModuleWithStatusInRelease,
+  ModuleVersion,
+  ModuleInRelease,
+  ModuleVersionWithStatus,
+} from 'types/module'
 
 export type ReleaseBase = {
   published: string | null
@@ -12,10 +17,18 @@ export type Release = {
   modified: string
 } & ReleaseBase
 
+export type ReleaseBaseWithModulesWithStatusInRelease = ReleaseBase & {
+  modules: ModuleWithStatusInRelease[]
+}
+
 export type ReleaseBaseWithModulesInRelease = ReleaseBase & {
   modules: ModuleInRelease[]
 }
 
 export type ReleaseWithModuleVersions = Release & {
   modules: ModuleVersion[]
+}
+
+export type ReleaseWithModuleVersionsWithStatus = Release & {
+  modules: ModuleVersionWithStatus[]
 }

@@ -17,6 +17,10 @@ export type ModuleVersion = {
   version: string
 }
 
+export type ModuleVersionWithStatus = ModuleVersion & {
+  status: ModuleStatus
+}
+
 export type ModuleVersionWithRelease = ModuleVersion & {
   statusInReleases?: ModuleStatusInRelease[]
 }
@@ -24,6 +28,9 @@ export type ModuleVersionWithRelease = ModuleVersion & {
 export type ModuleInRelease = {
   moduleSlug: string
   version: string
+}
+
+export type ModuleWithStatusInRelease = ModuleInRelease & {
   status: ModuleStatus
 }
 
