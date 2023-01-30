@@ -17,7 +17,7 @@ const LoginScreen = () => {
   const form = useForm<Login>()
   const {handleSubmit} = form
 
-  const onSubmitForm = (data: Login) => {
+  const onSubmit = (data: Login) => {
     logIn(data)
   }
 
@@ -33,7 +33,7 @@ const LoginScreen = () => {
         <ScreenTitle subtitle="Amsterdam App" title="Modulebeheersysteem" />
         <Phrase>Je moet inloggen om deze applicatie te gebruiken.</Phrase>
         <FormProvider {...form}>
-          <form onSubmit={handleSubmit(onSubmitForm)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Column gutter="lg">
               <TextField
                 label="E-mailadres"
@@ -55,7 +55,7 @@ const LoginScreen = () => {
               <LoadingButton
                 label="Inloggen"
                 loading={isLoggingIn}
-                onClick={handleSubmit(onSubmitForm)}
+                onClick={handleSubmit(onSubmit)}
                 type="submit"
               />
             </Column>
