@@ -76,7 +76,7 @@ export const modulesApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: statusInReleases,
       }),
-      invalidatesTags: ['Module'],
+      invalidatesTags: ['Module', 'Release'],
     }),
     getModule: builder.query<ModuleWithVersions, ModuleQueryArg>({
       query: ({slug}) => `/api/v1/module/${slug}`,

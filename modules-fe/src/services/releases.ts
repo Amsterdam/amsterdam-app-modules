@@ -2,7 +2,9 @@ import {baseApi} from 'services/baseApi'
 import {
   ReleaseBase,
   ReleaseBaseWithModulesInRelease,
+  ReleaseBaseWithModulesWithStatusInRelease,
   ReleaseWithModuleVersions,
+  ReleaseWithModuleVersionsWithStatus,
 } from 'types/release'
 
 type ReleaseQueryArg = {
@@ -11,9 +13,24 @@ type ReleaseQueryArg = {
 
 export const modulesApi = baseApi.injectEndpoints({
   endpoints: builder => ({
+    editReleaseVersion: builder.mutation<
+      ReleaseWithModuleVersions,
+      Partial<ReleaseBaseWithModulesInRelease> & {pathVersion: string}
+    >({
+      query: ({pathVersion, published, unpublished, ...release}) => ({
+        url: `/api/v1/release/${pathVersion}`,
+        method: 'PATCH',
+        body: {
+          published: published || null,
+          unpublished: unpublished || null,
+          ...release,
+        },
+      }),
+      invalidatesTags: ['Module', 'Release'],
+    }),
     createRelease: builder.mutation<
       ReleaseWithModuleVersions,
-      ReleaseBaseWithModulesInRelease
+      ReleaseBaseWithModulesWithStatusInRelease
     >({
       query: ({published, unpublished, ...release}) => ({
         url: '/api/v1/release',
@@ -24,13 +41,16 @@ export const modulesApi = baseApi.injectEndpoints({
           ...release,
         },
       }),
-      invalidatesTags: ['Release'],
+      invalidatesTags: ['Module', 'Release'],
     }),
     getLatestRelease: builder.query<ReleaseWithModuleVersions, void>({
       query: () => '/api/v1/release/latest',
       providesTags: ['Release'],
     }),
-    getRelease: builder.query<ReleaseWithModuleVersions, ReleaseQueryArg>({
+    getRelease: builder.query<
+      ReleaseWithModuleVersionsWithStatus,
+      ReleaseQueryArg
+    >({
       query: ({version}) => `/api/v1/release/${version}`,
       providesTags: ['Release'],
     }),
@@ -43,6 +63,7 @@ export const modulesApi = baseApi.injectEndpoints({
 })
 
 export const {
+  useEditReleaseVersionMutation,
   useGetReleaseQuery,
   useGetReleasesQuery,
   useGetLatestReleaseQuery,

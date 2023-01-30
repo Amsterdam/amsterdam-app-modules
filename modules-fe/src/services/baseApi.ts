@@ -22,6 +22,7 @@ const authorizedEndpoints = [
   'deleteModuleVersion',
   'editModuleVersion',
   'editModuleVersionStatus',
+  'editReleaseVersion',
 ]
 
 const baseQuery: BaseQueryFn<
