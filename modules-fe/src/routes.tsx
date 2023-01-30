@@ -3,12 +3,12 @@ import CreateModuleScreen from 'screens/CreateModule.screen'
 import CreateReleaseScreen from 'screens/CreateRelease.screen'
 import EditModuleVersionScreen from 'screens/EditModuleVersion.screen'
 import EditModuleVersionStatusScreen from 'screens/EditModuleVersionStatus.screen'
+import EditReleaseScreen from 'screens/EditRelease.screen'
 import ErrorScreen from 'screens/Error.screen'
 import HomeScreen from 'screens/Home.screen'
 import LoginScreen from 'screens/Login.screen'
 import ModuleScreen from 'screens/Module.screen'
 import ModulesScreen from 'screens/Modules.screen'
-import ReleaseScreen from 'screens/Release.screen'
 import ReleasesScreen from 'screens/Releases.screen'
 
 export const routes: RouteObject[] = [
@@ -55,6 +55,6 @@ export const routes: RouteObject[] = [
   },
   {
     path: '/release/:version',
-    element: <ReleaseScreen />,
+    element: <EditReleaseScreen />,
   },
 ]

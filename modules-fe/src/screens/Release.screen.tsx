@@ -1,64 +1,77 @@
-import {skipToken} from '@reduxjs/toolkit/query'
-import {useEffect, useMemo} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {useParams} from 'react-router-dom'
-import MockModules from 'assets/mocks/modules.json'
+import {useEffect} from 'react'
+import {useFormContext} from 'react-hook-form'
+import {useDispatch} from 'react-redux'
 import DragDropModules from 'components/features/DragDropModules'
+import VersionField from 'components/form-fields/VersionField'
 import Button from 'components/ui/button/Button'
+import TextField from 'components/ui/forms/TextField'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
-import ErrorScreen from 'screens/Error.screen'
 import LoadingScreen from 'screens/Loading.screen'
-import {useGetReleaseQuery} from 'services/releases'
-import {selectReleaseModules, setModules} from 'slices/release.slice'
-import {ModuleVersion} from 'types/module'
-import {ReleaseBase} from 'types/release'
+import {setModules} from 'slices/release.slice'
+import {ReleaseBase, ReleaseWithModuleVersions} from 'types/release'
 
-type Params = {
-  version: ReleaseBase['version']
+type Props = {
+  isLoading: boolean
+  onSubmit: (data: ReleaseBase) => void
+  release: ReleaseWithModuleVersions | undefined
+  subtitle: string
+  title: string
+  versionDefaultValue?: string
 }
 
-const ReleaseScreen = () => {
+const ReleaseScreen = ({
+  isLoading,
+  onSubmit,
+  release,
+  subtitle,
+  title,
+  versionDefaultValue,
+}: Props) => {
   const dispatch = useDispatch()
-  const releaseModules = useSelector(selectReleaseModules)
-  const {version} = useParams<Params>()
-  const {data: modulesInRelease, isLoading} = useGetReleaseQuery(
-    version ? {version} : skipToken,
-  )
-  const modules = useMemo(() => {
-    return modulesInRelease
-      ? modulesInRelease.modules.map(module =>
-          MockModules.find(m => m.moduleSlug === module.moduleSlug),
-        )
-      : []
-  }, [modulesInRelease])
+  const form = useFormContext<ReleaseBase>()
+  const {handleSubmit} = form
 
   useEffect(() => {
-    if (modules) dispatch(setModules(modules as ModuleVersion[]))
-  }, [dispatch, modules])
-
-  const onSave = () => {
-    // eslint-disable-next-line no-console
-    console.log(releaseModules) // TODO: PATCH release to API
-  }
+    if (release) {
+      dispatch(setModules(release.modules))
+    }
+  }, [dispatch, release])
 
   if (isLoading) {
     return <LoadingScreen />
   }
 
-  if (!modules || !modules.length) {
-    return (
-      <ErrorScreen message={`Geen modules gevonden voor release ${version}.`} />
-    )
+  if (!release) {
+    return null
   }
 
   return (
     <Screen>
       <Column gutter="lg">
-        <ScreenTitle subtitle="Release" title={`Amsterdam App ${version}`} />
-        <DragDropModules />
-        <Button label="Opslaan" onClick={onSave} />
+        <ScreenTitle subtitle={subtitle} title={title} />
+        <Column gutter="lg">
+          <VersionField
+            baseVersion={release.version}
+            defaultValue={versionDefaultValue}
+          />
+          <DragDropModules />
+          <TextField
+            label="Gepubliceerd"
+            name="published"
+            type="date"
+            width="half"
+          />
+          <TextField
+            label="Ongepubliceerd"
+            name="unpublished"
+            type="date"
+            width="half"
+          />
+          <TextField label="Release notes" name="releaseNotes" />
+          <Button label="Opslaan" onClick={handleSubmit(onSubmit)} />
+        </Column>
       </Column>
     </Screen>
   )
