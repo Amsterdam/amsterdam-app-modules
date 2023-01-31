@@ -10,23 +10,19 @@ type Props = {
   loading: boolean
 } & ButtonProps
 
-const LoadingButton = ({error, loading, ...buttonProps}: Props) => {
-  // eslint-disable-next-line no-console
-  console.log(error)
-  return (
-    <Column gutter="sm">
-      <Button
-        disabled={loading}
-        icon={loading ? <Icon color="inverse" name="spinner" /> : undefined}
-        {...buttonProps}
-      />
-      {!!error && (
-        <Phrase color="error">{`${'status' in error && error?.status} ${
-          'data' in error && (error?.data as {message: string})?.message
-        }`}</Phrase>
-      )}
-    </Column>
-  )
-}
+const LoadingButton = ({error, loading, ...buttonProps}: Props) => (
+  <Column gutter="sm">
+    <Button
+      disabled={loading}
+      icon={loading ? <Icon color="inverse" name="spinner" /> : undefined}
+      {...buttonProps}
+    />
+    {!!error && (
+      <Phrase color="error">{`${'status' in error && error?.status} ${
+        'data' in error && (error?.data as {message: string})?.message
+      }`}</Phrase>
+    )}
+  </Column>
+)
 
 export default LoadingButton
