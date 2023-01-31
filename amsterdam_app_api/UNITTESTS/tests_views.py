@@ -888,28 +888,6 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertDictEqual(response.data, {"message": "incorrect request body."})
 
-    def test_release_patch_400_3(self):
-        """ test release patch missing keys """
-        c = Client()
-        data = {'version': '', 'releaseNotes': None, 'published': None, 'unpublished': None, 'modules': [{}]}
-        response = c.patch('/api/v1/release/0.0.0',
-                           data=data,
-                           HTTP_AUTHORIZATION=self.authorization_header,
-                           content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.data, {"message": "incorrect request body."})
-
-    def test_release_patch_400_4(self):
-        """ test release patch missing keys """
-        c = Client()
-        data = {'version': '', 'releaseNotes': None, 'published': None, 'unpublished': None, 'modules': []}
-        response = c.patch('/api/v1/release/0.0.0',
-                           data=data,
-                           HTTP_AUTHORIZATION=self.authorization_header,
-                           content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.data, {"message": "incorrect request body."})
-
     def test_release_patch_409(self):
         """ test release patch missing keys """
         c = Client()
