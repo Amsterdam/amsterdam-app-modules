@@ -11,6 +11,8 @@ type Props = {
 } & ButtonProps
 
 const LoadingButton = ({error, loading, ...buttonProps}: Props) => {
+  // eslint-disable-next-line no-console
+  console.log(error)
   return (
     <Column gutter="sm">
       <Button
@@ -20,7 +22,7 @@ const LoadingButton = ({error, loading, ...buttonProps}: Props) => {
       />
       {!!error && (
         <Phrase color="error">{`${'status' in error && error?.status} ${
-          'message' in error && error?.message
+          'data' in error && (error?.data as {message: string})?.message
         }`}</Phrase>
       )}
     </Column>
