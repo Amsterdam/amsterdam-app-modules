@@ -24,23 +24,21 @@ const EditReleaseScreen = () => {
     versionParam ? {version: versionParam} : skipToken,
   )
 
-  const defaultValues = useMemo(() => {
+  const form = useForm<ReleaseBase>()
+  const {formState, reset} = form
+
+  useEffect(() => {
     if (release) {
       const {created, modified, published, unpublished, ...releaseProps} =
         release
-      return {
+      reset({
         ...releaseProps,
         published: published ?? '',
         unpublished: unpublished ?? '',
-      }
+      })
     }
-    return {}
-  }, [release])
+  }, [release, reset])
 
-  const form = useForm<ReleaseBase>({
-    defaultValues,
-  })
-  const {formState} = form
   const {dirtyFields} = formState
   const navigate = useNavigate()
   const [editRelease] = useEditReleaseVersionMutation()
