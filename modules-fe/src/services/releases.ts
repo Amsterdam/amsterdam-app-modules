@@ -17,12 +17,10 @@ export const modulesApi = baseApi.injectEndpoints({
       ReleaseWithModuleVersions,
       Partial<ReleaseBaseWithModulesInRelease> & {pathVersion: string}
     >({
-      query: ({pathVersion, published, unpublished, ...release}) => ({
+      query: ({pathVersion, ...release}) => ({
         url: `/api/v1/release/${pathVersion}`,
         method: 'PATCH',
         body: {
-          published: published || null,
-          unpublished: unpublished || null,
           ...release,
         },
       }),
