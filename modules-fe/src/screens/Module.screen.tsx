@@ -48,7 +48,8 @@ const ModuleScreen = () => {
     ) {
       editModule({
         slug: module?.slug,
-        status: module?.status === 1 ? 0 : 1,
+        status:
+          module?.status === 1 ? ModuleStatus.inactive : ModuleStatus.active,
       })
     }
   }
