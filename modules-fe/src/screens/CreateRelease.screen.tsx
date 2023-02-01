@@ -1,13 +1,16 @@
 import {FormProvider, useForm} from 'react-hook-form'
 import {useSelector} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
 import {
   useCreateReleaseMutation,
   useGetLatestReleaseQuery,
 } from 'services/releases'
 import {selectReleaseModules} from 'slices/release.slice'
 import {ReleaseBase} from 'types/release'
-import ReleaseScreen from './Release.screen'
+import ReleaseForm from '../components/features/ReleaseForm'
 
 const CreateReleaseScreen = () => {
   const releaseModules = useSelector(selectReleaseModules)
@@ -35,15 +38,21 @@ const CreateReleaseScreen = () => {
   }
 
   return (
-    <FormProvider {...form}>
-      <ReleaseScreen
-        isLoading={isLoading}
-        onSubmit={handleCreateRelease}
-        release={release}
-        subtitle="Nieuwe release"
-        title={`Amsterdam App ${releaseVersion ?? ''}`}
-      />
-    </FormProvider>
+    <Screen>
+      <Column gutter="lg">
+        <ScreenTitle
+          subtitle="Nieuwe release"
+          title={`Amsterdam App ${releaseVersion ?? ''}`}
+        />
+        <FormProvider {...form}>
+          <ReleaseForm
+            isLoading={isLoading}
+            onSubmit={handleCreateRelease}
+            release={release}
+          />
+        </FormProvider>
+      </Column>
+    </Screen>
   )
 }
 

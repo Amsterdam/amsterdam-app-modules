@@ -65,10 +65,8 @@ const EditModuleScreen = () => {
         version,
       })
         .unwrap()
-        .then(response => {
-          if ('data' in response) {
-            navigate(`/module/${moduleSlug}`)
-          }
+        .then(() => {
+          navigate(`/module/${moduleSlug}`)
         })
     }
   }

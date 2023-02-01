@@ -4,14 +4,17 @@ import {useEffect, useState} from 'react'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useSelector} from 'react-redux'
 import {useNavigate, useParams} from 'react-router-dom'
+import Column from 'components/ui/layout/Column'
+import Screen from 'components/ui/layout/Screen'
+import ScreenTitle from 'components/ui/text/ScreenTitle'
 import {
   useEditReleaseVersionMutation,
   useGetReleaseQuery,
 } from 'services/releases'
 import {selectReleaseModules} from 'slices/release.slice'
-import {ModuleVersionWithRelease} from 'types/module'
+import {ModuleVersionWithStatusInReleases} from 'types/module'
 import {ReleaseBase} from 'types/release'
-import ReleaseScreen from './Release.screen'
+import ReleaseForm from '../components/features/ReleaseForm'
 
 type Params = {
   version: ReleaseBase['version']
@@ -43,7 +46,7 @@ const EditReleaseScreen = () => {
   const navigate = useNavigate()
   const [editRelease] = useEditReleaseVersionMutation()
   const [initialReleaseModules, setInitialReleaseModules] = useState<
-    ModuleVersionWithRelease[] | undefined
+    ModuleVersionWithStatusInReleases[] | undefined
   >()
 
   useEffect(() => {
@@ -89,16 +92,22 @@ const EditReleaseScreen = () => {
   }
 
   return (
-    <FormProvider {...form}>
-      <ReleaseScreen
-        isLoading={isLoading}
-        onSubmit={handleEditRelease}
-        release={release}
-        subtitle="Release"
-        title={`Amsterdam App ${versionParam}`}
-        versionDefaultValue={versionParam}
-      />
-    </FormProvider>
+    <Screen>
+      <Column gutter="lg">
+        <ScreenTitle
+          subtitle="Release"
+          title={`Amsterdam App ${versionParam}`}
+        />
+        <FormProvider {...form}>
+          <ReleaseForm
+            isLoading={isLoading}
+            onSubmit={handleEditRelease}
+            release={release}
+            versionDefaultValue={versionParam}
+          />
+        </FormProvider>
+      </Column>
+    </Screen>
   )
 }
 

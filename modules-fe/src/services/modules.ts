@@ -2,7 +2,7 @@ import {baseApi} from 'services/baseApi'
 import {
   Module,
   ModuleVersion,
-  ModuleVersionWithRelease,
+  ModuleVersionWithStatusInReleases,
   ModuleWithVersions,
 } from 'types/module'
 
@@ -42,6 +42,7 @@ export const modulesApi = baseApi.injectEndpoints({
         url: `/api/v1/module/${moduleSlug}/version/${version}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['Module'],
     }),
     editModule: builder.mutation<ModuleVersion, ModuleVersion>({
       query: module => ({
@@ -65,7 +66,7 @@ export const modulesApi = baseApi.injectEndpoints({
     }),
     editModuleVersionStatus: builder.mutation<
       ModuleVersion,
-      Pick<ModuleVersionWithRelease, 'statusInReleases'> & {
+      Pick<ModuleVersionWithStatusInReleases, 'statusInReleases'> & {
         slug: string
         version: string
       }
@@ -82,7 +83,7 @@ export const modulesApi = baseApi.injectEndpoints({
       providesTags: ['Module'],
     }),
     getModuleVersion: builder.query<
-      ModuleVersionWithRelease,
+      ModuleVersionWithStatusInReleases,
       ModuleVersionQueryArg
     >({
       query: ({slug, version}) => `/api/v1/module/${slug}/version/${version}`,

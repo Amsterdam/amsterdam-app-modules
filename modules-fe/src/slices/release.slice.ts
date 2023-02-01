@@ -1,10 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from 'store/store'
-import {ModuleVersion, ModuleVersionWithRelease} from 'types/module'
+import {ModuleVersion, ModuleVersionWithStatusInReleases} from 'types/module'
 import {ReleaseWithModuleVersions} from 'types/release'
 
 type State = {
-  modules: ModuleVersionWithRelease[]
+  modules: ModuleVersionWithStatusInReleases[]
 }
 
 const initialState: State = {
