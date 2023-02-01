@@ -9,7 +9,7 @@ import {
   useGetReleaseQuery,
 } from 'services/releases'
 import {selectReleaseModules} from 'slices/release.slice'
-import {ModuleVersionWithRelease} from 'types/module'
+import {ModuleVersionWithStatusInReleases} from 'types/module'
 import {ReleaseBase} from 'types/release'
 import ReleaseScreen from './Release.screen'
 
@@ -43,7 +43,7 @@ const EditReleaseScreen = () => {
   const navigate = useNavigate()
   const [editRelease] = useEditReleaseVersionMutation()
   const [initialReleaseModules, setInitialReleaseModules] = useState<
-    ModuleVersionWithRelease[] | undefined
+    ModuleVersionWithStatusInReleases[] | undefined
   >()
 
   useEffect(() => {
