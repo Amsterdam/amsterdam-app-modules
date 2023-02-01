@@ -6,8 +6,6 @@ import VersionField from 'components/form-fields/VersionField'
 import Button from 'components/ui/button/Button'
 import TextField from 'components/ui/forms/TextField'
 import Column from 'components/ui/layout/Column'
-import Screen from 'components/ui/layout/Screen'
-import ScreenTitle from 'components/ui/text/ScreenTitle'
 import LoadingScreen from 'screens/Loading.screen'
 import {setModules} from 'slices/release.slice'
 import {ReleaseBase, ReleaseWithModuleVersions} from 'types/release'
@@ -16,17 +14,13 @@ type Props = {
   isLoading: boolean
   onSubmit: (data: ReleaseBase) => void
   release: ReleaseWithModuleVersions | undefined
-  subtitle: string
-  title: string
   versionDefaultValue?: string
 }
 
-const ReleaseScreen = ({
+const ReleaseForm = ({
   isLoading,
   onSubmit,
   release,
-  subtitle,
-  title,
   versionDefaultValue,
 }: Props) => {
   const dispatch = useDispatch()
@@ -48,33 +42,28 @@ const ReleaseScreen = ({
   }
 
   return (
-    <Screen>
-      <Column gutter="lg">
-        <ScreenTitle subtitle={subtitle} title={title} />
-        <Column gutter="lg">
-          <VersionField
-            baseVersion={release.version}
-            defaultValue={versionDefaultValue}
-          />
-          <DragDropModules />
-          <TextField
-            label="Gepubliceerd"
-            name="published"
-            type="date"
-            width="half"
-          />
-          <TextField
-            label="Ongepubliceerd"
-            name="unpublished"
-            type="date"
-            width="half"
-          />
-          <TextField label="Release notes" name="releaseNotes" />
-          <Button label="Opslaan" onClick={handleSubmit(onSubmit)} />
-        </Column>
-      </Column>
-    </Screen>
+    <Column gutter="lg">
+      <VersionField
+        baseVersion={release.version}
+        defaultValue={versionDefaultValue}
+      />
+      <DragDropModules />
+      <TextField
+        label="Gepubliceerd"
+        name="published"
+        type="date"
+        width="half"
+      />
+      <TextField
+        label="Ongepubliceerd"
+        name="unpublished"
+        type="date"
+        width="half"
+      />
+      <TextField label="Release notes" name="releaseNotes" />
+      <Button label="Opslaan" onClick={handleSubmit(onSubmit)} />
+    </Column>
   )
 }
 
-export default ReleaseScreen
+export default ReleaseForm
