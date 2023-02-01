@@ -422,8 +422,8 @@ def module_version_status(request, slug, version):
 @swagger_auto_schema(**as_patch_release)
 @api_view(['GET', 'DELETE', 'PATCH'])
 def release(request, version):
-    """ [GET]       Returns a specific release and the versions of the modules it consists of. Path parameter is x.y.z or
-                    latest
+    """ [GET]       Returns a specific release and the versions of the modules it consists of. Path parameter is x.y.z
+                    or latest
         [DELETE]    Deletes a release.
         [PATCH]     Updates details of a release. Path parameter is x.y.z or latest
     """
@@ -455,7 +455,8 @@ def get_release(request, version):
         for _slug in _module_order.order:
 
             _module_by_app = ModulesByApp.objects.filter(appVersion=version, moduleSlug=_slug).first()
-            _module_version = ModuleVersions.objects.filter(moduleSlug=_slug, version=_module_by_app.moduleVersion).first()
+            _module_version = ModuleVersions.objects.filter(moduleSlug=_slug,
+                                                            version=_module_by_app.moduleVersion).first()
             _modules.append({
                 "moduleSlug": _slug,
                 "version": _module_by_app.moduleVersion,

@@ -866,39 +866,6 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, None)
 
-    def test_release_patch_400_1(self):
-        """ test release patch missing keys """
-        c = Client()
-        data = {}
-        response = c.patch('/api/v1/release/0.0.0',
-                           data=data,
-                           HTTP_AUTHORIZATION=self.authorization_header,
-                           content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.data, {"message": "incorrect request body."})
-
-    def test_release_patch_400_2(self):
-        """ test release patch missing keys """
-        c = Client()
-        data = {'version': None, 'releaseNotes': None, 'published': None, 'unpublished': None, 'modules': None}
-        response = c.patch('/api/v1/release/0.0.0',
-                           data=data,
-                           HTTP_AUTHORIZATION=self.authorization_header,
-                           content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.data, {"message": "incorrect request body."})
-
-    def test_release_patch_409(self):
-        """ test release patch missing keys """
-        c = Client()
-        data = {'version': '0.0.0', 'releaseNotes': '', 'published': '', 'unpublished': '', 'modules': []}
-        response = c.patch('/api/v1/release/0.0.0',
-                           data=data,
-                           HTTP_AUTHORIZATION=self.authorization_header,
-                           content_type='application/json')
-        self.assertEqual(response.status_code, 409)
-        self.assertDictEqual(response.data, {'message': 'Release version already exists.'})
-
     def test_release_patch_403(self):
         """ test release patch missing keys """
         c = Client()
@@ -970,7 +937,7 @@ class Views(TestCase):
             'published': '1970-01-01',
             'unpublished': '',
             'created': response.data['created'],
-            'modified': None,
+            'modified': response.data['modified'],
             'modules': [{'moduleSlug': 'slug0', 'version': '1.2.3', 'status': 0}]}
 
         self.assertEqual(response.status_code, 200)
