@@ -42,6 +42,7 @@ export const modulesApi = baseApi.injectEndpoints({
         url: `/api/v1/module/${moduleSlug}/version/${version}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['Module'],
     }),
     editModule: builder.mutation<ModuleVersion, ModuleVersion>({
       query: module => ({
