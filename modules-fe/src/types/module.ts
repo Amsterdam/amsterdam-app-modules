@@ -6,7 +6,7 @@ export type Module = {
 }
 
 export type ModuleWithVersions = Module & {
-  versions: ModuleVersionWithRelease[]
+  versions: ModuleVersionWithStatusInReleases[]
 }
 
 export type ModuleVersion = {
@@ -17,13 +17,20 @@ export type ModuleVersion = {
   version: string
 }
 
-export type ModuleVersionWithRelease = ModuleVersion & {
+export type ModuleVersionWithStatus = ModuleVersion & {
+  status: ModuleStatus
+}
+
+export type ModuleVersionWithStatusInReleases = ModuleVersion & {
   statusInReleases?: ModuleStatusInRelease[]
 }
 
 export type ModuleInRelease = {
   moduleSlug: string
   version: string
+}
+
+export type ModuleWithStatusInRelease = ModuleInRelease & {
   status: ModuleStatus
 }
 

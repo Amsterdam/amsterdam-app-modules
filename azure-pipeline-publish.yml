@@ -8,7 +8,7 @@ resources:
 - repo: self
 
 variables:
-  - group: acr-ontwikkel 
+  - group: acr-test
   # Container registry service connection established during pipeline creation
   - name: dockerRegistryServiceConnection
     value: $(docker-registry-service-connection)

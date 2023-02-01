@@ -422,8 +422,8 @@ def module_version_status(request, slug, version):
 @swagger_auto_schema(**as_patch_release)
 @api_view(['GET', 'DELETE', 'PATCH'])
 def release(request, version):
-    """ [GET]       Returns a specific release and the versions of the modules it consists of. Path parameter is x.y.z or
-                    latest
+    """ [GET]       Returns a specific release and the versions of the modules it consists of. Path parameter is x.y.z
+                    or latest
         [DELETE]    Deletes a release.
         [PATCH]     Updates details of a release. Path parameter is x.y.z or latest
     """
@@ -455,7 +455,8 @@ def get_release(request, version):
         for _slug in _module_order.order:
 
             _module_by_app = ModulesByApp.objects.filter(appVersion=version, moduleSlug=_slug).first()
-            _module_version = ModuleVersions.objects.filter(moduleSlug=_slug, version=_module_by_app.moduleVersion).first()
+            _module_version = ModuleVersions.objects.filter(moduleSlug=_slug,
+                                                            version=_module_by_app.moduleVersion).first()
             _modules.append({
                 "moduleSlug": _slug,
                 "version": _module_by_app.moduleVersion,
@@ -570,35 +571,30 @@ def patch_release(request, version=None):
     """ Patches a release, storing its details and the list of module versions belonging to it.
         The order of modules in the request body is the order of appearance in the app
     """
-
     data = request.data
 
     # Guards...
-    if not all(key in data for key in ('version', 'releaseNotes', 'published', 'unpublished', 'modules')):
-        return Response({"message": "incorrect request body."}, status=400)
-
-    if not isinstance(data['modules'], list):
-        return Response({"message": "incorrect request body."}, status=400)
-
-    for _module_version in data['modules']:
-        if not all(key in _module_version for key in ('moduleSlug', 'version', 'status')):
-            return Response({"message": "incorrect request body."}, status=400)
-
-    for key in ('version', 'releaseNotes'):
-        if not isinstance(data[key], str):
-            return Response({"message": "incorrect request body."}, status=400)
-
-    existing_release = Releases.objects.filter(version=data['version']).first()
-    if existing_release is not None:
-        return Response({'message': 'Release version already exists.'}, status=409)
-
     current_release = Releases.objects.filter(version=version).first()
+
     if current_release is None:
         return Response({'message': f'Release version ‘{version}‘ not found.'}, status=404)
 
-    current_release = Releases.objects.filter(version=version).first()
-    if current_release.published is not None:
-        return Response({'message': f'Release version ‘{version}‘ already published.'}, status=403)
+    if 'version' in data and version != data['version']:
+        target_release = Releases.objects.filter(version=data['version']).first()
+        if target_release is not None:
+            return Response({'message': 'Release version already exists.'}, status=409)
+
+        if current_release.published is not None:
+            return Response({'message': f'Release version ‘{version}‘ already published.'}, status=403)
+
+    if 'modules' in data:
+        data_modules = data['modules']
+        if not isinstance(data_modules, list):
+            return Response({"message": "incorrect request body."}, status=400)
+
+        for _module_version in data['modules']:
+            if not all(key in _module_version for key in ('moduleSlug', 'version', 'status')):
+                return Response({"message": "incorrect request body. (modules)"}, status=400)
 
     for _modules_version in data['modules']:
         slug = _modules_version['moduleSlug']
@@ -612,44 +608,42 @@ def patch_release(request, version=None):
     # Create new app version
     #
 
-    # Remove release
-    ModulesByApp.objects.filter(appVersion=version).delete()
-    ModuleOrder.objects.filter(appVersion=version).delete()
-    Releases.objects.filter(version=version).delete()
+    # If there's a modules patch
+    if 'modules' in data:
+        ModulesByApp.objects.filter(appVersion=version).delete()
+        ModuleOrder.objects.filter(appVersion=version).delete()
 
-    # Create new release
-    _new_release = {
-        "version": data['version'],
-        "releaseNotes": data['releaseNotes'],
-        "published": data['published'],
-        "unpublished": data['unpublished']
-    }
-    Releases.objects.create(**_new_release)
+        # Add modules to release
+        _module_order = {'appVersion': data['version'] if 'version' in data else version, 'order': []}
+        for _module in data['modules']:
+            _module_order['order'].append(_module['moduleSlug'])
+            _module_by_app = {
+                'appVersion': data['version'] if 'version' in data else version,
+                'moduleSlug': _module['moduleSlug'],
+                'moduleVersion': _module['version'],
+                'status': _module['status']
+            }
+            ModulesByApp.objects.create(**_module_by_app)
 
-    # Add modules to release
-    _module_order = {'appVersion': data['version'], 'order': []}
-    for _module in data['modules']:
-        _module_order['order'].append(_module['moduleSlug'])
-        _module_by_app = {
-            'appVersion': data['version'],
-            'moduleSlug': _module['moduleSlug'],
-            'moduleVersion': _module['version'],
-            'status': _module['status']
-        }
-        ModulesByApp.objects.create(**_module_by_app)
+        # Add new modules order
+        ModuleOrder.objects.create(**_module_order)
 
-    # Add new modules order
-    ModuleOrder.objects.create(**_module_order)
+    _patch_release = Releases.objects.filter(version=version).first()
+    _patch_release.version = data['version'] if 'version' in data else _patch_release.version
+    _patch_release.releaseNotes = data['releaseNotes'] if 'releaseNotes' in data else _patch_release.releaseNotes
+    _patch_release.published = data['published'] if 'published' in data else _patch_release.published
+    _patch_release.unpublished = data['unpublished'] if 'unpublished' in data else _patch_release.unpublished
+    _patch_release.save()
 
     #
     # return object from database
     #
-
-    _release = Releases.objects.filter(version=data['version']).first()
-    _module_order = ModuleOrder.objects.filter(appVersion=data['version']).first()
+    new_version = data['version'] if 'version' in data else version
+    _release = Releases.objects.filter(version=new_version).first()
+    _module_order = ModuleOrder.objects.filter(appVersion=new_version).first()
     _modules = []
     for _slug in _module_order.order:
-        _module = ModulesByApp.objects.filter(appVersion=data['version'], moduleSlug=_slug).first()
+        _module = ModulesByApp.objects.filter(appVersion=new_version, moduleSlug=_slug).first()
         _modules.append({'moduleSlug': _module.moduleSlug, 'version': _module.moduleVersion, 'status': _module.status})
 
     result = {
@@ -661,6 +655,7 @@ def patch_release(request, version=None):
         "modified": _release.modified,
         "modules": _modules
     }
+
     return Response(result, status=200)
 
 

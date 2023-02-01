@@ -22,6 +22,7 @@ const authorizedEndpoints = [
   'deleteModuleVersion',
   'editModuleVersion',
   'editModuleVersionStatus',
+  'editReleaseVersion',
 ]
 
 const baseQuery: BaseQueryFn<
@@ -45,7 +46,10 @@ const baseQuery: BaseQueryFn<
         baseQueryApi,
         {},
       )
-      if (refreshResult.data) {
+      if (
+        refreshResult.data &&
+        'access' in (refreshResult.data as AuthorizationResponse)
+      ) {
         dispatch(setTokens(refreshResult.data as AuthorizationResponse))
       } else {
         dispatch(logout())

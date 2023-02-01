@@ -2,7 +2,7 @@ import {baseApi} from 'services/baseApi'
 import {
   Module,
   ModuleVersion,
-  ModuleVersionWithRelease,
+  ModuleVersionWithStatusInReleases,
   ModuleWithVersions,
 } from 'types/module'
 
@@ -66,7 +66,7 @@ export const modulesApi = baseApi.injectEndpoints({
     }),
     editModuleVersionStatus: builder.mutation<
       ModuleVersion,
-      Pick<ModuleVersionWithRelease, 'statusInReleases'> & {
+      Pick<ModuleVersionWithStatusInReleases, 'statusInReleases'> & {
         slug: string
         version: string
       }
@@ -76,14 +76,14 @@ export const modulesApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: statusInReleases,
       }),
-      invalidatesTags: ['Module'],
+      invalidatesTags: ['Module', 'Release'],
     }),
     getModule: builder.query<ModuleWithVersions, ModuleQueryArg>({
       query: ({slug}) => `/api/v1/module/${slug}`,
       providesTags: ['Module'],
     }),
     getModuleVersion: builder.query<
-      ModuleVersionWithRelease,
+      ModuleVersionWithStatusInReleases,
       ModuleVersionQueryArg
     >({
       query: ({slug, version}) => `/api/v1/module/${slug}/version/${version}`,
