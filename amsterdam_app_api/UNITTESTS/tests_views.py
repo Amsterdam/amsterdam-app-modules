@@ -139,8 +139,8 @@ class Views(TestCase):
     def test_module_patch_incorrect_request_body(self):
         """ test incorrect request body """
         c = Client()
-        data = {'slug': 'slug0'}
-        response = c.patch('/api/v1/module',
+        data = {}
+        response = c.patch('/api/v1/module/slug0',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
                            content_type='application/json')
@@ -151,8 +151,8 @@ class Views(TestCase):
     def test_module_patch_module_not_found(self):
         """ tet patch but module not found """
         c = Client()
-        data = {'slug': 'bogus', 'status': 1}
-        response = c.patch('/api/v1/module',
+        data = {'status': 1}
+        response = c.patch('/api/v1/module/bogus',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
                            content_type='application/json')
@@ -163,32 +163,18 @@ class Views(TestCase):
     def test_module_patch_ok(self):
         """ test module patch ok """
         c = Client()
-        data = {'slug': 'slug0', 'status': 0}
-        response = c.patch('/api/v1/module',
+        data = {'status': 0}
+        response = c.patch('/api/v1/module/slug0',
                            data=data,
                            HTTP_AUTHORIZATION=self.authorization_header,
                            content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, data)
-
-    def test_module_delete_incorrect_request_body(self):
-        """ test incorrect request body """
-        c = Client()
-        data = {}
-        response = c.delete('/api/v1/module',
-                            data=data,
-                            HTTP_AUTHORIZATION=self.authorization_header,
-                            content_type='application/json')
-        expected_result = {"message": "incorrect request body."}
-        self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.data, expected_result)
+        self.assertDictEqual(response.data, {'slug': 'slug0', 'status': 0})
 
     def test_module_delete_module_in_use(self):
         """ test delete model in use"""
         c = Client()
-        data = {'slug': 'slug0'}
-        response = c.delete('/api/v1/module',
-                            data=data,
+        response = c.delete('/api/v1/module/slug0',
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
         expected_result = {"message": "Module with slug ‘slug0’ is being used in a release."}
@@ -203,9 +189,8 @@ class Views(TestCase):
                data=data,
                HTTP_AUTHORIZATION=self.authorization_header,
                content_type='application/json')
-        data = {'slug': 'new'}
-        response = c.delete('/api/v1/module',
-                            data=data,
+
+        response = c.delete('/api/v1/module/new',
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
         self.assertEqual(response.status_code, 200)
