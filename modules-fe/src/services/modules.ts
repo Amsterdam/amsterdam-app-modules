@@ -44,13 +44,12 @@ export const modulesApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Module'],
     }),
-    editModule: builder.mutation<ModuleVersion, ModuleVersion>({
-      query: module => ({
-        url: `/api/v1/modules`,
-        method: 'POST',
-        body: {...module},
+    editModule: builder.mutation<Module, Module>({
+      query: ({slug, status}) => ({
+        url: `/api/v1/module/${slug}`,
+        method: 'PATCH',
+        body: {status},
       }),
-      transformResponse: (response: {result: ModuleVersion}) => response.result,
       invalidatesTags: ['Module'],
     }),
     editModuleVersion: builder.mutation<

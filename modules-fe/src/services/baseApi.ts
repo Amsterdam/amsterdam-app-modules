@@ -20,6 +20,7 @@ const authorizedEndpoints = [
   'createRelease',
   'createModuleVersion',
   'deleteModuleVersion',
+  'editModule',
   'editModuleVersion',
   'editModuleVersionStatus',
   'editReleaseVersion',

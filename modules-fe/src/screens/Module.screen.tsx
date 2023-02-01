@@ -1,5 +1,6 @@
 import {skipToken} from '@reduxjs/toolkit/query'
 import {useNavigate, useParams} from 'react-router-dom'
+import LoadingButton from 'components/features/LoadingButton'
 import BlockLink from 'components/ui/button/BlockLink'
 import Button from 'components/ui/button/Button'
 import Module from 'components/ui/containers/Module'
@@ -11,7 +12,7 @@ import ListItem from 'components/ui/text/ListItem'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
 import ErrorScreen from 'screens/Error.screen'
 import LoadingScreen from 'screens/Loading.screen'
-import {useGetModuleQuery} from 'services/modules'
+import {useEditModuleMutation, useGetModuleQuery} from 'services/modules'
 import {ModuleStatus} from 'types/module'
 
 type Params = {
@@ -30,8 +31,13 @@ const ModuleScreen = () => {
       : skipToken,
   )
   const latestVersion = module?.versions[0]
+  const [editModule, {isLoading: isEditingModule, error: editModuleError}] =
+    useEditModuleMutation()
 
   const handleModuleStatusChange = () => {
+    if (!module) {
+      return
+    }
     if (
       // eslint-disable-next-line no-alert
       window.confirm(
@@ -40,8 +46,10 @@ const ModuleScreen = () => {
         } wil zetten.`,
       )
     ) {
-      // eslint-disable-next-line no-console
-      console.log("API call to update module's status") // TODO: implement API call once ready
+      editModule({
+        slug: module?.slug,
+        status: module?.status === 1 ? 0 : 1,
+      })
     }
   }
 
@@ -76,12 +84,14 @@ const ModuleScreen = () => {
             </ListItem>
           ))}
         </List>
-        <Button
-          variant="secondary"
+        <LoadingButton
+          error={editModuleError}
           label={
             module?.status === ModuleStatus.active ? 'Uitzetten' : 'Aanzetten'
           }
+          loading={isEditingModule}
           onClick={handleModuleStatusChange}
+          variant="secondary"
         />
       </Column>
     </Screen>
