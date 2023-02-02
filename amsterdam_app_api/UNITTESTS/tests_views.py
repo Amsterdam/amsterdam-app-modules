@@ -439,6 +439,9 @@ class Views(TestCase):
     def test_modules_for_app_header(self):
         """ test modules for app get (no app version) """
         c = Client()
+        _module = {'slug': 'slug4', 'status': 1}
+        Module.objects.create(**_module)
+
         response = c.get('/api/v1/modules_for_app', HTTP_appVersion='0.0.0')
         expected_result = {
             'status': True,
@@ -448,6 +451,29 @@ class Views(TestCase):
                     'icon': 'icon',
                     'slug': 'slug4',
                     'status': 1,
+                    'title': 'title',
+                    'version': '10.3.2'
+                }
+            ]
+        }
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_modules_for_app_status(self):
+        """ test modules for app get (no app version) """
+        c = Client()
+        _module = {'slug': 'slug4', 'status': 0}
+        Module.objects.create(**_module)
+
+        response = c.get('/api/v1/modules_for_app', HTTP_appVersion='0.0.0')
+        expected_result = {
+            'status': True,
+            'result': [
+                {
+                    'description': 'description',
+                    'icon': 'icon',
+                    'slug': 'slug4',
+                    'status': 0,
                     'title': 'title',
                     'version': '10.3.2'
                 }
