@@ -1,16 +1,21 @@
+import {useMemo} from 'react'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useSelector} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import Column from 'components/ui/layout/Column'
 import Screen from 'components/ui/layout/Screen'
 import ScreenTitle from 'components/ui/text/ScreenTitle'
+import {useGetModulesQuery} from 'services/modules'
 import {
   useCreateReleaseMutation,
   useGetLatestReleaseQuery,
 } from 'services/releases'
 import {selectReleaseModules} from 'slices/release.slice'
-import {ReleaseBase} from 'types/release'
+import {ModuleVersion} from 'types/module'
+import {ReleaseBase, ReleaseWithModuleVersions} from 'types/release'
 import ReleaseForm from '../components/features/ReleaseForm'
+import ErrorScreen from './Error.screen'
+import LoadingScreen from './Loading.screen'
 
 const CreateReleaseScreen = () => {
   const releaseModules = useSelector(selectReleaseModules)
@@ -20,7 +25,31 @@ const CreateReleaseScreen = () => {
   const [createRelease] = useCreateReleaseMutation()
   const navigate = useNavigate()
 
-  const {data: release, isLoading} = useGetLatestReleaseQuery()
+  const {
+    data: release,
+    isError: getLatestReleaseIsError,
+    isLoading: isLoadingLatestRelease,
+  } = useGetLatestReleaseQuery()
+
+  const {data: latestModules, isLoading: isLoadingLatestModules} =
+    useGetModulesQuery(undefined, {
+      skip: isLoadingLatestRelease || !getLatestReleaseIsError,
+    })
+
+  const releaseIfNoLatestRelease = useMemo(() => {
+    if (!latestModules) {
+      return null
+    }
+    return {
+      created: '',
+      modified: '',
+      version: '0.0.0',
+      published: null,
+      unpublished: null,
+      releaseNotes: '',
+      modules: latestModules || ({} as ModuleVersion[]),
+    }
+  }, [latestModules])
 
   const handleCreateRelease = async (data: ReleaseBase) => {
     const preparedData = {
@@ -37,6 +66,16 @@ const CreateReleaseScreen = () => {
     }
   }
 
+  if (isLoadingLatestRelease || isLoadingLatestModules) {
+    return <LoadingScreen />
+  }
+
+  if (!release && !releaseIfNoLatestRelease) {
+    return (
+      <ErrorScreen message="Er zijn geen modules die aan een release toegevoegd kunnen worden." />
+    )
+  }
+
   return (
     <Screen>
       <Column gutter="lg">
@@ -46,9 +85,12 @@ const CreateReleaseScreen = () => {
         />
         <FormProvider {...form}>
           <ReleaseForm
-            isLoading={isLoading}
             onSubmit={handleCreateRelease}
-            release={release}
+            release={
+              release ||
+              releaseIfNoLatestRelease ||
+              ({} as ReleaseWithModuleVersions)
+            }
           />
         </FormProvider>
       </Column>
