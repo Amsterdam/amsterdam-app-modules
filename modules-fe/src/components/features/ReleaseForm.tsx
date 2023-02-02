@@ -6,23 +6,16 @@ import VersionField from 'components/form-fields/VersionField'
 import Button from 'components/ui/button/Button'
 import TextField from 'components/ui/forms/TextField'
 import Column from 'components/ui/layout/Column'
-import LoadingScreen from 'screens/Loading.screen'
 import {setModules} from 'slices/release.slice'
 import {ReleaseBase, ReleaseWithModuleVersions} from 'types/release'
 
 type Props = {
-  isLoading: boolean
   onSubmit: (data: ReleaseBase) => void
-  release: ReleaseWithModuleVersions | undefined
+  release: ReleaseWithModuleVersions
   versionDefaultValue?: string
 }
 
-const ReleaseForm = ({
-  isLoading,
-  onSubmit,
-  release,
-  versionDefaultValue,
-}: Props) => {
+const ReleaseForm = ({onSubmit, release, versionDefaultValue}: Props) => {
   const dispatch = useDispatch()
   const form = useFormContext<ReleaseBase>()
   const {handleSubmit} = form
@@ -32,14 +25,6 @@ const ReleaseForm = ({
       dispatch(setModules(release.modules))
     }
   }, [dispatch, release])
-
-  if (isLoading) {
-    return <LoadingScreen />
-  }
-
-  if (!release) {
-    return null
-  }
 
   return (
     <Column gutter="lg">

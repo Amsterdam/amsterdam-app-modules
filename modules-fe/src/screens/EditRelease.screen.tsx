@@ -15,6 +15,8 @@ import {selectReleaseModules} from 'slices/release.slice'
 import {ModuleVersionWithStatusInReleases} from 'types/module'
 import {ReleaseBase} from 'types/release'
 import ReleaseForm from '../components/features/ReleaseForm'
+import ErrorScreen from './Error.screen'
+import LoadingScreen from './Loading.screen'
 
 type Params = {
   version: ReleaseBase['version']
@@ -91,6 +93,16 @@ const EditReleaseScreen = () => {
     }
   }
 
+  if (isLoading) {
+    return <LoadingScreen />
+  }
+
+  if (!release) {
+    return (
+      <ErrorScreen message="De release versie kon niet worden opgehaald." />
+    )
+  }
+
   return (
     <Screen>
       <Column gutter="lg">
@@ -100,7 +112,6 @@ const EditReleaseScreen = () => {
         />
         <FormProvider {...form}>
           <ReleaseForm
-            isLoading={isLoading}
             onSubmit={handleEditRelease}
             release={release}
             versionDefaultValue={versionParam}
