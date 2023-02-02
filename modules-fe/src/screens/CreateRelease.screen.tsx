@@ -29,7 +29,9 @@ const CreateReleaseScreen = () => {
     useGetLatestReleaseQuery()
 
   const {data: latestModules, isLoading: isLoadingLatestModules} =
-    useGetModulesQuery()
+    useGetModulesQuery(undefined, {
+      skip: isLoadingLatestRelease || !!latestRelease,
+    })
 
   const releaseIfNoLatestRelease = useMemo(() => {
     if (!latestModules) {
