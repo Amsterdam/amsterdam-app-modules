@@ -25,13 +25,11 @@ const CreateReleaseScreen = () => {
   const [createRelease] = useCreateReleaseMutation()
   const navigate = useNavigate()
 
-  const {data: release, isLoading: isLoadingLatestRelease} =
+  const {data: latestRelease, isLoading: isLoadingLatestRelease} =
     useGetLatestReleaseQuery()
 
   const {data: latestModules, isLoading: isLoadingLatestModules} =
-    useGetModulesQuery(undefined, {
-      skip: isLoadingLatestRelease || !!release,
-    })
+    useGetModulesQuery()
 
   const releaseIfNoLatestRelease = useMemo(() => {
     if (!latestModules) {
@@ -40,7 +38,7 @@ const CreateReleaseScreen = () => {
     return {
       created: '',
       modified: '',
-      version: '0.0.0',
+      version: '0.15.0',
       published: null,
       unpublished: null,
       releaseNotes: '',
@@ -67,7 +65,7 @@ const CreateReleaseScreen = () => {
     return <LoadingScreen />
   }
 
-  if (!release && !releaseIfNoLatestRelease) {
+  if (!latestRelease && !releaseIfNoLatestRelease) {
     return (
       <ErrorScreen message="Er zijn geen modules die aan een release toegevoegd kunnen worden." />
     )
@@ -84,7 +82,7 @@ const CreateReleaseScreen = () => {
           <ReleaseForm
             onSubmit={handleCreateRelease}
             release={
-              release ||
+              latestRelease ||
               releaseIfNoLatestRelease ||
               ({} as ReleaseWithModuleVersions)
             }
