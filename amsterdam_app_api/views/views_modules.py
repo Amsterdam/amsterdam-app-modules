@@ -472,6 +472,8 @@ def get_release(request, version):
     """ Returns a specific release and the versions of the modules it consists of. """
     if version == 'latest':
         _releases = list(Releases.objects.all())
+        if not _releases:
+            return Response({'message': 'No releases found.'}, status=404)
         version = get_highest_version([x.version for x in _releases])
 
     _release = Releases.objects.filter(version=version).first()
