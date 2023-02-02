@@ -25,15 +25,12 @@ const CreateReleaseScreen = () => {
   const [createRelease] = useCreateReleaseMutation()
   const navigate = useNavigate()
 
-  const {
-    data: release,
-    isError: getLatestReleaseIsError,
-    isLoading: isLoadingLatestRelease,
-  } = useGetLatestReleaseQuery()
+  const {data: release, isLoading: isLoadingLatestRelease} =
+    useGetLatestReleaseQuery()
 
   const {data: latestModules, isLoading: isLoadingLatestModules} =
     useGetModulesQuery(undefined, {
-      skip: isLoadingLatestRelease || !getLatestReleaseIsError,
+      skip: isLoadingLatestRelease || !!release,
     })
 
   const releaseIfNoLatestRelease = useMemo(() => {
