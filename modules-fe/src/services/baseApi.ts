@@ -13,7 +13,6 @@ import {
 } from 'slices/authorization.slice'
 import {RootState} from 'store/store'
 import {AuthorizationResponse} from 'types/authorization'
-import {getTokenValidity} from 'utils/authorization'
 
 const authorizedEndpoints = [
   'createModule',
@@ -26,56 +25,55 @@ const authorizedEndpoints = [
   'editReleaseVersion',
 ]
 
-const baseQuery: BaseQueryFn<
+const baseQuery = fetchBaseQuery({
+  baseUrl: '/',
+  prepareHeaders: (headers, {getState, endpoint}) => {
+    const token = selectAuthorizationAccessToken(getState() as RootState)
+    if (authorizedEndpoints.includes(endpoint)) {
+      headers.set('Authorization', token)
+    }
+    return headers
+  },
+})
+const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
-> = async (args, baseQueryApi, extraOptions) => {
-  const {dispatch, getState} = baseQueryApi
-  const getNewAccessToken = async () => {
-    const token = selectAuthorizationAccessToken(getState() as RootState)
-    if (!getTokenValidity(token)) {
-      const refresh = selectAuthorizationRefreshToken(getState() as RootState)
-      const refreshResult = await fetchBaseQuery({
-        baseUrl: '/',
-      })(
-        {
-          url: '/api/v1/token/refresh',
-          method: 'POST',
-          body: {refresh},
-        },
-        baseQueryApi,
-        {},
-      )
-      if (
-        refreshResult.data &&
-        'access' in (refreshResult.data as AuthorizationResponse)
-      ) {
-        dispatch(setTokens(refreshResult.data as AuthorizationResponse))
-      } else {
-        dispatch(logout())
-      }
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions)
+  if (
+    result.error &&
+    result.error.status === 'PARSING_ERROR' &&
+    result.error.originalStatus === 401
+  ) {
+    const {dispatch, getState} = api
+    // try to get a new token
+    const refresh = selectAuthorizationRefreshToken(getState() as RootState)
+    const refreshResult = await fetchBaseQuery({
+      baseUrl: '/',
+    })(
+      {
+        url: '/api/v1/token/refresh',
+        method: 'POST',
+        body: {refresh},
+      },
+      api,
+      {},
+    )
+    if (refreshResult.data) {
+      // store the new token
+      dispatch(setTokens(refreshResult.data as AuthorizationResponse))
+      // retry the initial query
+      result = await baseQuery(args, api, extraOptions)
+    } else {
+      dispatch(logout())
     }
   }
-
-  if (typeof args === 'object' && authorizedEndpoints.includes(args.url)) {
-    await getNewAccessToken()
-  }
-
-  return fetchBaseQuery({
-    baseUrl: '/',
-    prepareHeaders: (headers, {endpoint}) => {
-      const token = selectAuthorizationAccessToken(getState() as RootState)
-      if (authorizedEndpoints.includes(endpoint)) {
-        headers.set('Authorization', token)
-      }
-      return headers
-    },
-  })(args, baseQueryApi, extraOptions)
+  return result
 }
 
 export const baseApi = createApi({
-  baseQuery,
+  baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
   tagTypes: ['Module', 'Release'],
 })
