@@ -551,6 +551,17 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertDictEqual(response.data, {'message': 'Release version does not exists.'})
 
+    def test_release_get_404_2(self):
+        """ Test get release not existing """
+        c = Client()
+        Releases.objects.filter().delete()
+        response = c.get('/api/v1/release/latest',
+                         HTTP_AUTHORIZATION=self.authorization_header,
+                         content_type='application/json',
+                         accept='application/json')
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.data, {'message': 'No releases found.'})
+
     def test_release_get_200(self):
         """ Test get release existing """
         import datetime  # pylint: disable=unused-import
