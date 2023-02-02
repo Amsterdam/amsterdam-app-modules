@@ -148,13 +148,97 @@ def slug_status_in_releases(slug):
     return _slug_status_in_releases
 
 
-@swagger_auto_schema(**as_module_post)
+@swagger_auto_schema(**as_module_slug_get)
 @swagger_auto_schema(**as_module_patch)
 @swagger_auto_schema(**as_module_delete)
-@api_view(['POST', 'PATCH', 'DELETE'])
+@api_view(['GET', 'PATCH', 'DELETE'])
+def module_slug(request, slug=None, version=None):
+    """ Get: Details for a module by slug. It returns all the module versions for that slug
+        and the status of that module across all releases
+        PATCH: Change the status for a module slug.
+
+        slug: (string) The human-readable identifier for the module. Example: construction-work.
+        status (integer) The status of the module. This allows to deactivate all of its versions in all releases at
+        once.
+
+        Allowed status values: [0|1]
+    """
+    if request.method == 'GET':
+        result = module_slug_get(request, slug=slug)
+        return result
+
+    if request.method == 'PATCH':
+        result = module_slug_patch(request, slug=slug)
+        return result
+
+    if request.method == 'DELETE':
+        result = module_slug_delete(request, slug=slug)
+        return result
+    return Response({'message': 'Method not allowed'}, status=401)
+
+
+def module_slug_get(request, slug=None):
+    """ Get details for a module by slug. It returns all the module versions for that slug
+        and the status of that module across all releases
+    """
+
+    # Get all modules for given slug
+    _module = Module.objects.filter(slug=slug).first()
+    if _module is None:
+        return Response({"message": f"Module with slug ‘{slug}’ not found."}, status=404)
+
+    # Get status in releases
+    status_in_releases = slug_status_in_releases(slug)
+
+    # Build result
+    module_versions = list(ModuleVersions.objects.filter(moduleSlug=slug).all())
+    result = {
+        "slug": slug,
+        "status": _module.status,
+        "versions": [
+            {
+                "title": x.title,
+                "moduleSlug": x.moduleSlug,
+                "description": x.description,
+                "version": x.version,
+                "icon": x.icon,
+                "statusInReleases": status_in_releases[x.version]
+            } for x in module_versions]
+    }
+
+    return Response(result, status=200)
+
+
+@IsAuthorized
+def module_slug_patch(request, slug=None):
+    """ Patch module slug """
+    data = dict(request.data)
+    if not all(key in data for key in ['status']):
+        return Response({"message": 'incorrect request body.'}, status=400)
+
+    _module = Module.objects.filter(slug=slug).first()
+    if _module is None:
+        return Response({"message": f"Module with slug ‘{slug}’ not found."}, status=404)
+    _module.status = data['status']
+    _module.save()
+    return Response(ModuleSerializer(_module, many=False).data, status=200)
+
+
+@IsAuthorized
+def module_slug_delete(request, slug=None):
+    """ Delete module slug"""
+    if list(ModuleVersions.objects.filter(moduleSlug=slug).all()):
+        return Response({"message": f"Module with slug ‘{slug}’ is being used in a release."}, status=403)
+
+    Module.objects.filter(slug=slug).delete()
+    return Response(status=200)
+
+
+@swagger_auto_schema(**as_module_post)
+@api_view(['POST'])
 @IsAuthorized
 def module(request):
-    """ Create, modify or delete a module slug.
+    """ Create module
 
         slug: (string) The human-readable identifier for the module. Example: construction-work.
         status (integer) The status of the module. This allows to deactivate all of its versions in all releases at
@@ -171,27 +255,6 @@ def module(request):
             return Response(ModuleSerializer(_module, many=False).data, status=200)
         except IntegrityError:
             return Response({"message": 'module already exists.'}, status=409)
-
-    if request.method == 'PATCH':
-        if not all(key in data for key in ['slug', 'status']):
-            return Response({"message": 'incorrect request body.'}, status=400)
-
-        _module = Module.objects.filter(slug=data['slug']).first()
-        if _module is None:
-            return Response({"message": f"Module with slug ‘{data['slug']}’ not found."}, status=404)
-        _module.status = data['status']
-        _module.save()
-        return Response(ModuleSerializer(_module, many=False).data, status=200)
-
-    if request.method == 'DELETE':
-        if not all(key in data for key in ['slug']):
-            return Response({"message": 'incorrect request body.'}, status=400)
-
-        if list(ModuleVersions.objects.filter(moduleSlug=data['slug']).all()):
-            return Response({"message": f"Module with slug ‘{data['slug']}’ is being used in a release."}, status=403)
-
-        Module.objects.filter(slug=data['slug']).delete()
-        return Response(status=200)
 
     return Response('method not allowed', status=500)
 
@@ -307,40 +370,6 @@ def post_module_version(request, slug=None):
 
     _new_module_version = ModuleVersions.objects.create(**data)
     return Response(ModuleVersionsSerializer(_new_module_version, many=False).data, status=200)
-
-
-@swagger_auto_schema(**as_module_slug_get)
-@api_view(['GET'])
-def module_slug(request, slug=None):
-    """ Get details for a module by slug. It returns all the module versions for that slug
-        and the status of that module across all releases
-    """
-
-    # Get all modules for given slug
-    _module = Module.objects.filter(slug=slug).first()
-    if _module is None:
-        return Response({"message": f"Module with slug ‘{slug}’ not found."}, status=404)
-
-    # Get status in releases
-    status_in_releases = slug_status_in_releases(slug)
-
-    # Build result
-    module_versions = list(ModuleVersions.objects.filter(moduleSlug=slug).all())
-    result = {
-        "slug": slug,
-        "status": _module.status,
-        "versions": [
-            {
-                "title": x.title,
-                "moduleSlug": x.moduleSlug,
-                "description": x.description,
-                "version": x.version,
-                "icon": x.icon,
-                "statusInReleases": status_in_releases[x.version]
-            } for x in module_versions]
-    }
-
-    return Response(result, status=200)
 
 
 @swagger_auto_schema(**as_modules_latest)

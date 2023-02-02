@@ -565,8 +565,13 @@ as_module_patch = {
                                             required=True)],
     'request_body': openapi.Schema(
         type=openapi.TYPE_OBJECT,
-        required=["slug", "status"],
-        properties=module,
+        required=["status"],
+        properties={
+            'status': openapi.Schema(type=openapi.TYPE_NUMBER,
+                                     description='The status of the module. This allows to deactivate '
+                                                 'all of its versions in all releases at once.\n\n'
+                                                 'status (enum: 0, 1, ...)'),
+        },
     ),
     'responses': {
         200: openapi.Response('application/json',
@@ -600,11 +605,6 @@ as_module_delete = {
                                             description="Authorization token",
                                             type=openapi.TYPE_STRING,
                                             required=True)],
-    'request_body': openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=["slug"],
-        properties={'slug': slug},
-    ),
     'responses': {
         200: openapi.Response(''),
         400: openapi.Response('application/json',
