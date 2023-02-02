@@ -590,6 +590,55 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
+    def test_release_get_status_200(self):
+        """ Test get release existing """
+        import datetime  # pylint: disable=unused-import
+        c = Client()
+
+        _module = Module.objects.filter(slug='slug0').first()
+        _module.status = 0
+        _module.save()
+
+        response = c.get('/api/v1/release/0.0.1',
+                         HTTP_AUTHORIZATION=self.authorization_header,
+                         content_type='application/json',
+                         accept='application/json')
+        expected_result = {
+            'version': '0.0.1',
+            'releaseNotes': 'release 0.0.1',
+            'published': '1971-01-01',
+            'unpublished': '1971-12-31',
+            'created': response.data['created'],
+            'modified': None,
+            'modules': [
+                {
+                    'moduleSlug': 'slug0',
+                    'version': '1.2.3',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 0
+                }, {
+                    'moduleSlug': 'slug1',
+                    'version': '1.3.4',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 0
+                }, {
+                    'moduleSlug': 'slug2',
+                    'version': '1.30.4',
+                    'title': 'title',
+                    'description': 'description',
+                    'icon': 'icon',
+                    'status': 1
+                }
+            ]
+        }
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.data, expected_result)
+
+
     def test_release_get_409(self):
         """ Test get release integrity error """
         ModuleOrder.objects.filter(appVersion='0.0.1').delete()

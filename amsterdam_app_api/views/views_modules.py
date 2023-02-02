@@ -488,13 +488,15 @@ def get_release(request, version):
             _module_by_app = ModulesByApp.objects.filter(appVersion=version, moduleSlug=_slug).first()
             _module_version = ModuleVersions.objects.filter(moduleSlug=_slug,
                                                             version=_module_by_app.moduleVersion).first()
+            _module = Module.objects.filter(slug=_slug).first()
+
             _modules.append({
                 "moduleSlug": _slug,
                 "version": _module_by_app.moduleVersion,
                 "title": _module_version.title,
                 "description": _module_version.description,
                 "icon": _module_version.icon,
-                "status": _module_by_app.status
+                "status": _module.status if _module.status == 0 else _module_by_app.status
             })
 
         result = {
