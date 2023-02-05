@@ -32,43 +32,52 @@ const baseQuery = fetchBaseQuery({
     if (authorizedEndpoints.includes(endpoint)) {
       headers.set('Authorization', token)
     }
+
     return headers
   },
 })
+
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions)
-  if (
-    result.error &&
-    result.error.status === 'PARSING_ERROR' &&
-    result.error.originalStatus === 401
-  ) {
+  const baseQueryWithArgs = baseQuery(args, api, extraOptions)
+
+  let result = await baseQueryWithArgs
+  const {error} = result
+
+  if (error?.status === 'PARSING_ERROR' && error.originalStatus === 401) {
     const {dispatch, getState} = api
+
     // try to get a new token
-    const refresh = selectAuthorizationRefreshToken(getState() as RootState)
-    const refreshResult = await fetchBaseQuery({
+    const refreshToken = selectAuthorizationRefreshToken(
+      getState() as RootState,
+    )
+    const refreshTokenResponse = await fetchBaseQuery({
       baseUrl: '/',
     })(
       {
         url: '/api/v1/token/refresh',
         method: 'POST',
-        body: {refresh},
+        body: {
+          refresh: refreshToken,
+        },
       },
       api,
       {},
     )
-    if (refreshResult.data) {
+
+    if (refreshTokenResponse.data) {
       // store the new token
-      dispatch(setTokens(refreshResult.data as AuthorizationResponse))
+      dispatch(setTokens(refreshTokenResponse.data as AuthorizationResponse))
       // retry the initial query
-      result = await baseQuery(args, api, extraOptions)
+      result = await baseQueryWithArgs
     } else {
       dispatch(logout())
     }
   }
+
   return result
 }
 
