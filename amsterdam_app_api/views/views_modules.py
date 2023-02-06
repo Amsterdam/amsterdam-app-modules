@@ -73,16 +73,17 @@ def modules_for_app_get(request):
 
     _modules = []
     for module_by_app in modules_by_app_data:
-        _module = ModuleVersions.objects.filter(moduleSlug=module_by_app.moduleSlug,
-                                                version=module_by_app.moduleVersion).first()
-        if _module is not None:
+        _module_version = ModuleVersions.objects.filter(moduleSlug=module_by_app.moduleSlug,
+                                                        version=module_by_app.moduleVersion).first()
+        _module = Module.objects.filter(slug=module_by_app.moduleSlug).first()
+        if _module_version is not None:
             _modules.append({
-                'description': _module.description,
-                'icon': _module.icon,
-                'slug': _module.moduleSlug,
-                'status': module_by_app.status,
-                'title': _module.title,
-                'version': _module.version
+                'description': _module_version.description,
+                'icon': _module_version.icon,
+                'slug': _module_version.moduleSlug,
+                'status': _module.status if _module.status == 0 else module_by_app.status,
+                'title': _module_version.title,
+                'version': _module_version.version
             })
 
     modules_ordered = []
