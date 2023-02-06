@@ -182,6 +182,9 @@ def module_slug_get(request, slug=None):
     """ Get details for a module by slug. It returns all the module versions for that slug
         and the status of that module across all releases
     """
+    def version_key(_module):
+        # Split the version string on the '.' character and convert the components to integers
+        return [int(x) for x in _module['version'].split('.')]
 
     # Get all modules for given slug
     _module = Module.objects.filter(slug=slug).first()
@@ -206,6 +209,9 @@ def module_slug_get(request, slug=None):
                 "statusInReleases": status_in_releases[x.version]
             } for x in module_versions]
     }
+
+    # Sort versions on version in result
+    result['versions'] = sorted(result['versions'], key=version_key, reverse=True)
 
     return Response(result, status=200)
 
