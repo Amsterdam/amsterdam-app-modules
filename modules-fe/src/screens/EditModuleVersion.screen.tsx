@@ -36,6 +36,7 @@ const EditModuleScreen = () => {
         }
       : skipToken,
   )
+  const isInRelease = moduleVersion?.statusInReleases?.length
 
   const form = useForm<ModuleVersion>()
   const [
@@ -130,17 +131,19 @@ const EditModuleScreen = () => {
             <ModuleTitleField defaultValue={moduleVersion.title} />
             <ModuleDescriptionField defaultValue={moduleVersion.description} />
             <ModuleIconField defaultValue={moduleVersion.icon} />
-            <VersionField
-              baseVersion={moduleVersion.version}
-              defaultValue={moduleVersion.version}
-            />
+            {!isInRelease && (
+              <VersionField
+                baseVersion={moduleVersion.version}
+                defaultValue={moduleVersion.version}
+              />
+            )}
             <LoadingButton
               error={editingModuleError}
               label="Opslaan"
               loading={isEditingModuleVersion}
               onClick={handleSubmit(onSubmit)}
             />
-            {moduleVersion.statusInReleases?.length ? (
+            {isInRelease ? (
               <Button
                 label="Aan- of uitzetten"
                 onClick={() =>
