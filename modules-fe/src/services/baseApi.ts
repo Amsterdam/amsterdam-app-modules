@@ -42,9 +42,7 @@ const baseQueryWithReauth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  const baseQueryWithArgs = baseQuery(args, api, extraOptions)
-
-  let result = await baseQueryWithArgs
+  let result = await baseQuery(args, api, extraOptions)
   const {error} = result
 
   if (error?.status === 'PARSING_ERROR' && error.originalStatus === 401) {
@@ -72,7 +70,7 @@ const baseQueryWithReauth: BaseQueryFn<
       // store the new token
       dispatch(setTokens(refreshTokenResponse.data as AuthorizationResponse))
       // retry the initial query
-      result = await baseQueryWithArgs
+      result = await baseQuery(args, api, extraOptions)
     } else {
       dispatch(logout())
     }
