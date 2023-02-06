@@ -314,7 +314,7 @@ def module_version_patch(request, slug=None, version=None):
         return Response({"message": 'incorrect request version formatting.'}, status=400)
 
     _module_by_app = ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).first()
-    if _module_by_app is not None:
+    if 'version' in data and version != data['version'] and _module_by_app is not None:
         _message = f"Module with slug ‘{slug}’ and version ‘{version}’ in use by release ‘{_module_by_app.appVersion}‘."
         return Response({"message": _message}, status=403)
 

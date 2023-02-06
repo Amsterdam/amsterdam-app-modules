@@ -303,7 +303,7 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertDictEqual(response.data, expected_result)
 
-    def test_module_slug_version_patch_in_use(self):
+    def test_module_slug_version_patch_in_use_1(self):
         """ test incorrect request body """
         c = Client()
         data = {'version': '10.11.12'}
@@ -313,6 +313,24 @@ class Views(TestCase):
                             content_type='application/json')
         expected_result = {'message': 'Module with slug ‘slug0’ and version ‘1.2.3’ in use by release ‘0.0.1‘.'}
         self.assertEqual(response.status_code, 403)
+        self.assertDictEqual(response.data, expected_result)
+
+    def test_module_slug_version_patch_in_use_2(self):
+        """ test incorrect request body """
+        c = Client()
+        data = {'description': 'test'}
+        response = c.patch('/api/v1/module/slug0/version/1.2.3',
+                            data=data,
+                            HTTP_AUTHORIZATION=self.authorization_header,
+                            content_type='application/json')
+        expected_result = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'version': '1.2.3',
+            'description': 'test',
+            'icon': 'icon'
+        }
+        self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
     def test_module_slug_version_patch_integrity_error(self):
