@@ -67,19 +67,35 @@ class Views(TestCase):
     def test_module_slug(self):
         """ get module by slug and version (exists) """
         c = Client()
+        data = {
+            'moduleSlug': 'slug0',
+            'title': 'title',
+            'icon': 'icon',
+            'version': '5.2.20',
+            'description': 'description'
+        }
+        ModuleVersions.objects.create(**data)
+
         response = c.get('/api/v1/module/slug0')
         expected_result = {
             'slug': 'slug0',
             'status': 1,
             'versions': [
                 {
+                    'moduleSlug': 'slug0',
+                    'title': 'title',
+                    'icon': 'icon',
+                    'version': '5.2.20',
+                    'description': 'description',
+                    'statusInReleases': []
+                }, {
                     'title': 'title',
                     'moduleSlug': 'slug0',
                     'description': 'description',
                     'version': '1.2.20',
                     'icon': 'icon',
-                    'statusInReleases': [{'status': 1, 'releases': ['0.1.1']}]},
-                {
+                    'statusInReleases': [{'status': 1, 'releases': ['0.1.1']}]
+                }, {
                     'title': 'title',
                     'moduleSlug': 'slug0',
                     'description': 'description',
