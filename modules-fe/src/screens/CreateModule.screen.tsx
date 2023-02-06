@@ -1,5 +1,5 @@
 import {skipToken} from '@reduxjs/toolkit/query'
-import {useCallback, useEffect} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
 import LoadingButton from 'components/features/LoadingButton'
@@ -34,11 +34,11 @@ const defaultModule: Omit<ModuleVersion, 'icon'> & {icon: ''} = {
 
 const CreateModuleScreen = () => {
   const navigate = useNavigate()
-
   const {slug} = useParams<Params>()
   const isNewModule = !slug
+  const [isBeforeNavigation, setBeforeNavigation] = useState(false)
   const {data: module, isLoading: isGetModuleLoading} = useGetModuleQuery(
-    slug
+    slug && !isBeforeNavigation
       ? {
           slug,
         }
@@ -58,6 +58,7 @@ const CreateModuleScreen = () => {
 
   const createModuleVersionAndNavigate = useCallback(
     (data: ModuleVersion) => {
+      setBeforeNavigation(true)
       createModuleVersion(data).then(response => {
         if ('data' in response) {
           navigate(`/module/${data.moduleSlug}`)
