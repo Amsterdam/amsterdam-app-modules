@@ -44,5 +44,5 @@ urlpatterns = [
     re_path(r'^static/.*$', views.static),
 
     # Main index file
-    re_path(r'^.*$', views.index)
+    re_path(r'^(?!api).*$', views.index)  # Matches '', so everything BUT /api/....
 ]
