@@ -24,7 +24,7 @@ type Params = {
 
 const EditReleaseScreen = () => {
   const releaseModules = useSelector(selectReleaseModules)
-  const [isBeforeNavigation, setBeforeNavigation] = useState(false)
+  const [isBeforeNavigation, setIsBeforeNavigation] = useState(false)
   const {version: versionParam} = useParams<Params>()
   const {data: release, isLoading} = useGetReleaseQuery(
     versionParam && !isBeforeNavigation ? {version: versionParam} : skipToken,
@@ -65,7 +65,7 @@ const EditReleaseScreen = () => {
     const dirtyFieldsOnly: Partial<ReleaseBase> = {}
     const dirtyFieldKeys = Object.keys(dirtyFields) as Array<keyof ReleaseBase>
     const isModulesModified = !isEqual(releaseModules, initialReleaseModules)
-    setBeforeNavigation(true)
+    setIsBeforeNavigation(true)
     if (!dirtyFieldKeys.length && !isModulesModified) {
       // No changes made
       navigate('/releases')

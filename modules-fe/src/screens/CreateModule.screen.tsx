@@ -36,7 +36,7 @@ const CreateModuleScreen = () => {
   const navigate = useNavigate()
   const {slug} = useParams<Params>()
   const isNewModule = !slug
-  const [isBeforeNavigation, setBeforeNavigation] = useState(false)
+  const [isBeforeNavigation, setIsBeforeNavigation] = useState(false)
   const {data: module, isLoading: isGetModuleLoading} = useGetModuleQuery(
     slug && !isBeforeNavigation
       ? {
@@ -58,7 +58,7 @@ const CreateModuleScreen = () => {
 
   const createModuleVersionAndNavigate = useCallback(
     (data: ModuleVersion) => {
-      setBeforeNavigation(true)
+      setIsBeforeNavigation(true)
       createModuleVersion(data).then(response => {
         if ('data' in response) {
           navigate(`/module/${data.moduleSlug}`)
