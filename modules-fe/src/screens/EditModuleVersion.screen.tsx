@@ -1,4 +1,5 @@
 import {skipToken} from '@reduxjs/toolkit/query'
+import {useState} from 'react'
 import {FormProvider, useForm} from 'react-hook-form'
 import {useNavigate, useParams} from 'react-router-dom'
 import LoadingButton from 'components/features/LoadingButton'
@@ -28,8 +29,9 @@ const EditModuleScreen = () => {
   const navigate = useNavigate()
 
   const {slug: slugParam, version: versionParam} = useParams<Params>()
+  const [isBeforeNavigation, setIsBeforeNavigation] = useState(false)
   const {data: moduleVersion, isLoading} = useGetModuleVersionQuery(
-    slugParam && versionParam
+    slugParam && versionParam && !isBeforeNavigation
       ? {
           slug: slugParam,
           version: versionParam,
@@ -61,6 +63,7 @@ const EditModuleScreen = () => {
         `Weet je zeker dat je module ‘${title}’ v${version} wil verwijderen?`,
       )
     ) {
+      setIsBeforeNavigation(true)
       deleteModuleVersion({
         moduleSlug,
         version,
@@ -89,18 +92,16 @@ const EditModuleScreen = () => {
       dirtyFieldKeys.forEach(<K extends keyof ModuleVersion>(field: K) => {
         dirtyFieldsOnly[field] = data[field]
       })
-
+      setIsBeforeNavigation(true)
       editModuleVersion({
         ...dirtyFieldsOnly,
         moduleSlug,
         pathVersion: version,
+      }).then(response => {
+        if ('data' in response) {
+          navigate(`/module/${moduleSlug}`)
+        }
       })
-        .unwrap()
-        .then(response => {
-          if ('data' in response) {
-            navigate(`/module/${moduleSlug}`)
-          }
-        })
     }
   }
 
