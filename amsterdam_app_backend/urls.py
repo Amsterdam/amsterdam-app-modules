@@ -28,9 +28,6 @@ urlpatterns = [
     # WEB INTERFACE (react website for module and version management)
     #
 
-    # Main index file
-    path('', views.index),
-
     # CSS files
     re_path(r'^static/css/.*$', views.css_files),
 
@@ -44,5 +41,8 @@ urlpatterns = [
     re_path(r'^favicon.ico$', views.favicon),
 
     # Static files
-    re_path(r'^static/.*$', views.static)
+    re_path(r'^static/.*$', views.static),
+
+    # Main index file
+    re_path(r'^.*$', views.index)
 ]
