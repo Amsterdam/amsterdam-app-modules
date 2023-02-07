@@ -16,6 +16,7 @@ import LoadingScreen from 'screens/Loading.screen'
 import {
   useDeleteModuleVersionMutation,
   useEditModuleVersionMutation,
+  useGetModulesQuery,
   useGetModuleVersionQuery,
 } from 'services/modules'
 import {ModuleVersion} from 'types/module'
@@ -49,6 +50,14 @@ const EditModuleScreen = () => {
     deleteModuleVersion,
     {isLoading: isDeletingModule, error: deletingModuleError},
   ] = useDeleteModuleVersionMutation()
+  const {data: latestModules} = useGetModulesQuery(undefined, {
+    skip: isBeforeNavigation,
+  })
+  const isLatestVersion = latestModules?.some(
+    module =>
+      module.moduleSlug === slugParam && module.version === versionParam,
+  )
+
   const {handleSubmit, formState} = form
   const {dirtyFields} = formState
 
@@ -132,7 +141,7 @@ const EditModuleScreen = () => {
             <ModuleTitleField defaultValue={moduleVersion.title} />
             <ModuleDescriptionField defaultValue={moduleVersion.description} />
             <ModuleIconField defaultValue={moduleVersion.icon} />
-            {!isInRelease && (
+            {!isInRelease && !!isLatestVersion && (
               <VersionField
                 baseVersion={moduleVersion.version}
                 defaultValue={moduleVersion.version}
