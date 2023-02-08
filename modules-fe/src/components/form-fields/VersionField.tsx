@@ -1,5 +1,5 @@
 import RadioFieldSet from 'components/ui/forms/RadioFieldSet'
-import {createModuleVersionSuggestions} from 'utils/createModuleVersionSuggestions'
+import {createVersionSuggestions} from 'utils/createVersionSuggestions'
 
 type Props = {
   baseVersion: string
@@ -11,7 +11,7 @@ const VersionField = ({baseVersion, defaultValue}: Props) => (
     defaultValue={defaultValue}
     label="Versie"
     name="version"
-    options={createModuleVersionSuggestions(baseVersion, defaultValue)}
+    options={createVersionSuggestions(baseVersion, defaultValue)}
     rules={{required: 'Selecteer één van de mogelijke versies.'}}
   />
 )

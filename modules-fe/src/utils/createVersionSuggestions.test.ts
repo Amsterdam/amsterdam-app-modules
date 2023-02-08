@@ -1,11 +1,11 @@
-import {createModuleVersionSuggestions} from './createModuleVersionSuggestions'
+import {createVersionSuggestions} from './createVersionSuggestions'
 
-describe('createModuleVersionSuggestions', () => {
+describe('createVersionSuggestions', () => {
   it('should create version suggestions based on base version', () => {
     const baseVersion = '1.2.3'
     const expected = ['1.2.4', '1.3.0', '2.0.0']
 
-    expect(createModuleVersionSuggestions(baseVersion)).toEqual(expected)
+    expect(createVersionSuggestions(baseVersion)).toEqual(expected)
   })
 
   it('should use default value when provided', () => {
@@ -13,7 +13,7 @@ describe('createModuleVersionSuggestions', () => {
     const defaultValue = '2.0.0'
     const expected = [defaultValue, '1.3.0', '2.0.0']
 
-    expect(createModuleVersionSuggestions(baseVersion, defaultValue)).toEqual(
+    expect(createVersionSuggestions(baseVersion, defaultValue)).toEqual(
       expected,
     )
   })
@@ -22,6 +22,6 @@ describe('createModuleVersionSuggestions', () => {
     const baseVersion = '1.a.b'
     const expected = ['1.NaN.NaN', '1.NaN.0', '2.0.0']
 
-    expect(createModuleVersionSuggestions(baseVersion)).toEqual(expected)
+    expect(createVersionSuggestions(baseVersion)).toEqual(expected)
   })
 })

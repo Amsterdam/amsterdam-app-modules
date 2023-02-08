@@ -1,4 +1,4 @@
-export const createModuleVersionSuggestions = (
+export const createVersionSuggestions = (
   baseVersion: string,
   defaultValue?: string,
 ) => {
