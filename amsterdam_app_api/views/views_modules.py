@@ -16,6 +16,7 @@ from amsterdam_app_api.serializers import ModulesByAppSerializer
 from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
 from amsterdam_app_api.GenericFunctions.Sort import Sort
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
+from amsterdam_app_api.swagger.swagger_views_modules import as_modules_available_for_release
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_post
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_patch
 from amsterdam_app_api.swagger.swagger_views_modules import as_module_delete
@@ -120,12 +121,19 @@ def correct_version_format(version):
 
 
 def get_highest_version(versions):
-    """ Get latest version from a list of versions
+    """ Get the latest version from a list of versions
         e.g from ["1.2.3", "2.0.0", "1.5.8"] it returns "2.0.0"
     """
     def version_to_tuple(version):
         return tuple(map(int, version.split(".")))
     return max(versions, key=version_to_tuple)
+
+
+def is_less_or_equal_version(d, version):
+    d_version = d.get('version', '')
+    d_version_list = [int(x) for x in d_version.split('.')]
+    version_list = [int(x) for x in version.split('.')]
+    return d_version_list <= version_list
 
 
 def slug_status_in_releases(slug):
@@ -403,6 +411,60 @@ def modules_latest(request):
     sorted_result = Sort().list_of_dicts(items=result, key='title', sort_order='asc')
 
     return Response(sorted_result, status=200)
+
+
+@swagger_auto_schema(**as_modules_available_for_release)
+@api_view(['GET'])
+def modules_available_for_release(request, release_version):
+    """ Returns a list of all module versions eligible to be included in a new release with the given version.
+        The list is ordered by slug ascending, then by version number descending.
+
+        A module version is available if its version number is equal to or greater than the highest version number
+        of that module to have appeared in any release before the one with the given version. Additionally, all versions
+        of each module that has not appeared in a release is available.
+    """
+
+    # Algorithm:
+    #
+    # For each module:
+    # - Does any release less or equal to the requested release contain this module?
+    #     - Yes:
+    #         Return that version of the module plus any higher versions
+    #     - No:
+    #         Return all versions of that module
+    # sorteren on `slug` and secondly on `moduleVersion`
+    def release_version_to_int_list(_module):
+        return [int(x) for x in _module.appVersion.split('.')]
+
+    def module_version_to_int_list(_module):
+        return [int(x) for x in _module.version.split('.')]
+
+    def slug_from_module(_module):
+        return _module.slug
+
+    _modules = list(Module.objects.filter().all())
+    sorted_modules = sorted(_modules, key=slug_from_module, reverse=False)
+    _slug_in_releases = []
+    result = []
+    for _module in sorted_modules:
+        _slug_in_releases = list(ModulesByApp.objects.filter(moduleSlug=_module.slug).all())
+        _slug_in_releases_sorted_by_release_version = sorted(_slug_in_releases,
+                                                             key=release_version_to_int_list,
+                                                             reverse=True)
+        any_release_less_or_equal = [x for x in _slug_in_releases_sorted_by_release_version
+                                     if is_less_or_equal_version({'version': x.appVersion}, release_version)]
+
+        # Return that version of the module plus any higher versions
+        _module_versions = list(ModuleVersions.objects.filter(moduleSlug=_module.slug).all())
+        if any_release_less_or_equal:
+            last_module_version = any_release_less_or_equal[0].moduleVersion
+            _module_versions_sorted = sorted(_module_versions, key=module_version_to_int_list, reverse=True)
+            result += [x for x in _module_versions_sorted
+                       if is_less_or_equal_version({'version': x.version}, last_module_version)]
+        # Return all versions of that module sorted on moduleVersion
+        else:
+            result += sorted(_module_versions, key=module_version_to_int_list, reverse=True)
+    return Response(ModuleVersionsSerializer(result, many=True).data, status=200)
 
 
 @swagger_auto_schema(**as_module_slug_status)

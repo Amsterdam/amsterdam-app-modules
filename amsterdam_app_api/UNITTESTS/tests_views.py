@@ -1,5 +1,6 @@
 """ Unittest for views
 """
+import json
 from django.test import Client
 from django.test import TestCase
 from django.contrib.auth import get_user_model
@@ -523,6 +524,37 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 5)
 
+    def test_modules_available_for_release_1(self):
+        """ Test modules available for release """
+        c = Client()
+        response = c.get('/api/v1/modules/available-for-release/0.0.0')
+        expected_result = [
+            {"moduleSlug": "slug0", "title": "title", "version": "1.2.20", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug0", "title": "title", "version": "1.2.3", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug1", "title": "title", "version": "1.3.4", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug2", "title": "title", "version": "1.30.4", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug3", "title": "title", "version": "2.10.2", "description": "description", "icon": "icon"}
+        ]
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.content.decode('utf-8'))
+        for i in range(len(expected_result)):
+            self.assertDictEqual(expected_result[i], result[i])
+
+    def test_modules_available_for_release_2(self):
+        """ Test modules available for release """
+        c = Client()
+        response = c.get('/api/v1/modules/available-for-release/0.0.1')
+        expected_result = [
+            {'moduleSlug': 'slug0', 'title': 'title', 'version': '1.2.3', 'description': 'description', 'icon': 'icon'},
+            {'moduleSlug': 'slug1', 'title': 'title', 'version': '1.3.4', 'description': 'description', 'icon': 'icon'},
+            {'moduleSlug': 'slug2', 'title': 'title', 'version': '1.30.4', 'description': 'description', 'icon': 'icon'},
+            {'moduleSlug': 'slug3', 'title': 'title', 'version': '2.10.2', 'description': 'description', 'icon': 'icon'}
+        ]
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.content.decode('utf-8'))
+        for i in range(len(expected_result)):
+            self.assertDictEqual(expected_result[i], result[i])
+
     def test_modules_by_app_get(self):
         """ test get modules by app """
         c = Client()
@@ -697,7 +729,6 @@ class Views(TestCase):
         }
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
-
 
     def test_release_get_409(self):
         """ Test get release integrity error """
