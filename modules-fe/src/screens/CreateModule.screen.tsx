@@ -45,9 +45,7 @@ const CreateModuleScreen = () => {
       : skipToken,
   )
   const latestVersion =
-    !isNewModule && module?.versions
-      ? module.versions[module.versions.length - 1]
-      : defaultModule
+    !isNewModule && module?.versions ? module.versions[0] : defaultModule
 
   const form = useForm<ModuleVersion>()
   const [createModule, {isLoading: isMutateModuleLoading}] =
