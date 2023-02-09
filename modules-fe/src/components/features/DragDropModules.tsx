@@ -5,7 +5,7 @@ import DraggableModules from 'components/features/DraggableModules'
 import Column from 'components/ui/layout/Column'
 import Grid from 'components/ui/layout/Grid'
 import LoadingScreen from 'screens/Loading.screen'
-import {useGetModulesQuery} from 'services/modules'
+import {useGetModulesAvailableForReleaseQuery} from 'services/modules'
 import {selectReleaseModules, setModules} from 'slices/release.slice'
 import {addToList, removeFromList, reorderList} from 'utils/list'
 
@@ -13,19 +13,28 @@ enum DroppableId {
   includedModules = 'includedModules',
   excludedModules = 'excludedModules',
 }
-const DragDropModules = () => {
+
+type Props = {
+  releaseVersion: string
+}
+
+const DragDropModules = ({releaseVersion}: Props) => {
   const dispatch = useDispatch()
   const releaseModules = useSelector(selectReleaseModules)
-  const {data: modules, isLoading: isLoadingModules} = useGetModulesQuery()
+  const {data: modulesAvailableForRelease, isLoading: isLoadingModules} =
+    useGetModulesAvailableForReleaseQuery(releaseVersion)
+
   const inactiveModules = useMemo(
     () =>
-      modules?.filter(
+      modulesAvailableForRelease?.filter(
         module =>
           !releaseModules.find(
-            activeModule => activeModule.moduleSlug === module.moduleSlug,
+            activeModule =>
+              activeModule.moduleSlug === module.moduleSlug &&
+              activeModule.version === module.version,
           ),
       ) ?? [],
-    [modules, releaseModules],
+    [modulesAvailableForRelease, releaseModules],
   )
 
   const onDragEnd = useCallback(
@@ -51,10 +60,13 @@ const DragDropModules = () => {
         dispatch(setModules(items))
       } else if (destination.droppableId === DroppableId.includedModules) {
         // dropped inside the active modules list
+        const draggingModule = inactiveModules[source.index]
         const items = addToList(
-          releaseModules,
+          releaseModules.filter(
+            module => module.moduleSlug !== draggingModule.moduleSlug,
+          ),
           destination.index,
-          inactiveModules[source.index],
+          draggingModule,
         )
         dispatch(setModules(items))
       }
@@ -66,7 +78,7 @@ const DragDropModules = () => {
     return <LoadingScreen />
   }
 
-  if (!modules) {
+  if (!modulesAvailableForRelease) {
     return null
   }
 
