@@ -49,7 +49,7 @@ class ModuleVersionsByRelease(models.Model):
     class Meta:
         """ Constraints (unique together is deprecated)
         """
-        constraints = [models.UniqueConstraint(fields=["appVersion", "moduleSlug"],
+        constraints = [models.UniqueConstraint(fields=["releaseVersion", "moduleSlug"],
                                                name="unique_appVersion_moduleSlug")]
 
     def delete(self, *args, **kwargs):

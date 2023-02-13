@@ -18,14 +18,14 @@ class AllModulesModels(TestCase):
 
         ]
         self.modules_by_app = [
-            {'appVersion': '0.0.0', 'moduleSlug': 'slug0', 'moduleVersion': '0.0.0', 'status': 1},
-            {'appVersion': '0.0.1', 'moduleSlug': 'slug0', 'moduleVersion': '0.0.0', 'status': 1},
-            {'appVersion': '0.0.1', 'moduleSlug': 'slug1', 'moduleVersion': '0.0.0', 'status': 1},
-            {'appVersion': '0.0.1', 'moduleSlug': 'slug2', 'moduleVersion': '0.0.0', 'status': 1}
+            {'releaseVersion': '0.0.0', 'moduleSlug': 'slug0', 'moduleVersion': '0.0.0', 'status': 1},
+            {'releaseVersion': '0.0.1', 'moduleSlug': 'slug0', 'moduleVersion': '0.0.0', 'status': 1},
+            {'releaseVersion': '0.0.1', 'moduleSlug': 'slug1', 'moduleVersion': '0.0.0', 'status': 1},
+            {'releaseVersion': '0.0.1', 'moduleSlug': 'slug2', 'moduleVersion': '0.0.0', 'status': 1}
         ]
         self.module_order = [
-            {'appVersion': '0.0.0', 'order': ['slug0']},
-            {'appVersion': '0.0.1', 'order': ['slug0', 'slug1', 'slug2']}
+            {'releaseVersion': '0.0.0', 'order': ['slug0']},
+            {'releaseVersion': '0.0.1', 'order': ['slug0', 'slug1', 'slug2']}
         ]
         self.releases = [
             {
@@ -113,21 +113,21 @@ class AllModulesModels(TestCase):
         """
         self.init_modules()
 
-        module = ModuleVersionsByRelease.objects.filter(appVersion='0.0.1', moduleSlug='slug1').first()
+        module = ModuleVersionsByRelease.objects.filter(releaseVersion='0.0.1', moduleSlug='slug1').first()
         module.delete()
-        order = ModuleOrderSerializer(ModuleOrder.objects.filter(appVersion='0.0.1').first(), many=False).data
+        order = ModuleOrderSerializer(ModuleOrder.objects.filter(releaseVersion='0.0.1').first(), many=False).data
         modules_by_app = list(ModuleVersionsByRelease.objects.all())
         self.assertEqual(len(modules_by_app), 3)
-        self.assertDictEqual(order, {'appVersion': '0.0.1', 'order': ['slug0', 'slug2']})
+        self.assertDictEqual(order, {'releaseVersion': '0.0.1', 'order': ['slug0', 'slug2']})
 
     def test_modules_by_app_partial_update(self):
         """ Test partial update on modules_by_app (patch)
         :return: void
         """
         ModuleVersionsByRelease.objects.create(**self.modules_by_app[0])
-        module = ModuleVersionsByRelease.objects.filter(moduleSlug='slug0', appVersion='0.0.0').first()
+        module = ModuleVersionsByRelease.objects.filter(moduleSlug='slug0', releaseVersion='0.0.0').first()
         module.partial_update(status=0)
-        data = ModuleVersionsByRelease.objects.filter(moduleSlug='slug0', appVersion='0.0.0').first()
+        data = ModuleVersionsByRelease.objects.filter(moduleSlug='slug0', releaseVersion='0.0.0').first()
         self.assertEqual(data.status, 0)
 
     def test_release_create_modify(self):

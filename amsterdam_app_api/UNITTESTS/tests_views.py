@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 """ Unittest for views
 """
 import json
@@ -194,7 +195,7 @@ class Views(TestCase):
         response = c.delete('/api/v1/module/slug0',
                             HTTP_AUTHORIZATION=self.authorization_header,
                             content_type='application/json')
-        expected_result = {"message": "Module with slug ‘slug0’ is being used in a release."}
+        expected_result = {"message": "Cannot delete module with slug ‘slug0’ while its version ‘1.2.3’ exists."}
         self.assertEqual(response.status_code, 403)
         self.assertDictEqual(response.data, expected_result)
 
@@ -455,14 +456,6 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertDictEqual(response.data, expected_result)
 
-    def test_modules_app_versions(self):
-        """ get all app versions """
-        c = Client()
-        response = c.get('/api/v1/modules_app_versions')
-        expected_result = {'status': True, 'result': ['0.1.1', '0.0.2', '0.0.1', '0.0.0']}
-        self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, expected_result)
-
     def test_modules_for_app_no_header(self):
         """ test modules for app get (no app version) """
         c = Client()
@@ -520,7 +513,7 @@ class Views(TestCase):
     def test_modules_latest(self):
         """ test modules/latest """
         c = Client()
-        response = c.get('/api/v1/modules/latest', HTTP_appVersion='0.0.0')
+        response = c.get('/api/v1/modules/latest', HTTP_releaseVersion='0.0.0')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 5)
 
@@ -529,10 +522,12 @@ class Views(TestCase):
         c = Client()
         response = c.get('/api/v1/modules/available-for-release/0.0.0')
         expected_result = [
-            {"moduleSlug": "slug0", "title": "title", "version": "1.2.20", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug0", "title": "title", "version": "1.2.20", "description": "description",
+             "icon": "icon"},
             {"moduleSlug": "slug0", "title": "title", "version": "1.2.3", "description": "description", "icon": "icon"},
             {"moduleSlug": "slug1", "title": "title", "version": "1.3.4", "description": "description", "icon": "icon"},
-            {"moduleSlug": "slug2", "title": "title", "version": "1.30.4", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug2", "title": "title", "version": "1.30.4", "description": "description",
+             "icon": "icon"},
             {"moduleSlug": "slug3", "title": "title", "version": "2.10.2", "description": "description", "icon": "icon"}
         ]
         self.assertEqual(response.status_code, 200)
@@ -545,36 +540,18 @@ class Views(TestCase):
         c = Client()
         response = c.get('/api/v1/modules/available-for-release/0.0.1')
         expected_result = [
+            {'moduleSlug': 'slug0', 'title': 'title', 'version': '1.2.20', 'description': 'description',
+             'icon': 'icon'},
             {'moduleSlug': 'slug0', 'title': 'title', 'version': '1.2.3', 'description': 'description', 'icon': 'icon'},
             {'moduleSlug': 'slug1', 'title': 'title', 'version': '1.3.4', 'description': 'description', 'icon': 'icon'},
-            {'moduleSlug': 'slug2', 'title': 'title', 'version': '1.30.4', 'description': 'description', 'icon': 'icon'},
+            {'moduleSlug': 'slug2', 'title': 'title', 'version': '1.30.4', 'description': 'description',
+             'icon': 'icon'},
             {'moduleSlug': 'slug3', 'title': 'title', 'version': '2.10.2', 'description': 'description', 'icon': 'icon'}
         ]
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.content.decode('utf-8'))
         for i in range(len(expected_result)):
             self.assertDictEqual(expected_result[i], result[i])
-
-    def test_modules_by_app_get(self):
-        """ test get modules by app """
-        c = Client()
-        data = {'appVersion': '0.0.1'}
-        response = c.get('/api/v1/modules_by_app',
-                         data=data,
-                         HTTP_AUTHORIZATION=self.authorization_header,
-                         content_type='application/json',
-                         accept='application/json')
-        expected_result = {
-            'status': True,
-            'result': [
-                {'appVersion': '0.0.1', 'moduleSlug': 'slug0', 'moduleVersion': '1.2.3', 'status': 1},
-                {'appVersion': '0.0.1', 'moduleSlug': 'slug1', 'moduleVersion': '1.3.4', 'status': 0},
-                {'appVersion': '0.0.1', 'moduleSlug': 'slug2', 'moduleVersion': '1.30.4', 'status': 1},
-                {'appVersion': '0.0.1', 'moduleSlug': 'slug3', 'moduleVersion': '2.10.2', 'status': 1}
-            ]
-        }
-        self.assertEqual(response.status_code, 200)
-        self.assertDictEqual(response.data, expected_result)
 
     def test_module_version_status_path_404(self):
         """ Test /api/v1/module/{slug}/version/{version}/status 404 """
@@ -732,7 +709,7 @@ class Views(TestCase):
 
     def test_release_get_409(self):
         """ Test get release integrity error """
-        ModuleOrder.objects.filter(appVersion='0.0.1').delete()
+        ModuleOrder.objects.filter(releaseVersion='0.0.1').delete()
         c = Client()
         response = c.get('/api/v1/release/0.0.1',
                          HTTP_AUTHORIZATION=self.authorization_header,
@@ -875,11 +852,11 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
-        module_order = ModuleOrder.objects.filter(appVersion='10.0.0').first()
-        self.assertEqual(module_order.appVersion, '10.0.0')
+        module_order = ModuleOrder.objects.filter(releaseVersion='10.0.0').first()
+        self.assertEqual(module_order.releaseVersion, '10.0.0')
         self.assertListEqual(module_order.order, ['slug0'])
 
-        _modules_by_app = list(ModuleVersionsByRelease.objects.filter(appVersion='10.0.0').all())
+        _modules_by_app = list(ModuleVersionsByRelease.objects.filter(releaseVersion='10.0.0').all())
         _modules_by_app_serialized = ModuleVersionsByReleaseSerializer(_modules_by_app, many=True).data
 
         self.assertEqual(len(_modules_by_app_serialized), 1)
@@ -887,8 +864,13 @@ class Views(TestCase):
     def test_releases_get(self):
         """ test releases """
         import datetime  # pylint: disable=unused-import
-        _module_by_app = {'appVersion': '0.0.0', 'moduleSlug': 'slug0', 'moduleVersion': '0.0.1', 'status': 1}
-        ModuleVersionsByRelease.objects.create(**_module_by_app)
+        _module_version_by_release = {
+            'releaseVersion': '0.0.0',
+            'moduleSlug': 'slug0',
+            'moduleVersion': '0.0.1',
+            'status': 1
+        }
+        ModuleVersionsByRelease.objects.create(**_module_version_by_release)
 
         _module_version = {
             'moduleSlug': 'slug0',
@@ -1079,11 +1061,11 @@ class Views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.data, expected_result)
 
-        module_order = ModuleOrder.objects.filter(appVersion='10.0.0').first()
-        self.assertEqual(module_order.appVersion, '10.0.0')
+        module_order = ModuleOrder.objects.filter(releaseVersion='10.0.0').first()
+        self.assertEqual(module_order.releaseVersion, '10.0.0')
         self.assertListEqual(module_order.order, ['slug0'])
 
-        _modules_by_app = list(ModuleVersionsByRelease.objects.filter(appVersion='10.0.0').all())
+        _modules_by_app = list(ModuleVersionsByRelease.objects.filter(releaseVersion='10.0.0').all())
         _modules_by_app_serialized = ModuleVersionsByReleaseSerializer(_modules_by_app, many=True).data
 
         self.assertEqual(len(_modules_by_app_serialized), 1)

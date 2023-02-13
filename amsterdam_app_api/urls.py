@@ -33,12 +33,8 @@ urlpatterns = [
     path('token/access', csrf_exempt(TokenObtainPairView.as_view()), name='token_obtain_pair'),
     path('token/refresh', csrf_exempt(TokenRefreshView.as_view()), name='token_refresh'),
 
-    # Legacy API app-version < 0.28.0
+    # Legacy API app-version < 0.29.0
     path('modules_for_app', csrf_exempt(views_modules.modules_for_app_get)),
-
-    # Modules
-    path('modules_app_versions', csrf_exempt(views_modules.modules_app_versions)),
-    path('modules_by_app', csrf_exempt(views_modules.modules_by_app)),
 
     # End-points from https://amsterdam-app.stoplight.io/docs/amsterdam-app/
     path('module/<str:slug>/version/<str:version>/status', csrf_exempt(views_modules.module_version_status)),
