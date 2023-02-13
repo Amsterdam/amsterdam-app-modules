@@ -136,6 +136,13 @@ def is_less_or_equal_version(d, version):
     return d_version_list <= version_list
 
 
+def is_higer_or_equal_version(d, version):
+    d_version = d.get('version', '')
+    d_version_list = [int(x) for x in d_version.split('.')]
+    version_list = [int(x) for x in version.split('.')]
+    return d_version_list >= version_list
+
+
 def slug_status_in_releases(slug):
     """ Get status in releases
     :param slug:
@@ -460,7 +467,7 @@ def modules_available_for_release(request, release_version):
             last_module_version = any_release_less_or_equal[0].moduleVersion
             _module_versions_sorted = sorted(_module_versions, key=module_version_to_int_list, reverse=True)
             result += [x for x in _module_versions_sorted
-                       if is_less_or_equal_version({'version': x.version}, last_module_version)]
+                       if is_higer_or_equal_version({'version': x.version}, last_module_version)]
         # Return all versions of that module sorted on moduleVersion
         else:
             result += sorted(_module_versions, key=module_version_to_int_list, reverse=True)
