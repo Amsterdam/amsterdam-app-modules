@@ -62,6 +62,7 @@
   --bg-color-button: var(--baseColor-primary-blue);
   --bg-color-button-hover: var(--baseColor-functional-darkblue);
   --bg-color-button-disabled: var(--baseColor-neutral-grey3);
+  --bg-color-dragging-over: var(--baseColor-custom-grey1);
 
   /* border colors */
   --border-color-cutout: var(--baseColor-primary-white);
