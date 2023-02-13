@@ -7,12 +7,12 @@ from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
 from amsterdam_app_api.models import Module
 from amsterdam_app_api.models import ModuleVersions
-from amsterdam_app_api.models import ModulesByApp
+from amsterdam_app_api.models import ModuleVersionsByRelease
 from amsterdam_app_api.models import ModuleOrder
 from amsterdam_app_api.models import Releases
 from amsterdam_app_api.serializers import ModuleSerializer
 from amsterdam_app_api.serializers import ModuleVersionsSerializer
-from amsterdam_app_api.serializers import ModulesByAppSerializer
+from amsterdam_app_api.serializers import ModuleVersionsByReleaseSerializer
 from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
 from amsterdam_app_api.GenericFunctions.Sort import Sort
 from amsterdam_app_api.swagger.swagger_views_modules import as_modules_latest
@@ -44,9 +44,9 @@ message = Messages()
 @api_view(['GET'])
 def modules_app_versions(request):
     """ GET app versions """
-    app_versions = [x['appVersion'] for x in list((ModulesByApp.objects.all().values('appVersion').distinct()))]
-    app_versions.sort(reverse=True)
-    return Response({'status': True, 'result': app_versions})
+    releaseVersion = [x['releaseVersion'] for x in list((ModuleVersionsByRelease.objects.all().values('releaseVersion').distinct()))]
+    releaseVersion.sort(reverse=True)
+    return Response({'status': True, 'result': releaseVersion})
 
 
 @swagger_auto_schema(**as_modules_by_app_get)
@@ -54,9 +54,9 @@ def modules_app_versions(request):
 def modules_by_app(request):
     """ Get modules by app
     """
-    app_version = request.GET.get('appVersion')
-    modules_data = list(ModulesByApp.objects.filter(appVersion=app_version).all())
-    data = ModulesByAppSerializer(modules_data, many=True).data
+    release_version = request.GET.get('releaseVersion')
+    modules_data = list(ModuleVersionsByRelease.objects.filter(releaseVersion=release_version).all())
+    data = ModuleVersionsByReleaseSerializer(modules_data, many=True).data
 
     # Remove Key from Dictionary List
     del_key = 'id'
@@ -67,22 +67,22 @@ def modules_by_app(request):
 @swagger_auto_schema(**as_modules_for_app_get)
 @api_view(['GET'])
 def modules_for_app_get(request):
-    """ GET module for app (by appVersion header) """
-    app_version = request.headers.get('appVersion')
-    modules_by_app_data = list(ModulesByApp.objects.filter(appVersion=app_version).all())
-    module_order_data = ModuleOrder.objects.filter(appVersion=app_version).first()
+    """ GET modules for release with (obsoleted) appVersion header. """
+    release_version = request.headers.get('appVersion')
+    modules_by_release_version = list(ModuleVersionsByRelease.objects.filter(releaseVersion=release_version).all())
+    module_order_data = ModuleOrder.objects.filter(releaseVersion=release_version).first()
 
     _modules = []
-    for module_by_app in modules_by_app_data:
-        _module_version = ModuleVersions.objects.filter(moduleSlug=module_by_app.moduleSlug,
-                                                        version=module_by_app.moduleVersion).first()
-        _module = Module.objects.filter(slug=module_by_app.moduleSlug).first()
+    for module_by_release_version in modules_by_release_version:
+        _module_version = ModuleVersions.objects.filter(moduleSlug=module_by_release_version.moduleSlug,
+                                                        version=module_by_release_version.moduleVersion).first()
+        _module = Module.objects.filter(slug=module_by_release_version.moduleSlug).first()
         if _module_version is not None:
             _modules.append({
                 'description': _module_version.description,
                 'icon': _module_version.icon,
                 'slug': _module_version.moduleSlug,
-                'status': _module.status if _module.status == 0 else module_by_app.status,
+                'status': _module.status if _module.status == 0 else module_by_release_version.status,
                 'title': _module_version.title,
                 'version': _module_version.version
             })
@@ -144,18 +144,21 @@ def slug_status_in_releases(slug):
     module_versions = list(ModuleVersions.objects.filter(moduleSlug=slug).all())
     _slug_status_in_releases = {}
     for _module_version in module_versions:
-        releases = ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=_module_version.version).all()
+        releases = ModuleVersionsByRelease.objects.filter(moduleSlug=slug, moduleVersion=_module_version.version).all()
         status_in_releases = {}
         for _release in releases:
             if _release.status in status_in_releases:
-                status_in_releases[_release.status]['releases'].append(_release.appVersion)
+                status_in_releases[_release.status]['releases'].append(_release.releaseVersion)
             else:
-                status_in_releases[_release.status] = {'releases': [_release.appVersion]}
+                status_in_releases[_release.status] = {'releases': [_release.releaseVersion]}
         _slug_status_in_releases[_module_version.version] = [
             {'status': k, 'releases': v['releases']} for k, v in status_in_releases.items()
         ]
     return _slug_status_in_releases
 
+####
+#### TOT HIER
+####
 
 @swagger_auto_schema(**as_module_slug_get)
 @swagger_auto_schema(**as_module_patch)
@@ -242,8 +245,10 @@ def module_slug_patch(request, slug=None):
 @IsAuthorized
 def module_slug_delete(request, slug=None):
     """ Delete module slug"""
-    if list(ModuleVersions.objects.filter(moduleSlug=slug).all()):
-        return Response({"message": f"Module with slug ‘{slug}’ is being used in a release."}, status=403)
+    _module = ModuleVersions.objects.filter(moduleSlug=slug).first()
+    if _module is not None:
+        _message = f"Cannot delete module with slug ‘{slug}’ while its version ‘{_module.version}’ exists."
+        return Response({"message": _message}, status=403)
 
     Module.objects.filter(slug=slug).delete()
     return Response(status=200)
@@ -327,7 +332,7 @@ def module_version_patch(request, slug=None, version=None):
     if 'version' in data and not correct_version_format(data['version']):
         return Response({"message": 'incorrect request version formatting.'}, status=400)
 
-    _module_by_app = ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).first()
+    _module_by_app = ModuleVersionsByRelease.objects.filter(moduleSlug=slug, moduleVersion=version).first()
     if 'version' in data and version != data['version'] and _module_by_app is not None:
         _message = f"Module with slug ‘{slug}’ and version ‘{version}’ in use by release ‘{_module_by_app.appVersion}‘."
         return Response({"message": _message}, status=403)
@@ -351,7 +356,7 @@ def module_version_delete(request, slug=None, version=None):
     if _module_version is None:
         return Response({"message": f"Module with slug ‘{slug}’ and version ‘{version}’ not found."}, status=404)
 
-    _module_version_in_releases = list(ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).all())
+    _module_version_in_releases = list(ModuleVersionsByRelease.objects.filter(moduleSlug=slug, moduleVersion=version).all())
     if len(_module_version_in_releases) != 0:
         return Response({"message": f"Module with slug ‘{slug}’ is being used in a release."}, status=403)
 
@@ -447,7 +452,7 @@ def modules_available_for_release(request, release_version):
     _slug_in_releases = []
     result = []
     for _module in sorted_modules:
-        _slug_in_releases = list(ModulesByApp.objects.filter(moduleSlug=_module.slug).all())
+        _slug_in_releases = list(ModuleVersionsByRelease.objects.filter(moduleSlug=_module.slug).all())
         _slug_in_releases_sorted_by_release_version = sorted(_slug_in_releases,
                                                              key=release_version_to_int_list,
                                                              reverse=True)
@@ -483,9 +488,9 @@ def module_version_status(request, slug, version):
     for i in range(len(data)):
         _app_versions = data[i]['releases']
         for _app_version in _app_versions:
-            module_by_app = ModulesByApp.objects.filter(moduleSlug=slug,
-                                                        moduleVersion=version,
-                                                        appVersion=_app_version).first()
+            module_by_app = ModuleVersionsByRelease.objects.filter(moduleSlug=slug,
+                                                                   moduleVersion=version,
+                                                                   appVersion=_app_version).first()
             if module_by_app is None:
                 response = {
                     "message": "specified a release that doesn’t contain the module version or doesn’t even exist."
@@ -496,15 +501,15 @@ def module_version_status(request, slug, version):
     for i in range(len(data)):
         _app_versions = data[i]['releases']
         for _app_version in _app_versions:
-            module_by_app = ModulesByApp.objects.filter(moduleSlug=slug,
-                                                        moduleVersion=version,
-                                                        appVersion=_app_version).first()
+            module_by_app = ModuleVersionsByRelease.objects.filter(moduleSlug=slug,
+                                                                   moduleVersion=version,
+                                                                   appVersion=_app_version).first()
             module_by_app.status = data[i]['status']
             module_by_app.save()
 
     # Retrieve (modified) modules from database
     _releases = {}
-    _modules_by_app = list(ModulesByApp.objects.filter(moduleSlug=slug, moduleVersion=version).all())
+    _modules_by_app = list(ModuleVersionsByRelease.objects.filter(moduleSlug=slug, moduleVersion=version).all())
     for _module in _modules_by_app:
         if str(_module.status) not in _releases:
             _releases[str(_module.status)] = [_module.appVersion]
@@ -554,7 +559,7 @@ def get_release(request, version):
         _modules = []
         for _slug in _module_order.order:
 
-            _module_by_app = ModulesByApp.objects.filter(appVersion=version, moduleSlug=_slug).first()
+            _module_by_app = ModuleVersionsByRelease.objects.filter(appVersion=version, moduleSlug=_slug).first()
             _module_version = ModuleVersions.objects.filter(moduleSlug=_slug,
                                                             version=_module_by_app.moduleVersion).first()
             _module = Module.objects.filter(slug=_slug).first()
@@ -640,7 +645,7 @@ def post_release(request):
             'moduleVersion': _module['version'],
             'status': _module['status']
         }
-        ModulesByApp.objects.create(**_module_by_app)
+        ModuleVersionsByRelease.objects.create(**_module_by_app)
 
     # Add new modules order
     ModuleOrder.objects.create(**_module_order)
@@ -653,7 +658,7 @@ def post_release(request):
     _module_order = ModuleOrder.objects.filter(appVersion=data['version']).first()
     _modules = []
     for _slug in _module_order.order:
-        _module = ModulesByApp.objects.filter(appVersion=data['version'], moduleSlug=_slug).first()
+        _module = ModuleVersionsByRelease.objects.filter(appVersion=data['version'], moduleSlug=_slug).first()
         _modules.append({'moduleSlug': _module.moduleSlug, 'version': _module.moduleVersion, 'status': _module.status})
 
     result = {
@@ -712,7 +717,7 @@ def patch_release(request, version=None):
 
     # If there's a modules patch
     if 'modules' in data:
-        ModulesByApp.objects.filter(appVersion=version).delete()
+        ModuleVersionsByRelease.objects.filter(appVersion=version).delete()
         ModuleOrder.objects.filter(appVersion=version).delete()
 
         # Add modules to release
@@ -725,7 +730,7 @@ def patch_release(request, version=None):
                 'moduleVersion': _module['version'],
                 'status': _module['status']
             }
-            ModulesByApp.objects.create(**_module_by_app)
+            ModuleVersionsByRelease.objects.create(**_module_by_app)
 
         # Add new modules order
         ModuleOrder.objects.create(**_module_order)
@@ -745,7 +750,7 @@ def patch_release(request, version=None):
     _module_order = ModuleOrder.objects.filter(appVersion=new_version).first()
     _modules = []
     for _slug in _module_order.order:
-        _module = ModulesByApp.objects.filter(appVersion=new_version, moduleSlug=_slug).first()
+        _module = ModuleVersionsByRelease.objects.filter(appVersion=new_version, moduleSlug=_slug).first()
         _modules.append({'moduleSlug': _module.moduleSlug, 'version': _module.moduleVersion, 'status': _module.status})
 
     result = {
@@ -769,7 +774,7 @@ def delete_release(request, version=None):
     if _release.published is not None:
         return Response({'message': f'Release version ‘{version}’ is already published.'}, status=403)
     _release.delete()
-    ModulesByApp.objects.filter(appVersion=version).delete()
+    ModuleVersionsByRelease.objects.filter(appVersion=version).delete()
     ModuleOrder.objects.filter(appVersion=version).delete()
     return Response(status=200)
 
@@ -786,7 +791,7 @@ def get_releases(request):
         _modules = []
         for _slug in _module_order.order:
             try:
-                _module_by_app = ModulesByApp.objects.filter(appVersion=_release.version, moduleSlug=_slug).first()
+                _module_by_app = ModuleVersionsByRelease.objects.filter(appVersion=_release.version, moduleSlug=_slug).first()
                 _module_version = ModuleVersions.objects.filter(moduleSlug=_slug,
                                                                 version=_module_by_app.moduleVersion).first()
 

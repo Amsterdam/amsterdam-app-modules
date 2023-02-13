@@ -3,7 +3,7 @@
 from rest_framework import serializers
 from amsterdam_app_api.models import Module
 from amsterdam_app_api.models import ModuleVersions
-from amsterdam_app_api.models import ModulesByApp
+from amsterdam_app_api.models import ModuleVersionsByRelease
 from amsterdam_app_api.models import ModuleOrder
 
 
@@ -21,10 +21,10 @@ class ModuleVersionsSerializer(serializers.ModelSerializer):
         fields = ('moduleSlug', 'title', 'version', 'description', 'icon')
 
 
-class ModulesByAppSerializer(serializers.ModelSerializer):
-    """ Modules by app """
+class ModuleVersionsByReleaseSerializer(serializers.ModelSerializer):
+    """ ModuleVersions by release """
     class Meta:
-        model = ModulesByApp
+        model = ModuleVersionsByRelease
         fields = '__all__'
 
 

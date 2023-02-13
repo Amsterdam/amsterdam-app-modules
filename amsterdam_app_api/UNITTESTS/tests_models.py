@@ -2,7 +2,7 @@
 """
 from django.test import TestCase
 from amsterdam_app_api.serializers import ModuleOrderSerializer
-from amsterdam_app_api.models import ModuleVersions, ModuleOrder, ModulesByApp, Releases
+from amsterdam_app_api.models import ModuleVersions, ModuleOrder, ModuleVersionsByRelease, Releases
 
 
 class AllModulesModels(TestCase):
@@ -45,7 +45,7 @@ class AllModulesModels(TestCase):
     def setUp(self):
         ModuleVersions.objects.all().delete()
         ModuleOrder.objects.all().delete()
-        ModulesByApp.objects.all().delete()
+        ModuleVersionsByRelease.objects.all().delete()
         Releases.objects.all().delete()
 
     def init_modules(self):
@@ -55,7 +55,7 @@ class AllModulesModels(TestCase):
         for module in self.module_versions:
             ModuleVersions.objects.create(**module)
         for module_by_app in self.modules_by_app:
-            ModulesByApp.objects.create(**module_by_app)
+            ModuleVersionsByRelease.objects.create(**module_by_app)
         for order in self.module_order:
             ModuleOrder.objects.create(**order)
         for release in self.releases:
@@ -94,17 +94,17 @@ class AllModulesModels(TestCase):
         """ Test saving module_by_app
         :return: void
         """
-        ModulesByApp.objects.create(**self.modules_by_app[0])
-        data = list(ModulesByApp.objects.all())
+        ModuleVersionsByRelease.objects.create(**self.modules_by_app[0])
+        data = list(ModuleVersionsByRelease.objects.all())
         self.assertEqual(len(data), 1)
 
     def test_modules_by_app_constraint_violation(self):
         """ check if constraints are working on modules_by_app
         :return: void
         """
-        ModulesByApp.objects.create(**self.modules_by_app[0])
-        data = list(ModulesByApp.objects.all())
-        self.assertRaises(Exception, ModulesByApp.objects.create, **self.modules_by_app[0])
+        ModuleVersionsByRelease.objects.create(**self.modules_by_app[0])
+        data = list(ModuleVersionsByRelease.objects.all())
+        self.assertRaises(Exception, ModuleVersionsByRelease.objects.create, **self.modules_by_app[0])
         self.assertEqual(len(data), 1)
 
     def test_modules_by_app_delete(self):
@@ -113,10 +113,10 @@ class AllModulesModels(TestCase):
         """
         self.init_modules()
 
-        module = ModulesByApp.objects.filter(appVersion='0.0.1', moduleSlug='slug1').first()
+        module = ModuleVersionsByRelease.objects.filter(appVersion='0.0.1', moduleSlug='slug1').first()
         module.delete()
         order = ModuleOrderSerializer(ModuleOrder.objects.filter(appVersion='0.0.1').first(), many=False).data
-        modules_by_app = list(ModulesByApp.objects.all())
+        modules_by_app = list(ModuleVersionsByRelease.objects.all())
         self.assertEqual(len(modules_by_app), 3)
         self.assertDictEqual(order, {'appVersion': '0.0.1', 'order': ['slug0', 'slug2']})
 
@@ -124,10 +124,10 @@ class AllModulesModels(TestCase):
         """ Test partial update on modules_by_app (patch)
         :return: void
         """
-        ModulesByApp.objects.create(**self.modules_by_app[0])
-        module = ModulesByApp.objects.filter(moduleSlug='slug0', appVersion='0.0.0').first()
+        ModuleVersionsByRelease.objects.create(**self.modules_by_app[0])
+        module = ModuleVersionsByRelease.objects.filter(moduleSlug='slug0', appVersion='0.0.0').first()
         module.partial_update(status=0)
-        data = ModulesByApp.objects.filter(moduleSlug='slug0', appVersion='0.0.0').first()
+        data = ModuleVersionsByRelease.objects.filter(moduleSlug='slug0', appVersion='0.0.0').first()
         self.assertEqual(data.status, 0)
 
     def test_release_create_modify(self):

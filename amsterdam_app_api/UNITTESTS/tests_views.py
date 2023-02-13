@@ -5,8 +5,8 @@ from django.test import Client
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from amsterdam_app_api.UNITTESTS.TestData import TestData
-from amsterdam_app_api.models import Module, ModuleVersions, ModulesByApp, ModuleOrder, Releases
-from amsterdam_app_api.serializers import ModulesByAppSerializer
+from amsterdam_app_api.models import Module, ModuleVersions, ModuleVersionsByRelease, ModuleOrder, Releases
+from amsterdam_app_api.serializers import ModuleVersionsByReleaseSerializer
 
 username = 'mock'
 password = 'unsave'
@@ -25,7 +25,7 @@ class SetUp:
             ModuleVersions.objects.create(**module)
 
         for module_by_app in self.data.modules_by_app:
-            ModulesByApp.objects.create(**module_by_app)
+            ModuleVersionsByRelease.objects.create(**module_by_app)
 
         for module_order in self.data.module_order:
             ModuleOrder.objects.create(**module_order)
@@ -879,8 +879,8 @@ class Views(TestCase):
         self.assertEqual(module_order.appVersion, '10.0.0')
         self.assertListEqual(module_order.order, ['slug0'])
 
-        _modules_by_app = list(ModulesByApp.objects.filter(appVersion='10.0.0').all())
-        _modules_by_app_serialized = ModulesByAppSerializer(_modules_by_app, many=True).data
+        _modules_by_app = list(ModuleVersionsByRelease.objects.filter(appVersion='10.0.0').all())
+        _modules_by_app_serialized = ModuleVersionsByReleaseSerializer(_modules_by_app, many=True).data
 
         self.assertEqual(len(_modules_by_app_serialized), 1)
 
@@ -888,7 +888,7 @@ class Views(TestCase):
         """ test releases """
         import datetime  # pylint: disable=unused-import
         _module_by_app = {'appVersion': '0.0.0', 'moduleSlug': 'slug0', 'moduleVersion': '0.0.1', 'status': 1}
-        ModulesByApp.objects.create(**_module_by_app)
+        ModuleVersionsByRelease.objects.create(**_module_by_app)
 
         _module_version = {
             'moduleSlug': 'slug0',
@@ -1083,7 +1083,7 @@ class Views(TestCase):
         self.assertEqual(module_order.appVersion, '10.0.0')
         self.assertListEqual(module_order.order, ['slug0'])
 
-        _modules_by_app = list(ModulesByApp.objects.filter(appVersion='10.0.0').all())
-        _modules_by_app_serialized = ModulesByAppSerializer(_modules_by_app, many=True).data
+        _modules_by_app = list(ModuleVersionsByRelease.objects.filter(appVersion='10.0.0').all())
+        _modules_by_app_serialized = ModuleVersionsByReleaseSerializer(_modules_by_app, many=True).data
 
         self.assertEqual(len(_modules_by_app_serialized), 1)
