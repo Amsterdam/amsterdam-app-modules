@@ -545,10 +545,11 @@ class Views(TestCase):
         c = Client()
         response = c.get('/api/v1/modules/available-for-release/0.0.1')
         expected_result = [
-            {'moduleSlug': 'slug0', 'title': 'title', 'version': '1.2.3', 'description': 'description', 'icon': 'icon'},
-            {'moduleSlug': 'slug1', 'title': 'title', 'version': '1.3.4', 'description': 'description', 'icon': 'icon'},
-            {'moduleSlug': 'slug2', 'title': 'title', 'version': '1.30.4', 'description': 'description', 'icon': 'icon'},
-            {'moduleSlug': 'slug3', 'title': 'title', 'version': '2.10.2', 'description': 'description', 'icon': 'icon'}
+            {"moduleSlug": "slug0", "title": "title", "version": "1.2.20", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug0", "title": "title", "version": "1.2.3", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug1", "title": "title", "version": "1.3.4", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug2", "title": "title", "version": "1.30.4", "description": "description", "icon": "icon"},
+            {"moduleSlug": "slug3", "title": "title", "version": "2.10.2", "description": "description", "icon": "icon"}
         ]
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.content.decode('utf-8'))
