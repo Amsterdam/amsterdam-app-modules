@@ -138,9 +138,6 @@ def slug_status_in_releases(slug):
         ]
     return _slug_status_in_releases
 
-####
-#### TOT HIER
-####
 
 @swagger_auto_schema(**as_module_slug_get)
 @swagger_auto_schema(**as_module_patch)
