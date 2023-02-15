@@ -38,10 +38,10 @@ class ModuleVersions(models.Model):
         super().save()
 
 
-class ModulesByApp(models.Model):
+class ModuleVersionsByRelease(models.Model):
     """ Modules by app version
     """
-    appVersion = models.CharField(max_length=100, blank=False)
+    releaseVersion = models.CharField(max_length=100, blank=False)
     moduleSlug = models.CharField(max_length=500, blank=False)
     moduleVersion = models.CharField(max_length=100, blank=False)
     status = models.IntegerField(default=1, blank=False)
@@ -49,13 +49,14 @@ class ModulesByApp(models.Model):
     class Meta:
         """ Constraints (unique together is deprecated)
         """
-        constraints = [models.UniqueConstraint(fields=["appVersion", "moduleSlug"],
+        constraints = [models.UniqueConstraint(fields=["releaseVersion", "moduleSlug"],
                                                name="unique_appVersion_moduleSlug")]
 
     def delete(self, *args, **kwargs):
-        modules_by_app = list(ModulesByApp.objects.filter(appVersion=self.appVersion, moduleSlug=self.moduleSlug).all())
+        modules_by_app = list(ModuleVersionsByRelease.objects.filter(releaseVersion=self.releaseVersion,
+                                                                     moduleSlug=self.moduleSlug).all())
         if len(modules_by_app) == 1:
-            module_order = ModuleOrder.objects.filter(appVersion=self.appVersion).first()
+            module_order = ModuleOrder.objects.filter(releaseVersion=self.releaseVersion).first()
             if module_order is not None:
                 module_order.order = [x for x in module_order.order if x != self.moduleSlug]
                 module_order.save()
@@ -75,7 +76,7 @@ class ModulesByApp(models.Model):
 class ModuleOrder(models.Model):
     """ Order the modules for an appversion
     """
-    appVersion = models.CharField(max_length=100, blank=False, unique=True, primary_key=True)
+    releaseVersion = models.CharField(max_length=100, blank=False, unique=True, primary_key=True)
     order = ArrayField(models.CharField(max_length=500, blank=False), blank=False)
 
 

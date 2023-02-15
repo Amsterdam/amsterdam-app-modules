@@ -67,23 +67,6 @@ module_slug_status = {
     "releases": openapi.Schema(type=openapi.TYPE_ARRAY, items=version)
 }
 
-as_module_app_versions = {
-    'methods': ['get'],
-    'responses': {
-        200: openapi.Response(
-            'application/json',
-            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
-                                  properties={
-                                      'status': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='result status'),
-                                      'result': openapi.Schema(type=openapi.TYPE_ARRAY,
-                                                               items=openapi.Schema(type=openapi.TYPE_STRING,
-                                                                                    description='app versions'))
-                                  }))
-    },
-    'tags': ['App Versions (to be removed)']
-}
-
-
 as_module_get = {
     'methods': ['get'],
     'manual_parameters': [
@@ -611,27 +594,6 @@ as_module_delete = {
                               }),
     },
     'tags': ['Module']
-}
-
-
-as_modules_by_app_get = {
-    'methods': ['get'],
-    'manual_parameters': [openapi.Parameter('appVersion',
-                                            openapi.IN_QUERY,
-                                            description="appVersion for requesting modules",
-                                            type=openapi.TYPE_STRING)],
-    'responses': {
-        200: openapi.Response(
-            'application/json',
-            schema=openapi.Schema(type=openapi.TYPE_OBJECT,
-                                  properties={
-                                      'status': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='result status'),
-                                      'result': openapi.Schema(type=openapi.TYPE_ARRAY,
-                                                               items=openapi.Schema(type=openapi.TYPE_OBJECT,
-                                                                                    properties=modules_by_app))
-                                  }))
-    },
-    'tags': ['Modules by App (to be removed)']
 }
 
 as_modules_for_app_get = {
