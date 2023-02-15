@@ -32,7 +32,7 @@ const ReleaseForm = ({onSubmit, release, versionDefaultValue}: Props) => {
         baseVersion={release.version}
         defaultValue={versionDefaultValue}
       />
-      <DragDropModules />
+      <DragDropModules releaseVersion={release.version} />
       <TextField
         label="Gepubliceerd"
         name="published"

@@ -1,0 +1,3 @@
+.Droppable[data-is-dragging-over="true"] {
+  outline: var(--size-border-md) dashed var(--border-color-dragging-over);
+}

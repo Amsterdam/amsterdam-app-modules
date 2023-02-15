@@ -1,8 +1,4 @@
 .Draggable:hover,
 .Draggable[data-is-dragging="true"] {
-  background-color: var(--bg-color-blocklink-hover);
-}
-
-.Draggable[data-is-dragging="true"] {
-  border: var(--size-border-md) dashed var(--border-color-dragging);
+  background-color: var(--bg-color-dragging);
 }

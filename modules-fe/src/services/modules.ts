@@ -92,6 +92,11 @@ export const modulesApi = baseApi.injectEndpoints({
       query: () => `/api/v1/modules/latest`,
       providesTags: ['Module'],
     }),
+    getModulesAvailableForRelease: builder.query<ModuleVersion[], string>({
+      query: releaseVersion =>
+        `/api/v1/modules/available-for-release/${releaseVersion}`,
+      providesTags: ['Module'],
+    }),
   }),
   overrideExisting: true,
 })
@@ -106,4 +111,5 @@ export const {
   useGetModuleQuery,
   useGetModuleVersionQuery,
   useGetModulesQuery,
+  useGetModulesAvailableForReleaseQuery,
 } = modulesApi

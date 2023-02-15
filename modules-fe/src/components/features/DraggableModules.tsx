@@ -30,7 +30,10 @@ const DraggableModules = ({
       <Droppable droppableId={droppableId}>
         <List>
           {modules.map(({icon, moduleSlug, title, version}, index) => (
-            <Draggable key={moduleSlug} draggableId={moduleSlug} index={index}>
+            <Draggable
+              key={moduleSlug + version}
+              draggableId={moduleSlug + version}
+              index={index}>
               <ListItem>
                 <Box>
                   <Module color={phraseColor} {...{icon, title, version}} />
