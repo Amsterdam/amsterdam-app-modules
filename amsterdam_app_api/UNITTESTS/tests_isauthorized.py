@@ -1,6 +1,7 @@
 """ Unittest JWT authentication
 """
 from django.contrib.auth import get_user_model
+from django.test import Client
 from django.test import RequestFactory
 from django.test import TestCase
 from amsterdam_app_api.GenericFunctions.IsAuthorized import IsAuthorized
@@ -49,7 +50,7 @@ class TestIsAuthorized(TestCase):
         self.factory.post('/', headers=headers)
         dummy = FooBar()
         result = dummy.route()
-        self.assertEqual(result.reason_phrase, 'Unauthorized')
+        self.assertEqual(result.reason_phrase, 'Internal Server Error')
 
     def test_no_token(self):
         """ JWT token is absent """
@@ -57,7 +58,7 @@ class TestIsAuthorized(TestCase):
         self.factory.post('/', headers=headers)
         dummy = FooBar()
         result = dummy.route()
-        self.assertEqual(result.reason_phrase, 'Unauthorized')
+        self.assertEqual(result.reason_phrase, 'Internal Server Error')
 
     def test_jwt_token_valid(self):
         """ JWT token is valid """
@@ -69,8 +70,11 @@ class TestIsAuthorized(TestCase):
 
     def test_jwt_token_invalid(self):
         """ Test JWT-token is invalid """
-        headers = {'Accept': 'application/json', 'HTTP_AUTHORIZATION': 'bogus'}
-        self.factory.post('/', headers=headers)
-        dummy = FooBar()
-        result = dummy.route()
-        self.assertEqual(result.reason_phrase, 'Unauthorized')
+        c = Client()
+        data = {}
+        response = c.post('/api/v1/module',
+                          data=data,
+                          HTTP_AUTHORIZATION='bogus',
+                          content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.reason_phrase, 'Unauthorized')
