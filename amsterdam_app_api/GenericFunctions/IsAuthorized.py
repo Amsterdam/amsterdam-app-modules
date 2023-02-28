@@ -34,8 +34,8 @@ class IsAuthorized:
             if jwtauthorization is not None:
                 if self.is_valid_jwt_token(jwt_encrypted_token=jwtauthorization):
                     return self.func(*args, **kwargs)
-        except Exception:  # pragma: no cover
-            pass
+        except Exception as error:  # pragma: no cover
+            return HttpResponse(f'Server error: {error}', status=500)
 
         # Access is not allowed, abort with 401
         return HttpResponse('Unauthorized', status=401)
