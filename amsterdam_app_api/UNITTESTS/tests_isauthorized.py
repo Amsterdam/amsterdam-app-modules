@@ -35,9 +35,10 @@ class TestIsAuthorized(TestCase):
 
     def setUp(self):
         """ Setup mock data: Create user for token """
-        self.user = get_user_model().objects.create_user(username=username,
-                                                         password=password,
-                                                         email=email)
+        users = get_user_model()
+        self.user = users.objects.create_user(username=username,
+                                              password=password,
+                                              email=email)
         self.user.save()
         response = self.client.post('/api/v1/token/access', {'username': username, 'password': password})
         self.jwt_token = response.data['access']
@@ -62,7 +63,7 @@ class TestIsAuthorized(TestCase):
 
     def test_jwt_token_valid(self):
         """ JWT token is valid """
-        headers = {'Accept': 'application/json', 'HTTP_AUTHORIZATION': self.jwt_token}
+        headers = {'Accept': 'application/json', 'AUTHORIZATION': self.jwt_token}
         request = self.factory.post('/', headers=headers)
         dummy = FooBar()
         result = dummy.route(request)
