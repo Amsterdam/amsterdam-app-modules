@@ -14,15 +14,25 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Install python requirements
 COPY requirements.txt /code/
-RUN cd /code && python3 -m pip install -r requirements.txt
 
-RUN apk update \
- && apk add --no-cache \
+RUN apk add --no-cache \
+    bash \
+    postgresql-client \
     netcat-openbsd \
     procps \
-    postgresql-client \
- && rm -rf /var/cache/apk/* \
- && rm -rf /tmp/*
+    libjpeg
+
+RUN apk add --no-cache --virtual .build-deps \
+    jpeg-dev \
+    zlib-dev \
+    gcc \
+    python3-dev \
+    musl-dev \
+    postgresql-dev \
+    && cd /code && python3 -m pip install -r requirements.txt \
+    && apk del --no-cache .build-deps \
+    && rm -rf /var/cache/apk/* \
+    && rm -rf /tmp/*
 
 # Copy sources to container
 COPY /static /code/static
