@@ -8,22 +8,31 @@ RUN cd /code/modules-fe \
  && npm install \
  && npm run build
 
-FROM python:3.9.0-slim-buster as deploy
+FROM python:3.9.0-alpine3.12 as deploy
 ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=on
 
 # Install python requirements
 COPY requirements.txt /code/
-RUN cd /code && python3 -m pip install -r requirements.txt
 
-RUN apt-get update  \
- && apt-get -y install --no-install-recommends \
-    netcat \
+RUN apk add --no-cache \
+    bash \
+    postgresql-client \
+    netcat-openbsd \
     procps \
-    postgresql-client-11 \
- && rm -rf /var/lib/apt/lists/* /var/cache/debconf/*-old \
- && apt-get autoremove -y \
- && rm -rf /tmp/*
+    libjpeg
+
+RUN apk add --no-cache --virtual .build-deps \
+    jpeg-dev \
+    zlib-dev \
+    gcc \
+    python3-dev \
+    musl-dev \
+    postgresql-dev \
+    && cd /code && python3 -m pip install -r requirements.txt \
+    && apk del --no-cache .build-deps \
+    && rm -rf /var/cache/apk/* \
+    && rm -rf /tmp/*
 
 # Copy sources to container
 COPY /static /code/static
